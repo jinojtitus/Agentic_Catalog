@@ -7,14 +7,14 @@ import json
 
 # Page configuration - iOS style
 st.set_page_config(
-    page_title="Agentic Catalog",
+    page_title="Agentic Operating System",
     page_icon="📱",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
         'Get Help': 'https://github.com/jinojtitus/Agentic_Catalog',
         'Report a bug': 'https://github.com/jinojtitus/Agentic_Catalog/issues',
-        'About': "Agentic AI Catalog - iOS-style interface for managing AI agents"
+        'About': "Agentic Operating System - iOS-style interface for managing AI agents"
     }
 )
 
@@ -832,8 +832,8 @@ def get_status_badge(status):
     return status_map.get(status, {'text': status, 'class': ''})
 
 def landing_page():
-    st.markdown('<h1 class="main-header">📱 Agentic Catalog</h1>', unsafe_allow_html=True)
-    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #6e6e73; margin-bottom: 2rem; font-family: \'Inter\', -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif;">Manage and monitor your AI agents with iOS-style elegance</p>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">📱 Agentic Operating System</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #6e6e73; margin-bottom: 2rem; font-family: \'Inter\', -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif;">Manage and monitor your AI agents</p>', unsafe_allow_html=True)
     
     data = load_agent_data()
     agents = data['agents']
@@ -1400,7 +1400,7 @@ def agent_detail_page():
 def governance_workflow():
     st.markdown('<h1 class="main-header">Governance Workflow – New Agent Card</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -1492,7 +1492,7 @@ def governance_workflow():
 def runtime_monitoring():
     st.markdown('<h1 class="main-header">Runtime Monitoring Dashboard</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -1788,7 +1788,7 @@ def runtime_monitoring():
 def escalation_console():
     st.markdown('<h1 class="main-header">Escalation Console</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -1840,7 +1840,7 @@ def escalation_console():
 def audit_reporting():
     st.markdown('<h1 class="main-header">Audit & Reporting</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -1915,7 +1915,7 @@ def audit_reporting():
 def payment_instruction_entry():
     st.markdown('<h1 class="main-header">Payment Instruction</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -2133,7 +2133,7 @@ def scenario_summary():
 def payment_escalation():
     st.markdown('<h1 class="main-header">Escalation Console – Payment Processor Agent</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -2188,7 +2188,7 @@ def payment_escalation():
 def payment_audit():
     st.markdown('<h1 class="main-header">Payment Audit & Compliance Dashboard</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -2270,7 +2270,7 @@ def payment_audit():
 def process_flow_diagram():
     st.markdown('<h1 class="main-header">🔄 End-to-End Process Flow</h1>', unsafe_allow_html=True)
     
-    if st.button("← Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -2282,136 +2282,210 @@ def process_flow_diagram():
     </div>
     """, unsafe_allow_html=True)
     
-    # Process Flow Diagram using Plotly
-    # Define nodes and their positions
+    # Process Flow Diagram using Plotly - Enhanced Design
+    # Define nodes and their positions with better spacing and visual hierarchy
     nodes = [
         # Input Layer
-        {"id": "user_input", "label": "User Input<br/>💬 Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF"},
+        {"id": "user_input", "label": "User Input<br/>💬 Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF", "size": 140, "category": "input"},
         
-        # Agent Processing Layer
-        {"id": "intent_agent", "label": "Intent Agent<br/>🧠 Parse & Extract<br/>Payment Details", "x": 2, "y": 8, "color": "#34C759"},
-        {"id": "verification_agent", "label": "Verification Agent<br/>🔍 Account & Compliance<br/>Validation", "x": 4, "y": 8, "color": "#34C759"},
-        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>📊 Pattern Analysis<br/>& Risk Assessment", "x": 6, "y": 8, "color": "#34C759"},
+        # Agent Processing Layer - Main Flow
+        {"id": "intent_agent", "label": "Intent Agent<br/>🧠 Parse & Extract<br/>Payment Details", "x": 3, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
+        {"id": "verification_agent", "label": "Verification Agent<br/>🔍 Account & Compliance<br/>Validation", "x": 6, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
+        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>📊 Pattern Analysis<br/>& Risk Assessment", "x": 9, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
         
         # Decision Points
-        {"id": "decision_point", "label": "Decision Point<br/>⚖️ Risk Assessment<br/>& Routing Logic", "x": 8, "y": 8, "color": "#FF9500"},
+        {"id": "decision_point", "label": "Decision Point<br/>⚖️ Risk Assessment<br/>& Routing Logic", "x": 12, "y": 8, "color": "#FF9500", "size": 140, "category": "decision"},
         
         # Human Interaction Points
-        {"id": "human_review", "label": "Human Review<br/>👤 Treasury Operations<br/>Manual Approval", "x": 10, "y": 6, "color": "#FF3B30"},
-        {"id": "escalation", "label": "Escalation<br/>🚨 Senior Management<br/>High-Risk Cases", "x": 10, "y": 10, "color": "#FF3B30"},
+        {"id": "human_review", "label": "Human Review<br/>👤 Treasury Operations<br/>Manual Approval", "x": 15, "y": 6, "color": "#FF3B30", "size": 130, "category": "human"},
+        {"id": "escalation", "label": "Escalation<br/>🚨 Senior Management<br/>High-Risk Cases", "x": 15, "y": 10, "color": "#FF3B30", "size": 130, "category": "human"},
         
         # Execution Layer
-        {"id": "payment_execution", "label": "Payment Execution<br/>💳 Core Banking API<br/>Transaction Processing", "x": 12, "y": 8, "color": "#007AFF"},
+        {"id": "payment_execution", "label": "Payment Execution<br/>💳 Core Banking API<br/>Transaction Processing", "x": 18, "y": 8, "color": "#007AFF", "size": 140, "category": "execution"},
         
         # Output Layer
-        {"id": "confirmation", "label": "Confirmation<br/>✅ Transaction Complete<br/>Audit Trail Generated", "x": 14, "y": 8, "color": "#34C759"},
+        {"id": "confirmation", "label": "Confirmation<br/>✅ Transaction Complete<br/>Audit Trail Generated", "x": 21, "y": 8, "color": "#34C759", "size": 140, "category": "output"},
         
         # Monitoring Layer
-        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 8, "y": 4, "color": "#8E8E93"},
+        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 12, "y": 4, "color": "#8E8E93", "size": 120, "category": "monitoring"},
         
         # Data Sources
-        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 2, "y": 6, "color": "#8E8E93"},
-        {"id": "payment_api", "label": "Payment API<br/>🏦 Core Banking<br/>Gateway", "x": 12, "y": 6, "color": "#8E8E93"},
+        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 3, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
+        {"id": "payment_api", "label": "Payment API<br/>🏦 Core Banking<br/>Gateway", "x": 18, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
     ]
     
-    # Define edges (connections)
+    # Define edges (connections) - Enhanced with better visual flow
     edges = [
-        # Main flow
-        {"from": "user_input", "to": "intent_agent", "label": "Natural Language"},
-        {"from": "intent_agent", "to": "verification_agent", "label": "Structured Data"},
-        {"from": "verification_agent", "to": "anomaly_agent", "label": "Validated Data"},
-        {"from": "anomaly_agent", "to": "decision_point", "label": "Risk Score"},
-        {"from": "decision_point", "to": "payment_execution", "label": "Approved"},
-        {"from": "payment_execution", "to": "confirmation", "label": "Success"},
+        # Main flow - Primary path
+        {"from": "user_input", "to": "intent_agent", "label": "Natural Language", "type": "main", "width": 3},
+        {"from": "intent_agent", "to": "verification_agent", "label": "Structured Data", "type": "main", "width": 3},
+        {"from": "verification_agent", "to": "anomaly_agent", "label": "Validated Data", "type": "main", "width": 3},
+        {"from": "anomaly_agent", "to": "decision_point", "label": "Risk Score", "type": "main", "width": 3},
+        {"from": "decision_point", "to": "payment_execution", "label": "Low Risk", "type": "main", "width": 3},
+        {"from": "payment_execution", "to": "confirmation", "label": "Success", "type": "main", "width": 3},
         
-        # Data connections
-        {"from": "compliance_db", "to": "verification_agent", "label": "Compliance Check"},
-        {"from": "payment_api", "to": "payment_execution", "label": "API Call"},
+        # Data connections - Supporting systems
+        {"from": "compliance_db", "to": "verification_agent", "label": "Compliance Check", "type": "data", "width": 2},
+        {"from": "payment_api", "to": "payment_execution", "label": "API Call", "type": "data", "width": 2},
         
-        # Escalation paths
-        {"from": "decision_point", "to": "human_review", "label": "Medium Risk"},
-        {"from": "decision_point", "to": "escalation", "label": "High Risk"},
-        {"from": "human_review", "to": "payment_execution", "label": "Approved"},
-        {"from": "escalation", "to": "payment_execution", "label": "Approved"},
+        # Escalation paths - Human intervention
+        {"from": "decision_point", "to": "human_review", "label": "Medium Risk", "type": "escalation", "width": 2},
+        {"from": "decision_point", "to": "escalation", "label": "High Risk", "type": "escalation", "width": 2},
+        {"from": "human_review", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 2},
+        {"from": "escalation", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 2},
         
-        # Monitoring connections
-        {"from": "monitoring", "to": "intent_agent", "label": "Monitor"},
-        {"from": "monitoring", "to": "verification_agent", "label": "Monitor"},
-        {"from": "monitoring", "to": "anomaly_agent", "label": "Monitor"},
-        {"from": "monitoring", "to": "payment_execution", "label": "Monitor"},
+        # Monitoring connections - Oversight
+        {"from": "monitoring", "to": "intent_agent", "label": "Monitor", "type": "monitoring", "width": 1},
+        {"from": "monitoring", "to": "verification_agent", "label": "Monitor", "type": "monitoring", "width": 1},
+        {"from": "monitoring", "to": "anomaly_agent", "label": "Monitor", "type": "monitoring", "width": 1},
+        {"from": "monitoring", "to": "payment_execution", "label": "Monitor", "type": "monitoring", "width": 1},
     ]
     
-    # Create the diagram
+    # Create the enhanced diagram
     fig = go.Figure()
     
-    # Add edges
+    # Define edge colors and styles based on type
+    edge_styles = {
+        "main": {"color": "#007AFF", "dash": "solid"},
+        "escalation": {"color": "#FF3B30", "dash": "dash"},
+        "data": {"color": "#8E8E93", "dash": "dot"},
+        "monitoring": {"color": "#8E8E93", "dash": "dot"}
+    }
+    
+    # Add edges with enhanced styling
     for edge in edges:
         from_node = next(n for n in nodes if n["id"] == edge["from"])
         to_node = next(n for n in nodes if n["id"] == edge["to"])
+        
+        style = edge_styles.get(edge["type"], {"color": "#8E8E93", "dash": "solid"})
         
         fig.add_trace(go.Scatter(
             x=[from_node["x"], to_node["x"]],
             y=[from_node["y"], to_node["y"]],
             mode='lines',
-            line=dict(color='#8E8E93', width=2, dash='solid'),
+            line=dict(
+                color=style["color"], 
+                width=edge["width"], 
+                dash=style["dash"]
+            ),
             showlegend=False,
-            hoverinfo='skip'
+            hoverinfo='skip',
+            opacity=0.8
         ))
         
-        # Add edge labels
+        # Add edge labels with better positioning
         mid_x = (from_node["x"] + to_node["x"]) / 2
         mid_y = (from_node["y"] + to_node["y"]) / 2
         
+        # Offset labels to avoid overlap
+        offset_x = 0.3 if edge["type"] == "escalation" else 0
+        offset_y = 0.2 if edge["type"] == "data" else 0
+        
         fig.add_annotation(
-            x=mid_x,
-            y=mid_y,
+            x=mid_x + offset_x,
+            y=mid_y + offset_y,
             text=edge["label"],
             showarrow=False,
-            font=dict(size=10, color="#6E6E73"),
-            bgcolor="rgba(255,255,255,0.8)",
-            bordercolor="#E5E5EA",
-            borderwidth=1,
-            borderpad=4
+            font=dict(size=11, color="#1D1D1F", family="Inter"),
+            bgcolor="rgba(255,255,255,0.95)",
+            bordercolor=style["color"],
+            borderwidth=2,
+            borderpad=6,
+            opacity=0.9
         )
     
-    # Add nodes
+    # Add nodes with enhanced styling
     for node in nodes:
+        # Determine node styling based on category
+        node_style = {
+            "input": {"border_width": 4, "opacity": 0.95},
+            "agent": {"border_width": 3, "opacity": 0.9},
+            "decision": {"border_width": 4, "opacity": 0.95},
+            "human": {"border_width": 3, "opacity": 0.9},
+            "execution": {"border_width": 4, "opacity": 0.95},
+            "output": {"border_width": 4, "opacity": 0.95},
+            "monitoring": {"border_width": 2, "opacity": 0.8},
+            "data": {"border_width": 2, "opacity": 0.8}
+        }
+        
+        style = node_style.get(node["category"], {"border_width": 3, "opacity": 0.9})
+        
         fig.add_trace(go.Scatter(
             x=[node["x"]],
             y=[node["y"]],
             mode='markers+text',
             marker=dict(
-                size=120,
+                size=node["size"],
                 color=node["color"],
-                line=dict(width=3, color='white'),
-                opacity=0.9
+                line=dict(width=style["border_width"], color='white'),
+                opacity=style["opacity"]
             ),
             text=node["label"],
             textposition="middle center",
-            textfont=dict(size=11, color="white", family="Inter"),
+            textfont=dict(size=12, color="white", family="Inter", weight="bold"),
             showlegend=False,
             hovertemplate=f"<b>{node['label'].split('<br/>')[0]}</b><br>" +
                          f"<br>".join(node['label'].split('<br/>')[1:]) +
+                         f"<br><br><b>Category:</b> {node['category'].title()}" +
                          "<extra></extra>"
         ))
     
-    # Update layout
+    # Update layout with enhanced styling
     fig.update_layout(
         title=dict(
             text="High-Value Payment Processing Workflow",
-            font=dict(size=20, family="Inter", color="#1D1D1F"),
-            x=0.5
+            font=dict(size=24, family="Inter", color="#1D1D1F", weight="bold"),
+            x=0.5,
+            y=0.95
         ),
-        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 15]),
-        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[3, 11]),
-        plot_bgcolor='rgba(0,0,0,0)',
-        paper_bgcolor='rgba(0,0,0,0)',
-        width=1200,
-        height=600,
-        margin=dict(l=50, r=50, t=80, b=50)
+        xaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(0,0,0,0.1)',
+            showticklabels=False, 
+            zeroline=False,
+            range=[-2, 23]
+        ),
+        yaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(0,0,0,0.1)',
+            showticklabels=False, 
+            zeroline=False,
+            range=[2, 12]
+        ),
+        plot_bgcolor='rgba(248,248,248,0.8)',
+        paper_bgcolor='rgba(255,255,255,0.9)',
+        width=1400,
+        height=700,
+        margin=dict(l=80, r=80, t=120, b=80),
+        font=dict(family="Inter", size=12)
     )
     
     st.plotly_chart(fig, use_container_width=True)
+    
+    # Add a visual legend
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border: 1px solid #dee2e6;">
+        <h4 style="color: #1D1D1F; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0 0 1rem 0; font-weight: 600;">🔍 Process Flow Legend</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 20px; height: 20px; background: #007AFF; border-radius: 50%; border: 3px solid white;"></div>
+                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>Main Flow</strong> - Primary processing path</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 20px; height: 20px; background: #FF3B30; border-radius: 50%; border: 3px solid white;"></div>
+                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>Escalation</strong> - Human intervention required</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 20px; height: 20px; background: #34C759; border-radius: 50%; border: 3px solid white;"></div>
+                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>AI Agents</strong> - Automated processing</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+                <div style="width: 20px; height: 20px; background: #8E8E93; border-radius: 50%; border: 3px solid white;"></div>
+                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>Data Sources</strong> - External systems</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Process Flow Details
     st.markdown("---")
@@ -2559,7 +2633,7 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("🏠 Agentic Catalog", key="nav_catalog"):
+        if st.button("🏠 Agentic Operating System", key="nav_catalog"):
             st.session_state['current_page'] = 'landing'
             st.rerun()
         if st.button("📋 Governance Workflow", key="nav_governance"):
