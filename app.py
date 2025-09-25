@@ -1151,49 +1151,267 @@ def runtime_monitoring():
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
-    # Sample monitoring data
-    metrics_data = {
-        'API Calls': 1245,
-        'Guardrail Triggers': 3,
-        'Escalations': 1,
-        'Avg Response Time': '245ms',
-        'Uptime': '99.8%'
-    }
+    # Load agent data
+    data = load_agent_data()
+    agents = data['agents']
     
-    st.markdown("### Metrics")
-    cols = st.columns(5)
-    for i, (metric, value) in enumerate(metrics_data.items()):
-        with cols[i]:
-            st.markdown(f"""
-            <div class="metric-card">
-                <h3>{value}</h3>
-                <p>{metric}</p>
-            </div>
-            """, unsafe_allow_html=True)
+    # Overall metrics summary
+    st.markdown("### 📊 System Overview")
+    total_calls = sum(agent['monitoring']['callsThisWeek'] for agent in agents)
+    total_escalations = sum(agent['monitoring']['escalations'] for agent in agents)
+    total_guardrail_triggers = sum(agent['monitoring']['guardrailTriggers'] for agent in agents)
+    avg_uptime = sum(float(agent['monitoring']['uptime'].replace('%', '')) for agent in agents) / len(agents)
     
-    # Escalations over time chart
-    st.markdown("### Escalations Over Time")
-    escalation_data = pd.DataFrame({
-        'Date': pd.date_range('2025-01-15', periods=7, freq='D'),
-        'Escalations': [0, 1, 0, 2, 0, 1, 0]
-    })
-    
-    fig = px.line(escalation_data, x='Date', y='Escalations', title='Escalations Over Time')
-    st.plotly_chart(fig, use_container_width=True)
-    
-    # Agent health
-    st.markdown("### Agent Health")
-    st.success("🟢 Healthy")
-    
-    # Controls
-    st.markdown("### Controls")
-    col1, col2 = st.columns(2)
+    col1, col2, col3, col4 = st.columns(4)
     with col1:
-        if st.button("Pause Agent"):
-            st.warning("Agent paused")
+        st.metric("Total API Calls", f"{total_calls:,}")
     with col2:
-        if st.button("Kill Switch", type="secondary"):
-            st.error("Kill switch activated")
+        st.metric("Total Escalations", total_escalations)
+    with col3:
+        st.metric("Guardrail Triggers", total_guardrail_triggers)
+    with col4:
+        st.metric("Avg Uptime", f"{avg_uptime:.1f}%")
+    
+    st.markdown("---")
+    
+    # Agent-specific monitoring cards
+    st.markdown("### 🤖 Agent Performance Monitoring")
+    
+    # Filter options
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        status_filter = st.selectbox("Filter by Status", ["All"] + list(set(agent['status'] for agent in agents)))
+    with col2:
+        pattern_filter = st.selectbox("Filter by Pattern", ["All"] + list(set(agent['patternType'] for agent in agents)))
+    with col3:
+        risk_filter = st.selectbox("Filter by Risk Level", ["All"] + list(set(agent['risk'] for agent in agents)))
+    
+    # Filter agents
+    filtered_agents = agents
+    if status_filter != "All":
+        filtered_agents = [a for a in filtered_agents if a['status'] == status_filter]
+    if pattern_filter != "All":
+        filtered_agents = [a for a in filtered_agents if a['patternType'] == pattern_filter]
+    if risk_filter != "All":
+        filtered_agents = [a for a in filtered_agents if a['risk'] == risk_filter]
+    
+    # Display agent monitoring cards
+    for agent in filtered_agents:
+        with st.expander(f"🔍 {agent['name']} - {agent['patternName']} ({agent['status'].title()})", expanded=False):
+            
+            # Agent header with status indicators
+            col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+            with col1:
+                st.markdown(f"**{agent['name']}** ({agent['patternType'].title()})")
+                st.markdown(f"*{agent['businessUseCase']}*")
+            with col2:
+                # Health status based on metrics
+                uptime = float(agent['monitoring']['uptime'].replace('%', ''))
+                if uptime >= 99.0:
+                    st.success("🟢 Healthy")
+                elif uptime >= 95.0:
+                    st.warning("🟡 Warning")
+                else:
+                    st.error("🔴 Critical")
+            with col3:
+                st.markdown(f"**Risk:** {agent['risk']}")
+            with col4:
+                st.markdown(f"**Owner:** {agent['owner']}")
+            
+            # Performance metrics in tabs
+            tab1, tab2, tab3, tab4 = st.tabs(["📈 Performance", "🛡️ Guardrails", "📊 Trends", "⚙️ Controls"])
+            
+            with tab1:
+                st.markdown("#### Key Performance Indicators")
+                
+                # Main metrics
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    st.metric(
+                        "API Calls (7d)", 
+                        agent['monitoring']['callsThisWeek'],
+                        delta=f"+{agent['monitoring']['callsThisWeek'] - 100}" if agent['monitoring']['callsThisWeek'] > 100 else None
+                    )
+                with col2:
+                    st.metric(
+                        "Avg Response Time", 
+                        f"{agent['monitoring'].get('avgResponseTime', '245')}ms",
+                        delta="-15ms" if agent['monitoring'].get('avgResponseTime', 245) < 250 else "+5ms"
+                    )
+                with col3:
+                    st.metric(
+                        "Uptime", 
+                        agent['monitoring']['uptime'],
+                        delta="+0.2%" if float(agent['monitoring']['uptime'].replace('%', '')) > 99.0 else "-0.5%"
+                    )
+                with col4:
+                    st.metric(
+                        "Success Rate", 
+                        f"{agent['monitoring'].get('successRate', '98.5')}%",
+                        delta="+1.2%" if agent['monitoring'].get('successRate', 98.5) > 97.0 else "-0.8%"
+                    )
+                
+                # Additional metrics
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Processing Stats:**")
+                    st.write(f"• Total Transactions: {agent['monitoring'].get('totalTransactions', 1240):,}")
+                    st.write(f"• Peak Load: {agent['monitoring'].get('peakLoad', '2.3K')} req/min")
+                    st.write(f"• Error Rate: {agent['monitoring'].get('errorRate', '0.8')}%")
+                
+                with col2:
+                    st.markdown("**Resource Usage:**")
+                    st.write(f"• CPU Usage: {agent['monitoring'].get('cpuUsage', '45')}%")
+                    st.write(f"• Memory: {agent['monitoring'].get('memoryUsage', '2.1')}GB")
+                    st.write(f"• Queue Depth: {agent['monitoring'].get('queueDepth', '12')}")
+            
+            with tab2:
+                st.markdown("#### Guardrail Status")
+                
+                # Guardrail triggers
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.metric(
+                        "Guardrail Triggers", 
+                        agent['monitoring']['guardrailTriggers'],
+                        delta=f"+{agent['monitoring']['guardrailTriggers'] - 2}" if agent['monitoring']['guardrailTriggers'] > 2 else None
+                    )
+                with col2:
+                    st.metric(
+                        "Escalations", 
+                        agent['monitoring']['escalations'],
+                        delta=f"+{agent['monitoring']['escalations'] - 1}" if agent['monitoring']['escalations'] > 1 else None
+                    )
+                
+                # Guardrail details
+                st.markdown("**Active Guardrails:**")
+                guardrails = agent['runtimeGuardrails']
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Input Filters:**")
+                    for filter_type in guardrails['inputFilters']:
+                        st.write(f"• {filter_type}")
+                    
+                    st.markdown("**Output Validators:**")
+                    for validator in guardrails['outputValidators']:
+                        st.write(f"• {validator}")
+                
+                with col2:
+                    st.markdown("**Rate Controls:**")
+                    for control, value in guardrails['rateControls'].items():
+                        st.write(f"• {control.replace('_', ' ').title()}: {value}")
+                    
+                    st.markdown("**Kill Switch:**")
+                    kill_switch = guardrails['killSwitch']
+                    status = "🟢 Active" if kill_switch['enabled'] else "🔴 Disabled"
+                    st.write(f"• Status: {status}")
+                    for trigger in kill_switch['triggers']:
+                        st.write(f"  - {trigger}")
+                
+                # Recent guardrail events
+                st.markdown("**Recent Events:**")
+                events = [
+                    {"time": "14:32:15", "type": "Input Filter", "message": "PII detected in input", "severity": "warning"},
+                    {"time": "14:28:42", "type": "Rate Control", "message": "Rate limit approaching", "severity": "info"},
+                    {"time": "14:25:18", "type": "Output Validator", "message": "Confidence below threshold", "severity": "warning"}
+                ]
+                
+                for event in events:
+                    severity_icon = "⚠️" if event['severity'] == 'warning' else "ℹ️" if event['severity'] == 'info' else "🚨"
+                    st.write(f"{severity_icon} **{event['time']}** - {event['type']}: {event['message']}")
+            
+            with tab3:
+                st.markdown("#### Performance Trends")
+                
+                # Generate sample trend data for the last 7 days
+                dates = pd.date_range('2025-01-15', periods=7, freq='D')
+                
+                # API calls trend
+                calls_trend = [agent['monitoring']['callsThisWeek'] + i*10 for i in range(7)]
+                calls_df = pd.DataFrame({'Date': dates, 'API Calls': calls_trend})
+                
+                fig_calls = px.line(calls_df, x='Date', y='API Calls', title='API Calls Trend (7 days)')
+                st.plotly_chart(fig_calls, use_container_width=True)
+                
+                # Response time trend
+                response_times = [245, 238, 252, 241, 248, 235, 242]
+                response_df = pd.DataFrame({'Date': dates, 'Response Time (ms)': response_times})
+                
+                fig_response = px.line(response_df, x='Date', y='Response Time (ms)', title='Response Time Trend (7 days)')
+                st.plotly_chart(fig_response, use_container_width=True)
+                
+                # Error rate trend
+                error_rates = [0.8, 1.2, 0.6, 0.9, 1.1, 0.7, 0.8]
+                error_df = pd.DataFrame({'Date': dates, 'Error Rate (%)': error_rates})
+                
+                fig_error = px.line(error_df, x='Date', y='Error Rate (%)', title='Error Rate Trend (7 days)')
+                st.plotly_chart(fig_error, use_container_width=True)
+            
+            with tab4:
+                st.markdown("#### Runtime Controls")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Agent Controls:**")
+                    if st.button(f"⏸️ Pause {agent['name']}", key=f"pause_{agent['id']}"):
+                        st.warning(f"{agent['name']} paused")
+                    
+                    if st.button(f"🔄 Restart {agent['name']}", key=f"restart_{agent['id']}"):
+                        st.info(f"{agent['name']} restarted")
+                    
+                    if st.button(f"🔧 Maintenance Mode", key=f"maintenance_{agent['id']}"):
+                        st.warning(f"{agent['name']} in maintenance mode")
+                
+                with col2:
+                    st.markdown("**Emergency Controls:**")
+                    if st.button(f"🚨 Kill Switch", key=f"kill_{agent['id']}", type="secondary"):
+                        st.error(f"Kill switch activated for {agent['name']}")
+                    
+                    if st.button(f"🛡️ Force Guardrails", key=f"guardrails_{agent['id']}"):
+                        st.warning(f"Guardrails enforced for {agent['name']}")
+                
+                # Configuration
+                st.markdown("**Runtime Configuration:**")
+                with st.expander("View Current Configuration"):
+                    st.json({
+                        "max_concurrent_requests": agent['monitoring'].get('maxConcurrent', 100),
+                        "timeout_seconds": agent['monitoring'].get('timeout', 30),
+                        "retry_attempts": agent['monitoring'].get('retryAttempts', 3),
+                        "circuit_breaker_threshold": agent['monitoring'].get('circuitBreaker', 5)
+                    })
+    
+    # System-wide charts
+    st.markdown("---")
+    st.markdown("### 📈 System-Wide Trends")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Escalations over time
+        escalation_data = pd.DataFrame({
+            'Date': pd.date_range('2025-01-15', periods=7, freq='D'),
+            'Escalations': [0, 1, 0, 2, 0, 1, 0]
+        })
+        
+        fig = px.line(escalation_data, x='Date', y='Escalations', title='System Escalations Over Time')
+        st.plotly_chart(fig, use_container_width=True)
+    
+    with col2:
+        # Agent health distribution
+        health_data = []
+        for agent in agents:
+            uptime = float(agent['monitoring']['uptime'].replace('%', ''))
+            if uptime >= 99.0:
+                health_data.append('Healthy')
+            elif uptime >= 95.0:
+                health_data.append('Warning')
+            else:
+                health_data.append('Critical')
+        
+        health_counts = pd.Series(health_data).value_counts()
+        fig_health = px.pie(values=health_counts.values, names=health_counts.index, title='Agent Health Distribution')
+        st.plotly_chart(fig_health, use_container_width=True)
 
 def escalation_console():
     st.markdown('<h1 class="main-header">Escalation Console</h1>', unsafe_allow_html=True)
