@@ -1220,7 +1220,7 @@ def landing_page():
                             yaxis_title="Number of Escalations",
                             font=dict(family="Inter", size=12)
                         )
-                        st.plotly_chart(fig, use_container_width=True)
+                        st.plotly_chart(fig, use_container_width=True, key=f"escalation_trends_chart_{agent['id']}")
                         
                         # Trend insights
                         st.markdown("**Trend Insights:**")
@@ -1856,21 +1856,21 @@ def runtime_monitoring():
                 calls_df = pd.DataFrame({'Date': dates, 'API Calls': calls_trend})
                 
                 fig_calls = px.line(calls_df, x='Date', y='API Calls', title='API Calls Trend (7 days)')
-                st.plotly_chart(fig_calls, use_container_width=True)
+                st.plotly_chart(fig_calls, use_container_width=True, key="monitoring_calls_chart")
                 
                 # Response time trend
                 response_times = [245, 238, 252, 241, 248, 235, 242]
                 response_df = pd.DataFrame({'Date': dates, 'Response Time (ms)': response_times})
                 
                 fig_response = px.line(response_df, x='Date', y='Response Time (ms)', title='Response Time Trend (7 days)')
-                st.plotly_chart(fig_response, use_container_width=True)
+                st.plotly_chart(fig_response, use_container_width=True, key="monitoring_response_chart")
                 
                 # Error rate trend
                 error_rates = [0.8, 1.2, 0.6, 0.9, 1.1, 0.7, 0.8]
                 error_df = pd.DataFrame({'Date': dates, 'Error Rate (%)': error_rates})
                 
                 fig_error = px.line(error_df, x='Date', y='Error Rate (%)', title='Error Rate Trend (7 days)')
-                st.plotly_chart(fig_error, use_container_width=True)
+                st.plotly_chart(fig_error, use_container_width=True, key="monitoring_error_chart")
             
             with tab4:
                 st.markdown("#### Runtime Controls")
@@ -1919,7 +1919,7 @@ def runtime_monitoring():
         })
         
         fig = px.line(escalation_data, x='Date', y='Escalations', title='System Escalations Over Time')
-        st.plotly_chart(fig, use_container_width=True)
+        st.plotly_chart(fig, use_container_width=True, key="audit_compliance_heatmap")
     
     with col2:
         # Agent health distribution
@@ -1935,7 +1935,7 @@ def runtime_monitoring():
         
         health_counts = pd.Series(health_data).value_counts()
         fig_health = px.pie(values=health_counts.values, names=health_counts.index, title='Agent Health Distribution')
-        st.plotly_chart(fig_health, use_container_width=True)
+        st.plotly_chart(fig_health, use_container_width=True, key="audit_health_distribution")
 
 def escalation_console():
     st.markdown('<h1 class="main-header">Escalation Console</h1>', unsafe_allow_html=True)
@@ -2408,7 +2408,7 @@ def payment_audit():
                   title='Anomaly Score Trends Over Time')
     fig.add_hline(y=0.65, line_dash="dash", line_color="red", 
                   annotation_text="Threshold: 0.65")
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, key="payment_audit_anomaly_trends")
 
 def process_flow_diagram():
     st.markdown('<h1 class="main-header">🔄 End-to-End Process Flow</h1>', unsafe_allow_html=True)
@@ -2603,7 +2603,7 @@ def process_flow_diagram():
         font=dict(family="Inter", size=12)
     )
     
-    st.plotly_chart(fig, use_container_width=True)
+    st.plotly_chart(fig, use_container_width=True, key="process_flow_diagram")
     
     # Add a visual legend
     st.markdown("""
