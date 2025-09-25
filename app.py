@@ -2243,15 +2243,6 @@ def payment_audit():
     with col4:
         st.metric("Escalations", "7", "2")
     
-    # Export options
-    st.markdown("### Export Options")
-    col1, col2 = st.columns(2)
-    with col1:
-        if st.button("Export PDF Report"):
-            st.success("PDF report export initiated")
-    with col2:
-        if st.button("Export CSV Data"):
-            st.success("CSV data export initiated")
     
     # Anomaly trend chart
     st.markdown("### Anomaly Score Trends")
