@@ -2137,6 +2137,13 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
+        # Agentic Operating System Section
+        st.markdown("""
+        <div style="margin-bottom: 1.5rem;">
+            <h3 style="color: #6e6e73; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; margin: 0 0 1rem 0; font-size: 0.9rem; text-transform: uppercase; letter-spacing: 0.5px;">Agentic Operating System</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
         if st.button("🏠 Agentic Catalog", key="nav_catalog"):
             st.session_state['current_page'] = 'landing'
             st.rerun()
@@ -2153,9 +2160,14 @@ def main():
             st.session_state['current_page'] = 'audit'
             st.rerun()
         
+        # Payment Workflow Section
         st.markdown("""
-        <div style="margin: 1.5rem 0; padding: 1rem; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.06);">
-            <h3 style="color: #1d1d1f; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; margin: 0 0 1rem 0; font-size: 1rem;">💳 Payment Workflow</h3>
+        <div style="margin: 2rem 0 1.5rem 0; padding: 1.2rem; background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%); border-radius: 16px; border: 1px solid rgba(0, 122, 255, 0.2); box-shadow: 0 2px 12px rgba(0, 122, 255, 0.1);">
+            <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.2rem; margin-right: 0.5rem;">💳</span>
+                <h3 style="color: #007AFF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 700; margin: 0; font-size: 1rem;">Payment Workflow</h3>
+            </div>
+            <p style="color: #6e6e73; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 0.8rem; margin: 0; line-height: 1.4;">High-value payment processing with anomaly detection and governance</p>
         </div>
         """, unsafe_allow_html=True)
         
