@@ -785,7 +785,7 @@ def load_agent_data():
                 ],
                 'dependencies': {
                     'orchestrator': 'Temporal Workflow Engine',
-                    'monitoring': 'Prometheus + Grafana',
+                    'monitoring_system': 'Prometheus + Grafana',
                     'messaging': 'RabbitMQ',
                     'database': 'PostgreSQL'
                 },
@@ -1041,6 +1041,122 @@ def landing_page():
                     st.write(f"Enabled: {'✅' if decision_journals['enabled'] else '❌'}")
                     st.write(f"Required: {'✅' if decision_journals['required'] else '❌'}")
                     st.write(f"Template: {decision_journals['template']}")
+                
+                with tab5:
+                    st.markdown("### 🚨 Escalation Examples")
+                    
+                    # Escalation scenarios based on agent type
+                    if agent['patternType'] == 'orchestration':
+                        st.markdown("**Common Escalation Scenarios:**")
+                        st.markdown("""
+                        - **Workflow Timeout**: Process exceeds maximum execution time
+                        - **Dependency Failure**: Required service or API is unavailable
+                        - **Resource Exhaustion**: Memory or CPU limits exceeded
+                        - **Validation Error**: Input data fails schema validation
+                        - **Business Rule Violation**: Payment amount exceeds limits
+                        """)
+                        
+                        st.markdown("**Recent Escalation Events:**")
+                        escalation_events = [
+                            {"time": "14:32:15", "type": "Workflow Timeout", "severity": "High", "status": "Resolved"},
+                            {"time": "14:28:42", "type": "Dependency Failure", "severity": "Medium", "status": "Pending"},
+                            {"time": "14:25:18", "type": "Validation Error", "severity": "Low", "status": "Resolved"}
+                        ]
+                        
+                        for event in escalation_events:
+                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
+                            status_icon = "✅" if event['status'] == 'Resolved' else "⏳"
+                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
+                    
+                    elif agent['patternType'] == 'monitoring':
+                        st.markdown("**Common Escalation Scenarios:**")
+                        st.markdown("""
+                        - **Threshold Breach**: Performance metrics exceed defined limits
+                        - **Anomaly Detection**: Unusual patterns detected in data
+                        - **Compliance Violation**: Regulatory requirements not met
+                        - **System Health**: Critical system components failing
+                        - **Data Quality**: Input data quality below standards
+                        """)
+                        
+                        st.markdown("**Recent Escalation Events:**")
+                        escalation_events = [
+                            {"time": "14:30:22", "type": "Threshold Breach", "severity": "High", "status": "Resolved"},
+                            {"time": "14:25:15", "type": "Anomaly Detection", "severity": "Medium", "status": "Investigating"},
+                            {"time": "14:20:08", "type": "Compliance Violation", "severity": "High", "status": "Resolved"}
+                        ]
+                        
+                        for event in escalation_events:
+                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
+                            status_icon = "✅" if event['status'] == 'Resolved' else "🔍" if event['status'] == 'Investigating' else "⏳"
+                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
+                    
+                    elif agent['patternType'] == 'retrieval':
+                        st.markdown("**Common Escalation Scenarios:**")
+                        st.markdown("""
+                        - **Query Timeout**: Search query takes too long to execute
+                        - **No Results Found**: Search returns empty results
+                        - **Permission Denied**: User lacks access to requested data
+                        - **Index Corruption**: Search index needs rebuilding
+                        - **Rate Limiting**: Too many requests in short time
+                        """)
+                        
+                        st.markdown("**Recent Escalation Events:**")
+                        escalation_events = [
+                            {"time": "14:35:18", "type": "Query Timeout", "severity": "Medium", "status": "Resolved"},
+                            {"time": "14:28:45", "type": "No Results Found", "severity": "Low", "status": "Resolved"},
+                            {"time": "14:22:12", "type": "Permission Denied", "severity": "Medium", "status": "Resolved"}
+                        ]
+                        
+                        for event in escalation_events:
+                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
+                            status_icon = "✅" if event['status'] == 'Resolved' else "⏳"
+                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
+                    
+                    else:
+                        st.markdown("**Common Escalation Scenarios:**")
+                        st.markdown("""
+                        - **Processing Error**: Unexpected error during execution
+                        - **Input Validation**: Invalid or malformed input data
+                        - **Resource Constraints**: Insufficient system resources
+                        - **External Service**: Third-party service unavailable
+                        - **Business Logic**: Rule or constraint violation
+                        """)
+                        
+                        st.markdown("**Recent Escalation Events:**")
+                        escalation_events = [
+                            {"time": "14:33:25", "type": "Processing Error", "severity": "High", "status": "Resolved"},
+                            {"time": "14:29:10", "type": "Input Validation", "severity": "Low", "status": "Resolved"},
+                            {"time": "14:24:55", "type": "External Service", "severity": "Medium", "status": "Pending"}
+                        ]
+                        
+                        for event in escalation_events:
+                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
+                            status_icon = "✅" if event['status'] == 'Resolved' else "⏳"
+                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
+                    
+                    # Escalation metrics
+                    st.markdown("### 📊 Escalation Metrics")
+                    col1, col2, col3 = st.columns(3)
+                    with col1:
+                        st.metric("Total Escalations", agent['monitoring']['escalations'])
+                    with col2:
+                        st.metric("Avg Resolution Time", "2.3 min")
+                    with col3:
+                        st.metric("Success Rate", "94.2%")
+                    
+                    # Escalation actions
+                    st.markdown("### 🔧 Escalation Actions")
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        if st.button("📊 View Escalation Logs", key=f"escalation_logs_{agent['id']}"):
+                            st.info("Opening escalation logs...")
+                        if st.button("🔔 Configure Alerts", key=f"configure_alerts_{agent['id']}"):
+                            st.info("Opening alert configuration...")
+                    with col2:
+                        if st.button("📈 Escalation Trends", key=f"escalation_trends_{agent['id']}"):
+                            st.info("Loading escalation trends...")
+                        if st.button("⚙️ Escalation Settings", key=f"escalation_settings_{agent['id']}"):
+                            st.info("Opening escalation settings...")
             
     
     # Stats
@@ -1386,10 +1502,25 @@ def runtime_monitoring():
     
     # Overall metrics summary
     st.markdown("### 📊 System Overview")
-    total_calls = sum(agent['monitoring']['callsThisWeek'] for agent in agents)
-    total_escalations = sum(agent['monitoring']['escalations'] for agent in agents)
-    total_guardrail_triggers = sum(agent['monitoring']['guardrailTriggers'] for agent in agents)
-    avg_uptime = sum(float(agent['monitoring']['uptime'].replace('%', '')) for agent in agents) / len(agents)
+    
+    # Safe monitoring data extraction with error handling
+    def get_monitoring_value(agent, key, default=0):
+        if 'monitoring' in agent and isinstance(agent['monitoring'], dict):
+            return agent['monitoring'].get(key, default)
+        return default
+    
+    def get_uptime_value(agent):
+        if 'monitoring' in agent and isinstance(agent['monitoring'], dict):
+            uptime_str = agent['monitoring'].get('uptime', '0%')
+            if isinstance(uptime_str, str) and uptime_str != 'N/A':
+                return float(uptime_str.replace('%', ''))
+        return 0.0
+    
+    total_calls = sum(get_monitoring_value(agent, 'callsThisWeek', 0) for agent in agents)
+    total_escalations = sum(get_monitoring_value(agent, 'escalations', 0) for agent in agents)
+    total_guardrail_triggers = sum(get_monitoring_value(agent, 'guardrailTriggers', 0) for agent in agents)
+    uptime_values = [get_uptime_value(agent) for agent in agents if get_uptime_value(agent) > 0]
+    avg_uptime = sum(uptime_values) / len(uptime_values) if uptime_values else 0.0
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -1435,7 +1566,7 @@ def runtime_monitoring():
                 st.markdown(f"*{agent['businessUseCase']}*")
             with col2:
                 # Health status based on metrics
-                uptime = float(agent['monitoring']['uptime'].replace('%', ''))
+                uptime = get_uptime_value(agent)
                 if uptime >= 99.0:
                     st.success("🟢 Healthy")
                 elif uptime >= 95.0:
@@ -1456,28 +1587,37 @@ def runtime_monitoring():
                 # Main metrics
                 col1, col2, col3, col4 = st.columns(4)
                 with col1:
+                    calls = get_monitoring_value(agent, 'callsThisWeek', 0)
                     st.metric(
                         "API Calls (7d)", 
-                        agent['monitoring']['callsThisWeek'],
-                        delta=f"+{agent['monitoring']['callsThisWeek'] - 100}" if agent['monitoring']['callsThisWeek'] > 100 else None
+                        calls,
+                        delta=f"+{calls - 100}" if calls > 100 else None
                     )
                 with col2:
+                    response_time = get_monitoring_value(agent, 'avgResponseTime', '245ms')
+                    if isinstance(response_time, str):
+                        response_time_val = float(response_time.replace('ms', '').replace('s', '')) * (1000 if 's' in response_time else 1)
+                    else:
+                        response_time_val = response_time
                     st.metric(
                         "Avg Response Time", 
-                        f"{agent['monitoring'].get('avgResponseTime', '245')}ms",
-                        delta="-15ms" if agent['monitoring'].get('avgResponseTime', 245) < 250 else "+5ms"
+                        f"{response_time}",
+                        delta="-15ms" if response_time_val < 250 else "+5ms"
                     )
                 with col3:
+                    uptime = get_uptime_value(agent)
+                    uptime_str = get_monitoring_value(agent, 'uptime', '0%')
                     st.metric(
                         "Uptime", 
-                        agent['monitoring']['uptime'],
-                        delta="+0.2%" if float(agent['monitoring']['uptime'].replace('%', '')) > 99.0 else "-0.5%"
+                        f"{uptime:.1f}%" if uptime > 0 else uptime_str,
+                        delta="+0.2%" if uptime > 99.0 else "-0.5%"
                     )
                 with col4:
+                    success_rate = get_monitoring_value(agent, 'successRate', 98.5)
                     st.metric(
                         "Success Rate", 
-                        f"{agent['monitoring'].get('successRate', '98.5')}%",
-                        delta="+1.2%" if agent['monitoring'].get('successRate', 98.5) > 97.0 else "-0.8%"
+                        f"{success_rate}%",
+                        delta="+1.2%" if success_rate > 97.0 else "-0.8%"
                     )
                 
                 # Additional metrics
@@ -1500,16 +1640,18 @@ def runtime_monitoring():
                 # Guardrail triggers
                 col1, col2 = st.columns(2)
                 with col1:
+                    triggers = get_monitoring_value(agent, 'guardrailTriggers', 0)
                     st.metric(
                         "Guardrail Triggers", 
-                        agent['monitoring']['guardrailTriggers'],
-                        delta=f"+{agent['monitoring']['guardrailTriggers'] - 2}" if agent['monitoring']['guardrailTriggers'] > 2 else None
+                        triggers,
+                        delta=f"+{triggers - 2}" if triggers > 2 else None
                     )
                 with col2:
+                    escalations = get_monitoring_value(agent, 'escalations', 0)
                     st.metric(
                         "Escalations", 
-                        agent['monitoring']['escalations'],
-                        delta=f"+{agent['monitoring']['escalations'] - 1}" if agent['monitoring']['escalations'] > 1 else None
+                        escalations,
+                        delta=f"+{escalations - 1}" if escalations > 1 else None
                     )
                 
                 # Guardrail details
@@ -1557,7 +1699,8 @@ def runtime_monitoring():
                 dates = pd.date_range('2025-01-15', periods=7, freq='D')
                 
                 # API calls trend
-                calls_trend = [agent['monitoring']['callsThisWeek'] + i*10 for i in range(7)]
+                base_calls = get_monitoring_value(agent, 'callsThisWeek', 0)
+                calls_trend = [base_calls + i*10 for i in range(7)]
                 calls_df = pd.DataFrame({'Date': dates, 'API Calls': calls_trend})
                 
                 fig_calls = px.line(calls_df, x='Date', y='API Calls', title='API Calls Trend (7 days)')
@@ -1630,7 +1773,7 @@ def runtime_monitoring():
         # Agent health distribution
         health_data = []
         for agent in agents:
-            uptime = float(agent['monitoring']['uptime'].replace('%', ''))
+            uptime = get_uptime_value(agent)
             if uptime >= 99.0:
                 health_data.append('Healthy')
             elif uptime >= 95.0:
@@ -2124,6 +2267,278 @@ def payment_audit():
                   annotation_text="Threshold: 0.65")
     st.plotly_chart(fig, use_container_width=True)
 
+def process_flow_diagram():
+    st.markdown('<h1 class="main-header">🔄 End-to-End Process Flow</h1>', unsafe_allow_html=True)
+    
+    if st.button("← Back to Agentic Catalog"):
+        st.session_state['current_page'] = 'landing'
+        st.rerun()
+    
+    st.markdown("""
+    <div style="text-align: center; margin-bottom: 2rem;">
+        <p style="font-size: 1.1rem; color: #6e6e73; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+            Visual representation of the complete payment processing workflow with AI agents, human interactions, and escalation paths
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
+    
+    # Process Flow Diagram using Plotly
+    # Define nodes and their positions
+    nodes = [
+        # Input Layer
+        {"id": "user_input", "label": "User Input<br/>💬 Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF"},
+        
+        # Agent Processing Layer
+        {"id": "intent_agent", "label": "Intent Agent<br/>🧠 Parse & Extract<br/>Payment Details", "x": 2, "y": 8, "color": "#34C759"},
+        {"id": "verification_agent", "label": "Verification Agent<br/>🔍 Account & Compliance<br/>Validation", "x": 4, "y": 8, "color": "#34C759"},
+        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>📊 Pattern Analysis<br/>& Risk Assessment", "x": 6, "y": 8, "color": "#34C759"},
+        
+        # Decision Points
+        {"id": "decision_point", "label": "Decision Point<br/>⚖️ Risk Assessment<br/>& Routing Logic", "x": 8, "y": 8, "color": "#FF9500"},
+        
+        # Human Interaction Points
+        {"id": "human_review", "label": "Human Review<br/>👤 Treasury Operations<br/>Manual Approval", "x": 10, "y": 6, "color": "#FF3B30"},
+        {"id": "escalation", "label": "Escalation<br/>🚨 Senior Management<br/>High-Risk Cases", "x": 10, "y": 10, "color": "#FF3B30"},
+        
+        # Execution Layer
+        {"id": "payment_execution", "label": "Payment Execution<br/>💳 Core Banking API<br/>Transaction Processing", "x": 12, "y": 8, "color": "#007AFF"},
+        
+        # Output Layer
+        {"id": "confirmation", "label": "Confirmation<br/>✅ Transaction Complete<br/>Audit Trail Generated", "x": 14, "y": 8, "color": "#34C759"},
+        
+        # Monitoring Layer
+        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 8, "y": 4, "color": "#8E8E93"},
+        
+        # Data Sources
+        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 2, "y": 6, "color": "#8E8E93"},
+        {"id": "payment_api", "label": "Payment API<br/>🏦 Core Banking<br/>Gateway", "x": 12, "y": 6, "color": "#8E8E93"},
+    ]
+    
+    # Define edges (connections)
+    edges = [
+        # Main flow
+        {"from": "user_input", "to": "intent_agent", "label": "Natural Language"},
+        {"from": "intent_agent", "to": "verification_agent", "label": "Structured Data"},
+        {"from": "verification_agent", "to": "anomaly_agent", "label": "Validated Data"},
+        {"from": "anomaly_agent", "to": "decision_point", "label": "Risk Score"},
+        {"from": "decision_point", "to": "payment_execution", "label": "Approved"},
+        {"from": "payment_execution", "to": "confirmation", "label": "Success"},
+        
+        # Data connections
+        {"from": "compliance_db", "to": "verification_agent", "label": "Compliance Check"},
+        {"from": "payment_api", "to": "payment_execution", "label": "API Call"},
+        
+        # Escalation paths
+        {"from": "decision_point", "to": "human_review", "label": "Medium Risk"},
+        {"from": "decision_point", "to": "escalation", "label": "High Risk"},
+        {"from": "human_review", "to": "payment_execution", "label": "Approved"},
+        {"from": "escalation", "to": "payment_execution", "label": "Approved"},
+        
+        # Monitoring connections
+        {"from": "monitoring", "to": "intent_agent", "label": "Monitor"},
+        {"from": "monitoring", "to": "verification_agent", "label": "Monitor"},
+        {"from": "monitoring", "to": "anomaly_agent", "label": "Monitor"},
+        {"from": "monitoring", "to": "payment_execution", "label": "Monitor"},
+    ]
+    
+    # Create the diagram
+    fig = go.Figure()
+    
+    # Add edges
+    for edge in edges:
+        from_node = next(n for n in nodes if n["id"] == edge["from"])
+        to_node = next(n for n in nodes if n["id"] == edge["to"])
+        
+        fig.add_trace(go.Scatter(
+            x=[from_node["x"], to_node["x"]],
+            y=[from_node["y"], to_node["y"]],
+            mode='lines',
+            line=dict(color='#8E8E93', width=2, dash='solid'),
+            showlegend=False,
+            hoverinfo='skip'
+        ))
+        
+        # Add edge labels
+        mid_x = (from_node["x"] + to_node["x"]) / 2
+        mid_y = (from_node["y"] + to_node["y"]) / 2
+        
+        fig.add_annotation(
+            x=mid_x,
+            y=mid_y,
+            text=edge["label"],
+            showarrow=False,
+            font=dict(size=10, color="#6E6E73"),
+            bgcolor="rgba(255,255,255,0.8)",
+            bordercolor="#E5E5EA",
+            borderwidth=1,
+            borderpad=4
+        )
+    
+    # Add nodes
+    for node in nodes:
+        fig.add_trace(go.Scatter(
+            x=[node["x"]],
+            y=[node["y"]],
+            mode='markers+text',
+            marker=dict(
+                size=120,
+                color=node["color"],
+                line=dict(width=3, color='white'),
+                opacity=0.9
+            ),
+            text=node["label"],
+            textposition="middle center",
+            textfont=dict(size=11, color="white", family="Inter"),
+            showlegend=False,
+            hovertemplate=f"<b>{node['label'].split('<br/>')[0]}</b><br>" +
+                         f"<br>".join(node['label'].split('<br/>')[1:]) +
+                         "<extra></extra>"
+        ))
+    
+    # Update layout
+    fig.update_layout(
+        title=dict(
+            text="High-Value Payment Processing Workflow",
+            font=dict(size=20, family="Inter", color="#1D1D1F"),
+            x=0.5
+        ),
+        xaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[-1, 15]),
+        yaxis=dict(showgrid=False, zeroline=False, showticklabels=False, range=[3, 11]),
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)',
+        width=1200,
+        height=600,
+        margin=dict(l=50, r=50, t=80, b=50)
+    )
+    
+    st.plotly_chart(fig, use_container_width=True)
+    
+    # Process Flow Details
+    st.markdown("---")
+    st.markdown("### 📋 Process Flow Details")
+    
+    # Create tabs for different aspects
+    tab1, tab2, tab3, tab4 = st.tabs(["🔄 Workflow Steps", "🤖 AI Agents", "👤 Human Interactions", "📊 Data Flow"])
+    
+    with tab1:
+        st.markdown("""
+        #### **1. Input Processing**
+        - **User Input**: Natural language payment instructions
+        - **Intent Agent**: Parses and extracts structured payment data
+        - **Output**: Standardized payment request with amount, accounts, purpose
+        
+        #### **2. Verification & Compliance**
+        - **Verification Agent**: Validates account details and compliance status
+        - **Data Sources**: Sanctions lists, KYC databases, AML checks
+        - **Output**: Compliance status and account validation results
+        
+        #### **3. Risk Assessment**
+        - **Anomaly Agent**: Analyzes payment patterns and risk indicators
+        - **Pattern Recognition**: Historical data analysis and anomaly detection
+        - **Output**: Risk score and anomaly indicators
+        
+        #### **4. Decision & Routing**
+        - **Decision Point**: Routes based on risk level and business rules
+        - **Low Risk**: Direct to execution
+        - **Medium Risk**: Human review required
+        - **High Risk**: Escalation to senior management
+        
+        #### **5. Execution & Confirmation**
+        - **Payment Execution**: Core banking API integration
+        - **Transaction Processing**: Real-time payment processing
+        - **Confirmation**: Success notification and audit trail
+        """)
+    
+    with tab2:
+        st.markdown("""
+        #### **🧠 Intent Agent (Retriever-Augmented)**
+        - **Purpose**: Parse natural language payment instructions
+        - **Capabilities**: NLP processing, entity extraction, intent classification
+        - **Input**: Free-form text instructions
+        - **Output**: Structured payment data (amount, accounts, purpose, urgency)
+        
+        #### **🔍 Verification Agent (Document Classifier)**
+        - **Purpose**: Validate accounts and compliance status
+        - **Capabilities**: Account validation, compliance checking, data enrichment
+        - **Input**: Account details, payment amount
+        - **Output**: Validation status, compliance flags, risk indicators
+        
+        #### **📊 Anomaly Agent (AI Supervisor)**
+        - **Purpose**: Detect unusual patterns and assess risk
+        - **Capabilities**: Pattern analysis, anomaly detection, risk scoring
+        - **Input**: Payment data, historical patterns, user behavior
+        - **Output**: Anomaly score, risk level, pattern analysis
+        
+        #### **⚖️ Decision Agent (Workflow Orchestrator)**
+        - **Purpose**: Route payments based on risk and business rules
+        - **Capabilities**: Rule evaluation, routing logic, escalation triggers
+        - **Input**: Risk scores, compliance status, business rules
+        - **Output**: Routing decision, escalation requirements
+        """)
+    
+    with tab3:
+        st.markdown("""
+        #### **👤 Treasury Operations (Human Review)**
+        - **Trigger**: Medium-risk payments (>$100K, <$1M)
+        - **Process**: Manual review of payment details and risk factors
+        - **Tools**: Scenario summary dashboard, decision journal
+        - **Decision**: Approve, reject, or escalate further
+        - **SLA**: 15-minute response time
+        
+        #### **👤 Senior Management (Escalation)**
+        - **Trigger**: High-risk payments (>$1M) or complex scenarios
+        - **Process**: Executive review with full context and analysis
+        - **Tools**: Comprehensive audit trail, risk analysis reports
+        - **Decision**: Final approval authority
+        - **SLA**: 30-minute response time
+        
+        #### **👤 Compliance Team (Oversight)**
+        - **Role**: Monitor overall compliance and audit processes
+        - **Access**: Real-time monitoring dashboard, audit reports
+        - **Responsibilities**: Policy updates, compliance training, audit reviews
+        """)
+    
+    with tab4:
+        st.markdown("""
+        #### **📥 Input Data Sources**
+        - **User Instructions**: Natural language payment requests
+        - **Account Data**: Customer account information and balances
+        - **Compliance Data**: Sanctions lists, KYC status, AML flags
+        - **Historical Data**: Previous transactions, user patterns, risk indicators
+        
+        #### **🔄 Processing Data**
+        - **Structured Payment Data**: Parsed and validated payment details
+        - **Risk Scores**: Anomaly detection and risk assessment results
+        - **Compliance Status**: Real-time compliance check results
+        - **Decision Context**: All relevant data for human review
+        
+        #### **📤 Output Data**
+        - **Transaction Records**: Complete payment transaction details
+        - **Audit Trails**: Comprehensive logging of all decisions and actions
+        - **Compliance Reports**: Regulatory reporting and audit documentation
+        - **Monitoring Data**: Real-time performance and compliance metrics
+        
+        #### **🔄 Data Flow Patterns**
+        - **Real-time Processing**: Immediate data validation and risk assessment
+        - **Asynchronous Review**: Human review processes with SLA tracking
+        - **Batch Reporting**: Daily compliance and audit reports
+        - **Event Streaming**: Real-time monitoring and alerting
+        """)
+    
+    # Process Metrics
+    st.markdown("---")
+    st.markdown("### 📊 Process Performance Metrics")
+    
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("Avg Processing Time", "2.3 min", "0.2 min")
+    with col2:
+        st.metric("Human Review Rate", "15.2%", "2.1%")
+    with col3:
+        st.metric("Escalation Rate", "3.8%", "0.5%")
+    with col4:
+        st.metric("Success Rate", "99.7%", "0.1%")
+
 def main():
     # Initialize session state
     if 'current_page' not in st.session_state:
@@ -2186,6 +2601,9 @@ def main():
         if st.button("📊 Payment Audit", key="nav_payment_audit"):
             st.session_state['current_page'] = 'payment_audit'
             st.rerun()
+        if st.button("🔄 Process Flow", key="nav_process_flow"):
+            st.session_state['current_page'] = 'process_flow'
+            st.rerun()
     
     # Route to appropriate page
     if st.session_state['current_page'] == 'landing':
@@ -2210,6 +2628,8 @@ def main():
         payment_escalation()
     elif st.session_state['current_page'] == 'payment_audit':
         payment_audit()
+    elif st.session_state['current_page'] == 'process_flow':
+        process_flow_diagram()
 
 if __name__ == "__main__":
     main()
