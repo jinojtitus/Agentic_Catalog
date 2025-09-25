@@ -1144,19 +1144,171 @@ def landing_page():
                     with col3:
                         st.metric("Success Rate", "94.2%")
                     
-                    # Escalation actions
+                    # Escalation Actions with Tabbed Content
                     st.markdown("### 🔧 Escalation Actions")
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        if st.button("📊 View Escalation Logs", key=f"escalation_logs_{agent['id']}"):
-                            st.info("Opening escalation logs...")
-                        if st.button("🔔 Configure Alerts", key=f"configure_alerts_{agent['id']}"):
-                            st.info("Opening alert configuration...")
-                    with col2:
-                        if st.button("📈 Escalation Trends", key=f"escalation_trends_{agent['id']}"):
-                            st.info("Loading escalation trends...")
-                        if st.button("⚙️ Escalation Settings", key=f"escalation_settings_{agent['id']}"):
-                            st.info("Opening escalation settings...")
+                    
+                    # Create tabs for escalation actions
+                    action_tab1, action_tab2, action_tab3, action_tab4 = st.tabs(["📋 Logs", "📊 Trends", "⚙️ Settings", "🔔 Alerts"])
+                    
+                    with action_tab1:
+                        st.markdown("#### 📋 Escalation Logs")
+                        st.markdown("**Recent Escalation Log Entries:**")
+                        
+                        # Sample escalation logs based on agent type
+                        if agent['patternType'] == 'orchestration':
+                            log_entries = [
+                                {"Timestamp": "2025-01-24 14:30:15", "Level": "HIGH", "Event": "High Risk Transaction Detected", "Details": "Payment amount $5.2M exceeds threshold", "Action": "Escalated to Treasury Manager", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-24 11:15:42", "Level": "MEDIUM", "Event": "Anomaly Pattern Detected", "Details": "Unusual payment frequency pattern", "Action": "Auto-retry with stricter validation", "Status": "Pending"},
+                                {"Timestamp": "2025-01-23 16:45:33", "Level": "HIGH", "Event": "Compliance Check Failed", "Details": "Beneficiary on sanctions list", "Action": "Blocked transaction", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-23 09:22:18", "Level": "LOW", "Event": "API Timeout", "Details": "Payment gateway timeout", "Action": "Retry with exponential backoff", "Status": "Resolved"}
+                            ]
+                        elif agent['patternType'] == 'monitoring':
+                            log_entries = [
+                                {"Timestamp": "2025-01-24 13:20:55", "Level": "MEDIUM", "Event": "Performance Degradation", "Details": "Response time 6.2s > 5s threshold", "Action": "Scaling up resources", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-24 09:30:12", "Level": "HIGH", "Event": "Error Rate Spike", "Details": "Error rate 7.8% > 5% threshold", "Action": "Investigating root cause", "Status": "Investigating"},
+                                {"Timestamp": "2025-01-23 22:15:44", "Level": "HIGH", "Event": "Resource Exhaustion", "Details": "Memory usage 92% > 90% threshold", "Action": "Emergency scaling", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-23 15:33:27", "Level": "LOW", "Event": "Service Unavailable", "Details": "Health check failed", "Action": "Restart service", "Status": "Resolved"}
+                            ]
+                        elif agent['patternType'] == 'retrieval':
+                            log_entries = [
+                                {"Timestamp": "2025-01-24 15:45:21", "Level": "HIGH", "Event": "Data Source Unavailable", "Details": "External API timeout after 30s", "Action": "Fallback to cache", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-24 12:10:38", "Level": "MEDIUM", "Event": "Query Timeout", "Details": "Complex query exceeded 30s limit", "Action": "Query optimization", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-23 18:30:15", "Level": "LOW", "Event": "Data Quality Issue", "Details": "Missing required fields", "Action": "Data validation", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-23 11:45:52", "Level": "MEDIUM", "Event": "Access Denied", "Details": "Authentication token expired", "Action": "Token refresh", "Status": "Resolved"}
+                            ]
+                        else:
+                            log_entries = [
+                                {"Timestamp": "2025-01-24 16:20:33", "Level": "MEDIUM", "Event": "Processing Error", "Details": "Unexpected data format", "Action": "Error handling", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-24 10:45:19", "Level": "LOW", "Event": "Validation Failure", "Details": "Input validation error", "Action": "Input sanitization", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-23 14:15:41", "Level": "HIGH", "Event": "Dependency Failure", "Details": "Required service unavailable", "Action": "Circuit breaker activated", "Status": "Resolved"},
+                                {"Timestamp": "2025-01-23 08:30:25", "Level": "LOW", "Event": "Resource Limit", "Details": "CPU usage 95%", "Action": "Resource optimization", "Status": "Resolved"}
+                            ]
+                        
+                        # Display log entries
+                        for log in log_entries:
+                            level_color = "🔴" if log["Level"] == "HIGH" else "🟡" if log["Level"] == "MEDIUM" else "🟢"
+                            status_icon = "✅" if log["Status"] == "Resolved" else "⏳" if log["Status"] == "Pending" else "🔍"
+                            
+                            with st.expander(f"{level_color} {log['Event']} - {log['Timestamp']}"):
+                                st.markdown(f"**Level:** {log['Level']}")
+                                st.markdown(f"**Details:** {log['Details']}")
+                                st.markdown(f"**Action Taken:** {log['Action']}")
+                                st.markdown(f"**Status:** {status_icon} {log['Status']}")
+                    
+                    with action_tab2:
+                        st.markdown("#### 📊 Escalation Trends")
+                        st.markdown("**Escalation Trends Over Time:**")
+                        
+                        # Sample trend data
+                        trend_data = pd.DataFrame({
+                            'Date': pd.date_range('2025-01-18', periods=7, freq='D'),
+                            'High Severity': [2, 1, 3, 1, 2, 0, 1],
+                            'Medium Severity': [4, 3, 2, 5, 3, 4, 2],
+                            'Low Severity': [1, 2, 1, 0, 1, 2, 1]
+                        })
+                        
+                        # Create trend chart
+                        fig = px.line(trend_data, x='Date', y=['High Severity', 'Medium Severity', 'Low Severity'],
+                                    title='Escalation Trends (Last 7 Days)',
+                                    color_discrete_map={
+                                        'High Severity': '#FF3B30',
+                                        'Medium Severity': '#FF9500',
+                                        'Low Severity': '#34C759'
+                                    })
+                        fig.update_layout(
+                            xaxis_title="Date",
+                            yaxis_title="Number of Escalations",
+                            font=dict(family="Inter", size=12)
+                        )
+                        st.plotly_chart(fig, use_container_width=True)
+                        
+                        # Trend insights
+                        st.markdown("**Trend Insights:**")
+                        st.markdown("- **High Severity**: 10 escalations (avg 1.4/day)")
+                        st.markdown("- **Medium Severity**: 23 escalations (avg 3.3/day)")
+                        st.markdown("- **Low Severity**: 8 escalations (avg 1.1/day)")
+                        st.markdown("- **Peak Day**: January 20th (6 total escalations)")
+                        st.markdown("- **Resolution Rate**: 85% within 24 hours")
+                    
+                    with action_tab3:
+                        st.markdown("#### ⚙️ Escalation Settings")
+                        st.markdown("**Current Escalation Configuration:**")
+                        
+                        # Escalation thresholds
+                        st.markdown("**Escalation Thresholds:**")
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.number_input("High Severity Threshold", value=0.8, min_value=0.0, max_value=1.0, step=0.1, key=f"high_threshold_{agent['id']}")
+                            st.number_input("Medium Severity Threshold", value=0.6, min_value=0.0, max_value=1.0, step=0.1, key=f"medium_threshold_{agent['id']}")
+                        with col2:
+                            st.number_input("Low Severity Threshold", value=0.4, min_value=0.0, max_value=1.0, step=0.1, key=f"low_threshold_{agent['id']}")
+                            st.number_input("Auto-retry Attempts", value=3, min_value=0, max_value=10, step=1, key=f"retry_attempts_{agent['id']}")
+                        
+                        # Escalation routing
+                        st.markdown("**Escalation Routing:**")
+                        escalation_routing = {
+                            'High Severity': 'Treasury Manager + Senior Management',
+                            'Medium Severity': 'Treasury Operations Team',
+                            'Low Severity': 'Auto-retry + Logging'
+                        }
+                        
+                        for severity, routing in escalation_routing.items():
+                            st.markdown(f"- **{severity}**: {routing}")
+                        
+                        # Notification settings
+                        st.markdown("**Notification Settings:**")
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.checkbox("Email Notifications", value=True, key=f"email_notifications_{agent['id']}")
+                            st.checkbox("SMS Alerts", value=False, key=f"sms_alerts_{agent['id']}")
+                        with col2:
+                            st.checkbox("Slack Integration", value=True, key=f"slack_integration_{agent['id']}")
+                            st.checkbox("Dashboard Alerts", value=True, key=f"dashboard_alerts_{agent['id']}")
+                        
+                        # Save settings button
+                        if st.button("Save Settings", key=f"save_settings_{agent['id']}"):
+                            st.success("Escalation settings updated successfully!")
+                    
+                    with action_tab4:
+                        st.markdown("#### 🔔 Configure Alerts")
+                        st.markdown("**Alert Configuration:**")
+                        
+                        # Alert rules
+                        st.markdown("**Active Alert Rules:**")
+                        alert_rules = [
+                            {"Rule": "High Risk Transaction", "Condition": "Amount > $5M", "Action": "Immediate Escalation", "Status": "Active"},
+                            {"Rule": "Anomaly Detection", "Condition": "Anomaly Score > 0.8", "Action": "Human Review", "Status": "Active"},
+                            {"Rule": "Performance Degradation", "Condition": "Response Time > 5s", "Action": "Auto-scaling", "Status": "Active"},
+                            {"Rule": "Error Rate Spike", "Condition": "Error Rate > 5%", "Action": "Investigation", "Status": "Active"}
+                        ]
+                        
+                        for rule in alert_rules:
+                            status_icon = "🟢" if rule["Status"] == "Active" else "🔴"
+                            st.markdown(f"- {status_icon} **{rule['Rule']}**: {rule['Condition']} → {rule['Action']}")
+                        
+                        # Create new alert
+                        st.markdown("**Create New Alert Rule:**")
+                        with st.form(key=f"new_alert_{agent['id']}"):
+                            alert_name = st.text_input("Alert Name", key=f"alert_name_{agent['id']}")
+                            alert_condition = st.text_input("Condition", key=f"alert_condition_{agent['id']}")
+                            alert_action = st.selectbox("Action", ["Immediate Escalation", "Human Review", "Auto-retry", "Logging Only"], key=f"alert_action_{agent['id']}")
+                            alert_severity = st.selectbox("Severity", ["High", "Medium", "Low"], key=f"alert_severity_{agent['id']}")
+                            
+                            if st.form_submit_button("Create Alert Rule"):
+                                st.success(f"Alert rule '{alert_name}' created successfully!")
+                        
+                        # Alert history
+                        st.markdown("**Recent Alert History:**")
+                        alert_history = [
+                            {"Time": "2025-01-24 14:30", "Alert": "High Risk Transaction", "Status": "Triggered", "Action": "Escalated"},
+                            {"Time": "2025-01-24 11:15", "Alert": "Anomaly Detection", "Status": "Triggered", "Action": "Human Review"},
+                            {"Time": "2025-01-23 16:45", "Alert": "Compliance Failure", "Status": "Triggered", "Action": "Blocked"},
+                            {"Time": "2025-01-23 09:22", "Alert": "API Timeout", "Status": "Resolved", "Action": "Retry"}
+                        ]
+                        
+                        for alert in alert_history:
+                            status_icon = "🔴" if alert["Status"] == "Triggered" else "🟢"
+                            st.markdown(f"- {status_icon} **{alert['Alert']}** ({alert['Time']}) → {alert['Action']}")
             
     
     # Stats
@@ -2624,7 +2776,7 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("🏠 Agentic Operating System", key="nav_catalog"):
+        if st.button("🏠 Agentic Catalog", key="nav_catalog"):
             st.session_state['current_page'] = 'landing'
             st.rerun()
         if st.button("📋 Governance Workflow", key="nav_governance"):
