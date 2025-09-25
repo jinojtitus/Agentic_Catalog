@@ -5,105 +5,193 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import json
 
-# Page configuration
+# Page configuration - iOS style
 st.set_page_config(
     page_title="Agentic Catalog",
-    page_icon="🤖",
+    page_icon="📱",
     layout="wide",
-    initial_sidebar_state="expanded"
+    initial_sidebar_state="expanded",
+    menu_items={
+        'Get Help': 'https://github.com/jinojtitus/Agentic_Catalog',
+        'Report a bug': 'https://github.com/jinojtitus/Agentic_Catalog/issues',
+        'About': "Agentic AI Catalog - iOS-style interface for managing AI agents"
+    }
 )
 
-# Custom CSS
+# iOS-style Custom CSS
 st.markdown("""
 <style>
+    /* Import SF Pro font (iOS system font) */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+    
+    /* Global iOS styling */
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+        max-width: 1200px;
+    }
+    
+    /* iOS-style main header */
     .main-header {
-        font-size: 2.5rem;
-        font-weight: bold;
-        color: #1f77b4;
-        margin-bottom: 2rem;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 2.8rem;
+        font-weight: 700;
+        color: #1d1d1f;
+        margin-bottom: 2.5rem;
         text-align: center;
+        letter-spacing: -0.02em;
     }
     
+    /* iOS-style agent cards */
     .agent-card {
-        background-color: white;
+        background-color: #ffffff;
         padding: 1.5rem;
-        border-radius: 10px;
-        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-        margin-bottom: 1rem;
-        border-left: 4px solid #1f77b4;
+        border-radius: 16px;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        margin-bottom: 1.5rem;
+        border: 1px solid rgba(0, 0, 0, 0.04);
+        transition: all 0.3s ease;
     }
     
+    .agent-card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+    
+    /* iOS-style status badges */
     .status-badge {
         display: inline-block;
-        padding: 0.25rem 0.5rem;
-        border-radius: 4px;
+        padding: 0.375rem 0.75rem;
+        border-radius: 20px;
         font-size: 0.8rem;
-        font-weight: bold;
+        font-weight: 600;
         margin-bottom: 0.5rem;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
     .status-approved {
-        background-color: #d4edda;
-        color: #155724;
+        background-color: #d1f2eb;
+        color: #00a86b;
+        border: 1px solid #a8e6cf;
     }
     
     .status-pilot {
-        background-color: #fff3cd;
-        color: #856404;
+        background-color: #fff3e0;
+        color: #ff8f00;
+        border: 1px solid #ffcc80;
     }
     
     .status-draft {
-        background-color: #f8d7da;
-        color: #721c24;
+        background-color: #ffebee;
+        color: #d32f2f;
+        border: 1px solid #ffcdd2;
     }
     
+    /* iOS-style metric cards */
     .metric-card {
-        background-color: #f8f9fa;
-        padding: 1rem;
-        border-radius: 8px;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
+        padding: 1.5rem;
+        border-radius: 16px;
         text-align: center;
-        border: 1px solid #dee2e6;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        transition: all 0.2s ease;
     }
     
+    .metric-card:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .metric-card h3 {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 2rem;
+        font-weight: 700;
+        color: #1d1d1f;
+        margin: 0 0 0.5rem 0;
+    }
+    
+    .metric-card p {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        font-size: 0.9rem;
+        color: #6e6e73;
+        margin: 0;
+        font-weight: 500;
+    }
+    
+    /* iOS-style compliance table */
     .compliance-table {
         width: 100%;
         border-collapse: collapse;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
     }
     
     .compliance-table th,
     .compliance-table td {
-        padding: 0.75rem;
+        padding: 1rem 1.5rem;
         text-align: left;
-        border-bottom: 1px solid #dee2e6;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
     }
     
     .compliance-table th {
-        background-color: #f8f9fa;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
         font-weight: 600;
+        color: #1d1d1f;
+        font-size: 0.9rem;
     }
     
-    /* Make all buttons equal size */
+    .compliance-table td {
+        color: #3c3c43;
+        font-size: 0.9rem;
+    }
+    
+    /* iOS-style buttons */
     .stButton > button {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
         min-width: 120px !important;
-        height: 40px !important;
-        padding: 10px 20px !important;
-        font-size: 14px !important;
-        border-radius: 4px !important;
+        height: 44px !important;
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        border-radius: 12px !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        margin-right: 10px !important;
-        margin-bottom: 10px !important;
+        margin-right: 12px !important;
+        margin-bottom: 12px !important;
+        border: none !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
     
-    /* Sidebar navigation buttons - make all same size as largest button */
+    .stButton > button:hover {
+        transform: translateY(-1px) !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+    }
+    
+    /* Primary button styling */
+    .stButton > button[kind="primary"] {
+        background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%) !important;
+        color: white !important;
+    }
+    
+    .stButton > button[kind="secondary"] {
+        background: linear-gradient(135deg, #f2f2f7 0%, #e5e5ea 100%) !important;
+        color: #1d1d1f !important;
+    }
+    
+    /* Sidebar navigation buttons - iOS style */
     .stSidebar .stButton > button {
         width: 100% !important;
         min-width: 200px !important;
-        height: 45px !important;
-        padding: 12px 20px !important;
-        font-size: 14px !important;
-        border-radius: 6px !important;
+        height: 50px !important;
+        padding: 14px 20px !important;
+        font-size: 16px !important;
+        font-weight: 500 !important;
+        border-radius: 12px !important;
         display: flex !important;
         align-items: center !important;
         justify-content: flex-start !important;
@@ -113,20 +201,160 @@ st.markdown("""
         white-space: nowrap !important;
         overflow: hidden !important;
         text-overflow: ellipsis !important;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+        color: #1d1d1f !important;
+        border: 1px solid rgba(0, 0, 0, 0.06) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stSidebar .stButton > button:hover {
+        background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%) !important;
+        transform: translateX(4px) !important;
+        box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08) !important;
+    }
+    
+    /* iOS-style expanders */
+    .streamlit-expander {
+        border: 1px solid rgba(0, 0, 0, 0.06) !important;
+        border-radius: 16px !important;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+        margin-bottom: 1rem !important;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%) !important;
+    }
+    
+    .streamlit-expander .streamlit-expanderHeader {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        font-weight: 600 !important;
+        font-size: 1.1rem !important;
+        color: #1d1d1f !important;
+        padding: 1rem 1.5rem !important;
+        border-radius: 16px 16px 0 0 !important;
+    }
+    
+    .streamlit-expander .streamlit-expanderContent {
+        padding: 1.5rem !important;
+        border-radius: 0 0 16px 16px !important;
+    }
+    
+    /* iOS-style tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px !important;
+        background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%) !important;
+        border-radius: 12px !important;
+        padding: 4px !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+    
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+        font-weight: 500 !important;
+        font-size: 0.9rem !important;
+        padding: 8px 16px !important;
+        transition: all 0.2s ease !important;
+    }
+    
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #007AFF 0%, #0051D5 100%) !important;
+        color: white !important;
+        box-shadow: 0 2px 8px rgba(0, 122, 255, 0.3) !important;
+    }
+    
+    /* iOS-style metrics */
+    .metric-container {
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        border-radius: 16px;
+        padding: 1.5rem;
+        border: 1px solid rgba(0, 0, 0, 0.06);
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.04);
+        margin-bottom: 1rem;
+    }
+    
+    /* iOS-style success/warning/error messages */
+    .stSuccess {
+        background: linear-gradient(135deg, #d1f2eb 0%, #a8e6cf 100%) !important;
+        border: 1px solid #00a86b !important;
+        border-radius: 12px !important;
+        color: #00a86b !important;
+    }
+    
+    .stWarning {
+        background: linear-gradient(135deg, #fff3e0 0%, #ffcc80 100%) !important;
+        border: 1px solid #ff8f00 !important;
+        border-radius: 12px !important;
+        color: #ff8f00 !important;
+    }
+    
+    .stError {
+        background: linear-gradient(135deg, #ffebee 0%, #ffcdd2 100%) !important;
+        border: 1px solid #d32f2f !important;
+        border-radius: 12px !important;
+        color: #d32f2f !important;
+    }
+    
+    .stInfo {
+        background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%) !important;
+        border: 1px solid #2196f3 !important;
+        border-radius: 12px !important;
+        color: #1976d2 !important;
+    }
+    
+    /* iOS-style form elements */
+    .stSelectbox > div > div {
+        border-radius: 12px !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    }
+    
+    .stTextInput > div > div > input {
+        border-radius: 12px !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    }
+    
+    .stTextArea > div > div > textarea {
+        border-radius: 12px !important;
+        border: 1px solid rgba(0, 0, 0, 0.1) !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif !important;
+    }
+    
+    /* iOS-style plotly charts */
+    .js-plotly-plot {
+        border-radius: 16px !important;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08) !important;
+        overflow: hidden !important;
+    }
+    
+    /* iOS-style sidebar */
+    .css-1d391kg {
+        background: linear-gradient(180deg, #f8f9fa 0%, #ffffff 100%) !important;
+        border-right: 1px solid rgba(0, 0, 0, 0.06) !important;
+    }
+    
+    /* iOS-style main content area */
+    .main .block-container {
+        background: linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%) !important;
     }
     
     /* Ensure form submit buttons are also equal size */
     .stForm > div > div > button {
         min-width: 120px !important;
-        height: 40px !important;
-        padding: 10px 20px !important;
-        font-size: 14px !important;
-        border-radius: 4px !important;
+        height: 44px !important;
+        padding: 12px 24px !important;
+        font-size: 16px !important;
+        font-weight: 600 !important;
+        border-radius: 12px !important;
         display: inline-flex !important;
         align-items: center !important;
         justify-content: center !important;
-        margin-right: 10px !important;
-        margin-bottom: 10px !important;
+        margin-right: 12px !important;
+        margin-bottom: 12px !important;
+        border: none !important;
+        transition: all 0.2s ease !important;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1) !important;
     }
 </style>
 """, unsafe_allow_html=True)
@@ -604,7 +832,8 @@ def get_status_badge(status):
     return status_map.get(status, {'text': status, 'class': ''})
 
 def landing_page():
-    st.markdown('<h1 class="main-header">Agentic Catalog</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">📱 Agentic Catalog</h1>', unsafe_allow_html=True)
+    st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #6e6e73; margin-bottom: 2rem; font-family: \'Inter\', -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif;">Manage and monitor your AI agents with iOS-style elegance</p>', unsafe_allow_html=True)
     
     data = load_agent_data()
     agents = data['agents']
@@ -1900,40 +2129,49 @@ def main():
     if 'current_page' not in st.session_state:
         st.session_state['current_page'] = 'landing'
     
-    # Sidebar navigation
+    # iOS-style Sidebar navigation
     with st.sidebar:
-        st.markdown("## Navigation")
-        if st.button("🏠 Agentic Catalog"):
+        st.markdown("""
+        <div style="text-align: center; margin-bottom: 2rem;">
+            <h2 style="color: #1d1d1f; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 700; margin: 0;">📱 Navigation</h2>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("🏠 Agentic Catalog", key="nav_catalog"):
             st.session_state['current_page'] = 'landing'
             st.rerun()
-        if st.button("📋 Governance Workflow"):
+        if st.button("📋 Governance Workflow", key="nav_governance"):
             st.session_state['current_page'] = 'governance'
             st.rerun()
-        if st.button("📊 Runtime Monitoring"):
+        if st.button("📊 Runtime Monitoring", key="nav_monitoring"):
             st.session_state['current_page'] = 'monitoring'
             st.rerun()
-        if st.button("🚨 Escalation Console"):
+        if st.button("🚨 Escalation Console", key="nav_escalation"):
             st.session_state['current_page'] = 'escalation'
             st.rerun()
-        if st.button("📈 Audit & Reporting"):
+        if st.button("📈 Audit & Reporting", key="nav_audit"):
             st.session_state['current_page'] = 'audit'
             st.rerun()
         
-        st.markdown("---")
-        st.markdown("### Payment Workflow")
-        if st.button("💳 Payment Instruction"):
+        st.markdown("""
+        <div style="margin: 1.5rem 0; padding: 1rem; background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%); border-radius: 12px; border: 1px solid rgba(0, 0, 0, 0.06);">
+            <h3 style="color: #1d1d1f; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 600; margin: 0 0 1rem 0; font-size: 1rem;">💳 Payment Workflow</h3>
+        </div>
+        """, unsafe_allow_html=True)
+        
+        if st.button("💳 Payment Instruction", key="nav_payment"):
             st.session_state['current_page'] = 'payment_instruction'
             st.rerun()
-        if st.button("🔍 Intent Verification"):
+        if st.button("🔍 Intent Verification", key="nav_intent"):
             st.session_state['current_page'] = 'intent_verification'
             st.rerun()
-        if st.button("📋 Scenario Summary"):
+        if st.button("📋 Scenario Summary", key="nav_scenario"):
             st.session_state['current_page'] = 'scenario_summary'
             st.rerun()
-        if st.button("🚨 Payment Escalation"):
+        if st.button("🚨 Payment Escalation", key="nav_payment_escalation"):
             st.session_state['current_page'] = 'payment_escalation'
             st.rerun()
-        if st.button("📊 Payment Audit"):
+        if st.button("📊 Payment Audit", key="nav_payment_audit"):
             st.session_state['current_page'] = 'payment_audit'
             st.rerun()
     
