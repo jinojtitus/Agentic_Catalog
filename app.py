@@ -4,6 +4,7 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import json
+import yaml
 
 # Page configuration - iOS style
 st.set_page_config(
@@ -420,7 +421,53 @@ def load_agent_data():
                     'notificationChannels': ['Slack', 'Teams', 'ServiceNow'],
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'escalation_reasoning'}
                 },
-                'monitoring': {'callsThisWeek': 1245, 'guardrailTriggers': 3, 'escalations': 1, 'avgResponseTime': '245ms', 'uptime': '99.8%'}
+                'monitoring': {'callsThisWeek': 1245, 'guardrailTriggers': 3, 'escalations': 1, 'avgResponseTime': '245ms', 'uptime': '99.8%'},
+                'patternImplementations': {
+                    'primary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠'],
+                    'secondary_patterns': ['Reflection 🪞', 'Critic/Reviewer 🧐'],
+                    'pattern_details': {
+                        'Tool Use 🔧': {
+                            'implementation': 'Uses vector database and embedding APIs for document retrieval',
+                            'tools_used': ['Pinecone Vector DB', 'Azure OpenAI Embeddings', 'Azure Blob Storage'],
+                            'configuration': {
+                                'max_retry_attempts': 3,
+                                'tool_whitelist_required': True,
+                                'input_validation': True,
+                                'output_sanitization': True
+                            }
+                        },
+                        'Memory & Learning 🧠': {
+                            'implementation': 'Learns from document classification patterns and improves routing accuracy',
+                            'memory_type': 'Long-term pattern recognition',
+                            'learning_mechanism': 'Feedback loop from classification accuracy',
+                            'configuration': {
+                                'short_term_memory_ttl': 3600,
+                                'long_term_memory_summary_threshold': 30,
+                                'memory_inspection_enabled': True
+                            }
+                        },
+                        'Reflection 🪞': {
+                            'implementation': 'Self-evaluates classification confidence and accuracy before routing',
+                            'reflection_criteria': ['accuracy', 'confidence', 'compliance'],
+                            'max_reflection_loops': 2,
+                            'configuration': {
+                                'reflection_notes_required': True,
+                                'audit_logging': True,
+                                'timeout_seconds': 30
+                            }
+                        },
+                        'Critic/Reviewer 🧐': {
+                            'implementation': 'Secondary validation of high-risk document classifications',
+                            'critic_role': 'Quality assurance for document routing decisions',
+                            'decision_authority': 'Primary agent with critic override',
+                            'configuration': {
+                                'evaluation_rubric_required': True,
+                                'critic_output_tags': ['approve', 'revise', 'reject'],
+                                'critique_traceability': True
+                            }
+                        }
+                    }
+                }
             },
             {
                 'id': 'orchestrator-v2',
@@ -477,7 +524,66 @@ def load_agent_data():
                     'notificationChannels': ['Slack', 'Email', 'PagerDuty'],
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'workflow_escalation'}
                 },
-                'monitoring': {'callsThisWeek': 892, 'guardrailTriggers': 5, 'escalations': 2, 'avgResponseTime': '1.2s', 'uptime': '98.5%'}
+                'monitoring': {'callsThisWeek': 892, 'guardrailTriggers': 5, 'escalations': 2, 'avgResponseTime': '1.2s', 'uptime': '98.5%'},
+                'patternImplementations': {
+                    'primary_patterns': ['Orchestration 🎼', 'Planning 📋'],
+                    'secondary_patterns': ['Tool Use 🔧', 'Collaboration / Delegation 🤝', 'Exploration / Simulation 🔄'],
+                    'pattern_details': {
+                        'Orchestration 🎼': {
+                            'implementation': 'Meta-agent coordinating multiple workflow steps and task management',
+                            'coordination_scope': 'End-to-end workflow execution',
+                            'global_state_management': True,
+                            'configuration': {
+                                'global_state_required': True,
+                                'task_registry_enabled': True,
+                                'escalation_policy': 'retry_fallback_human',
+                                'modular_components': True
+                            }
+                        },
+                        'Planning 📋': {
+                            'implementation': 'Breaks down complex workflows into executable sub-tasks',
+                            'planning_depth': 'Multi-level task decomposition',
+                            'plan_format': 'JSON workflow definitions',
+                            'configuration': {
+                                'max_plan_depth': 5,
+                                'plan_format': 'json',
+                                'required_fields': ['task_id', 'description', 'dependencies', 'success_criteria'],
+                                'replan_on_failure': True
+                            }
+                        },
+                        'Tool Use 🔧': {
+                            'implementation': 'Integrates with workflow engine, message queue, and monitoring systems',
+                            'tools_used': ['Temporal Workflow Engine', 'RabbitMQ', 'PostgreSQL', 'Prometheus'],
+                            'configuration': {
+                                'max_retry_attempts': 3,
+                                'tool_whitelist_required': True,
+                                'input_validation': True,
+                                'rate_limiting': True
+                            }
+                        },
+                        'Collaboration / Delegation 🤝': {
+                            'implementation': 'Coordinates with specialized agents for different workflow steps',
+                            'delegation_protocol': 'Structured handoff with context preservation',
+                            'conflict_resolution': 'Workflow state arbitration',
+                            'configuration': {
+                                'role_declaration_required': True,
+                                'handoff_packet_format': 'json',
+                                'conflict_resolution': 'workflow_state_arbitration',
+                                'circular_delegation_check': True
+                            }
+                        },
+                        'Exploration / Simulation 🔄': {
+                            'implementation': 'Simulates workflow execution paths before committing to execution',
+                            'scenario_testing': 'Workflow path validation and optimization',
+                            'configuration': {
+                                'max_scenarios': 5,
+                                'scenario_ranking_required': True,
+                                'top_scenarios_retained': 2,
+                                'assumption_documentation': True
+                            }
+                        }
+                    }
+                }
             },
             {
                 'id': 'compliance-v1',
@@ -534,7 +640,53 @@ def load_agent_data():
                     'notificationChannels': ['Email', 'Teams', 'Slack'],
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'compliance_finding'}
                 },
-                'monitoring': {'callsThisWeek': 0, 'guardrailTriggers': 0, 'escalations': 0, 'avgResponseTime': 'N/A', 'uptime': 'N/A'}
+                'monitoring': {'callsThisWeek': 0, 'guardrailTriggers': 0, 'escalations': 0, 'avgResponseTime': 'N/A', 'uptime': 'N/A'},
+                'patternImplementations': {
+                    'primary_patterns': ['Tool Use 🔧', 'Critic/Reviewer 🧐'],
+                    'secondary_patterns': ['Memory & Learning 🧠', 'Reflection 🪞'],
+                    'pattern_details': {
+                        'Tool Use 🔧': {
+                            'implementation': 'Integrates with compliance APIs and regulatory databases',
+                            'tools_used': ['Compliance API', 'Regulatory Database', 'Audit Logging System'],
+                            'configuration': {
+                                'max_retry_attempts': 3,
+                                'tool_whitelist_required': True,
+                                'input_validation': True,
+                                'output_sanitization': True
+                            }
+                        },
+                        'Critic/Reviewer 🧐': {
+                            'implementation': 'Reviews and validates compliance findings before reporting',
+                            'critic_role': 'Compliance validation and quality assurance',
+                            'decision_authority': 'Primary agent with compliance override',
+                            'configuration': {
+                                'evaluation_rubric_required': True,
+                                'critic_output_tags': ['compliant', 'non_compliant', 'requires_review'],
+                                'critique_traceability': True
+                            }
+                        },
+                        'Memory & Learning 🧠': {
+                            'implementation': 'Learns from compliance patterns and regulatory updates',
+                            'memory_type': 'Regulatory knowledge base',
+                            'learning_mechanism': 'Pattern recognition from compliance violations',
+                            'configuration': {
+                                'short_term_memory_ttl': 7200,
+                                'long_term_memory_summary_threshold': 50,
+                                'memory_inspection_enabled': True
+                            }
+                        },
+                        'Reflection 🪞': {
+                            'implementation': 'Self-evaluates compliance findings for accuracy and completeness',
+                            'reflection_criteria': ['accuracy', 'completeness', 'regulatory_alignment'],
+                            'max_reflection_loops': 2,
+                            'configuration': {
+                                'reflection_notes_required': True,
+                                'audit_logging': True,
+                                'timeout_seconds': 60
+                            }
+                        }
+                    }
+                }
             },
             {
                 'id': 'payment-processor-v1',
@@ -642,7 +794,74 @@ def load_agent_data():
                     'notificationChannels': ['Slack', 'Teams', 'Email', 'PagerDuty'],
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'payment_decision'}
                 },
-                'monitoring': {'callsThisWeek': 23, 'guardrailTriggers': 7, 'escalations': 3, 'avgResponseTime': '3.2s', 'uptime': '99.9%'}
+                'monitoring': {'callsThisWeek': 23, 'guardrailTriggers': 7, 'escalations': 3, 'avgResponseTime': '3.2s', 'uptime': '99.9%'},
+                'patternImplementations': {
+                    'primary_patterns': ['Orchestration 🎼', 'Tool Use 🔧', 'Exploration / Simulation 🔄'],
+                    'secondary_patterns': ['Reflection 🪞', 'Critic/Reviewer 🧐', 'Memory & Learning 🧠'],
+                    'pattern_details': {
+                        'Orchestration 🎼': {
+                            'implementation': 'Coordinates multi-step payment processing workflow with anomaly detection',
+                            'coordination_scope': 'End-to-end payment execution pipeline',
+                            'global_state_management': True,
+                            'configuration': {
+                                'global_state_required': True,
+                                'task_registry_enabled': True,
+                                'escalation_policy': 'retry_fallback_human',
+                                'modular_components': True
+                            }
+                        },
+                        'Tool Use 🔧': {
+                            'implementation': 'Integrates with payment APIs, anomaly detection models, and verification systems',
+                            'tools_used': ['Payment API', 'Anomaly Detection Model', 'Account Verification API', 'Banking APIs'],
+                            'configuration': {
+                                'max_retry_attempts': 3,
+                                'tool_whitelist_required': True,
+                                'input_validation': True,
+                                'output_sanitization': True
+                            }
+                        },
+                        'Exploration / Simulation 🔄': {
+                            'implementation': 'Simulates payment scenarios and risk assessments before execution',
+                            'scenario_testing': 'Payment risk analysis and compliance validation',
+                            'configuration': {
+                                'max_scenarios': 8,
+                                'scenario_ranking_required': True,
+                                'top_scenarios_retained': 3,
+                                'assumption_documentation': True
+                            }
+                        },
+                        'Reflection 🪞': {
+                            'implementation': 'Self-evaluates payment confidence and anomaly scores before execution',
+                            'reflection_criteria': ['confidence', 'anomaly_score', 'compliance', 'risk_assessment'],
+                            'max_reflection_loops': 3,
+                            'configuration': {
+                                'reflection_notes_required': True,
+                                'audit_logging': True,
+                                'timeout_seconds': 120
+                            }
+                        },
+                        'Critic/Reviewer 🧐': {
+                            'implementation': 'Secondary validation of high-value payment decisions',
+                            'critic_role': 'Payment risk and compliance validation',
+                            'decision_authority': 'Human reviewer with critic recommendations',
+                            'configuration': {
+                                'evaluation_rubric_required': True,
+                                'critic_output_tags': ['approve', 'reject', 'requires_human_review'],
+                                'critique_traceability': True
+                            }
+                        },
+                        'Memory & Learning 🧠': {
+                            'implementation': 'Learns from payment patterns and fraud detection to improve accuracy',
+                            'memory_type': 'Payment pattern recognition and fraud detection',
+                            'learning_mechanism': 'Feedback loop from payment success/failure patterns',
+                            'configuration': {
+                                'short_term_memory_ttl': 1800,
+                                'long_term_memory_summary_threshold': 20,
+                                'memory_inspection_enabled': True
+                            }
+                        }
+                    }
+                }
             },
             {
                 'id': 'negotiator-v1',
@@ -700,7 +919,75 @@ def load_agent_data():
                     'notificationChannels': ['Email', 'Teams', 'Legal Portal'],
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'negotiation_decision'}
                 },
-                'monitoring': {'callsThisWeek': 12, 'guardrailTriggers': 2, 'escalations': 1, 'avgResponseTime': '45s', 'uptime': '99.5%'}
+                'monitoring': {'callsThisWeek': 12, 'guardrailTriggers': 2, 'escalations': 1, 'avgResponseTime': '45s', 'uptime': '99.5%'},
+                'patternImplementations': {
+                    'primary_patterns': ['Collaboration / Delegation 🤝', 'Planning 📋', 'Reflection 🪞'],
+                    'secondary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠', 'Critic/Reviewer 🧐'],
+                    'pattern_details': {
+                        'Collaboration / Delegation 🤝': {
+                            'implementation': 'Coordinates with legal team and counterparty agents during negotiations',
+                            'delegation_protocol': 'Structured negotiation handoffs with legal oversight',
+                            'conflict_resolution': 'Legal team arbitration with negotiation state preservation',
+                            'configuration': {
+                                'role_declaration_required': True,
+                                'handoff_packet_format': 'json',
+                                'conflict_resolution': 'legal_team_arbitration',
+                                'circular_delegation_check': True
+                            }
+                        },
+                        'Planning 📋': {
+                            'implementation': 'Develops multi-step negotiation strategies and fallback plans',
+                            'planning_depth': 'Strategic negotiation planning with contingency planning',
+                            'plan_format': 'JSON negotiation strategies',
+                            'configuration': {
+                                'max_plan_depth': 4,
+                                'plan_format': 'json',
+                                'required_fields': ['strategy_id', 'tactics', 'fallback_plans', 'success_criteria'],
+                                'replan_on_failure': True
+                            }
+                        },
+                        'Reflection 🪞': {
+                            'implementation': 'Self-evaluates negotiation progress and strategy effectiveness',
+                            'reflection_criteria': ['strategy_effectiveness', 'counterparty_response', 'legal_compliance'],
+                            'max_reflection_loops': 3,
+                            'configuration': {
+                                'reflection_notes_required': True,
+                                'audit_logging': True,
+                                'timeout_seconds': 300
+                            }
+                        },
+                        'Tool Use 🔧': {
+                            'implementation': 'Integrates with legal databases, contract templates, and communication systems',
+                            'tools_used': ['Legal Database', 'Contract Templates', 'Communication APIs', 'Document Management'],
+                            'configuration': {
+                                'max_retry_attempts': 3,
+                                'tool_whitelist_required': True,
+                                'input_validation': True,
+                                'output_sanitization': True
+                            }
+                        },
+                        'Memory & Learning 🧠': {
+                            'implementation': 'Learns from negotiation outcomes and counterparty behavior patterns',
+                            'memory_type': 'Negotiation strategy and outcome patterns',
+                            'learning_mechanism': 'Feedback loop from negotiation success/failure patterns',
+                            'configuration': {
+                                'short_term_memory_ttl': 7200,
+                                'long_term_memory_summary_threshold': 25,
+                                'memory_inspection_enabled': True
+                            }
+                        },
+                        'Critic/Reviewer 🧐': {
+                            'implementation': 'Legal team reviews negotiation strategies and contract terms',
+                            'critic_role': 'Legal compliance and risk assessment',
+                            'decision_authority': 'Legal team with negotiation override',
+                            'configuration': {
+                                'evaluation_rubric_required': True,
+                                'critic_output_tags': ['approve', 'revise', 'reject'],
+                                'critique_traceability': True
+                            }
+                        }
+                    }
+                }
             },
             {
                 'id': 'classifier-v1',
@@ -759,7 +1046,64 @@ def load_agent_data():
                     'notificationChannels': ['Slack', 'Email', 'Teams'],
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'classification_decision'}
                 },
-                'monitoring': {'callsThisWeek': 2156, 'guardrailTriggers': 12, 'escalations': 3, 'avgResponseTime': '2.1s', 'uptime': '99.9%'}
+                'monitoring': {'callsThisWeek': 2156, 'guardrailTriggers': 12, 'escalations': 3, 'avgResponseTime': '2.1s', 'uptime': '99.9%'},
+                'patternImplementations': {
+                    'primary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠', 'Reflection 🪞'],
+                    'secondary_patterns': ['Critic/Reviewer 🧐', 'Planning 📋'],
+                    'pattern_details': {
+                        'Tool Use 🔧': {
+                            'implementation': 'Integrates with classification models, vector databases, and document storage systems',
+                            'tools_used': ['Custom Classification Model v3', 'Pinecone Vector DB', 'Azure Blob Storage', 'Azure OpenAI GPT-4'],
+                            'configuration': {
+                                'max_retry_attempts': 3,
+                                'tool_whitelist_required': True,
+                                'input_validation': True,
+                                'output_sanitization': True
+                            }
+                        },
+                        'Memory & Learning 🧠': {
+                            'implementation': 'Learns from classification patterns and improves accuracy over time',
+                            'memory_type': 'Document classification patterns and accuracy feedback',
+                            'learning_mechanism': 'Feedback loop from classification accuracy and user corrections',
+                            'configuration': {
+                                'short_term_memory_ttl': 3600,
+                                'long_term_memory_summary_threshold': 40,
+                                'memory_inspection_enabled': True
+                            }
+                        },
+                        'Reflection 🪞': {
+                            'implementation': 'Self-evaluates classification confidence and accuracy before finalizing decisions',
+                            'reflection_criteria': ['confidence', 'accuracy', 'consistency', 'compliance'],
+                            'max_reflection_loops': 2,
+                            'configuration': {
+                                'reflection_notes_required': True,
+                                'audit_logging': True,
+                                'timeout_seconds': 5
+                            }
+                        },
+                        'Critic/Reviewer 🧐': {
+                            'implementation': 'Secondary validation of low-confidence classifications',
+                            'critic_role': 'Classification quality assurance and validation',
+                            'decision_authority': 'Primary agent with critic recommendations',
+                            'configuration': {
+                                'evaluation_rubric_required': True,
+                                'critic_output_tags': ['approve', 'revise', 'requires_human_review'],
+                                'critique_traceability': True
+                            }
+                        },
+                        'Planning 📋': {
+                            'implementation': 'Plans classification strategies for complex multi-document scenarios',
+                            'planning_depth': 'Document classification workflow planning',
+                            'plan_format': 'JSON classification strategies',
+                            'configuration': {
+                                'max_plan_depth': 3,
+                                'plan_format': 'json',
+                                'required_fields': ['classification_id', 'strategy', 'confidence_threshold', 'fallback_plan'],
+                                'replan_on_failure': True
+                            }
+                        }
+                    }
+                }
             },
             {
                 'id': 'supervisor-v1',
@@ -818,7 +1162,86 @@ def load_agent_data():
                     'notificationChannels': ['PagerDuty', 'Slack', 'Teams', 'Email'],
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'supervisory_decision'}
                 },
-                'monitoring': {'callsThisWeek': 156, 'guardrailTriggers': 8, 'escalations': 5, 'avgResponseTime': '1.8s', 'uptime': '99.7%'}
+                'monitoring': {'callsThisWeek': 156, 'guardrailTriggers': 8, 'escalations': 5, 'avgResponseTime': '1.8s', 'uptime': '99.7%'},
+                'patternImplementations': {
+                    'primary_patterns': ['Orchestration 🎼', 'Collaboration / Delegation 🤝', 'Critic/Reviewer 🧐'],
+                    'secondary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠', 'Reflection 🪞', 'Planning 📋'],
+                    'pattern_details': {
+                        'Orchestration 🎼': {
+                            'implementation': 'Meta-agent coordinating multiple AI agents and managing system-wide operations',
+                            'coordination_scope': 'Multi-agent system supervision and coordination',
+                            'global_state_management': True,
+                            'configuration': {
+                                'global_state_required': True,
+                                'task_registry_enabled': True,
+                                'escalation_policy': 'retry_fallback_human',
+                                'modular_components': True
+                            }
+                        },
+                        'Collaboration / Delegation 🤝': {
+                            'implementation': 'Coordinates and delegates tasks between specialized agents',
+                            'delegation_protocol': 'Structured agent handoffs with supervisory oversight',
+                            'conflict_resolution': 'Supervisor arbitration with escalation paths',
+                            'configuration': {
+                                'role_declaration_required': True,
+                                'handoff_packet_format': 'json',
+                                'conflict_resolution': 'supervisor_arbitration',
+                                'circular_delegation_check': True
+                            }
+                        },
+                        'Critic/Reviewer 🧐': {
+                            'implementation': 'Reviews and validates decisions from supervised agents',
+                            'critic_role': 'Multi-agent quality assurance and decision validation',
+                            'decision_authority': 'Supervisor with human escalation override',
+                            'configuration': {
+                                'evaluation_rubric_required': True,
+                                'critic_output_tags': ['approve', 'revise', 'escalate_to_human'],
+                                'critique_traceability': True
+                            }
+                        },
+                        'Tool Use 🔧': {
+                            'implementation': 'Integrates with monitoring systems, messaging, and orchestration tools',
+                            'tools_used': ['Temporal Workflow Engine', 'Prometheus + Grafana', 'RabbitMQ', 'PostgreSQL'],
+                            'configuration': {
+                                'max_retry_attempts': 3,
+                                'tool_whitelist_required': True,
+                                'input_validation': True,
+                                'output_sanitization': True
+                            }
+                        },
+                        'Memory & Learning 🧠': {
+                            'implementation': 'Learns from agent performance patterns and escalation outcomes',
+                            'memory_type': 'Agent performance patterns and supervisory decisions',
+                            'learning_mechanism': 'Feedback loop from agent performance and escalation outcomes',
+                            'configuration': {
+                                'short_term_memory_ttl': 3600,
+                                'long_term_memory_summary_threshold': 50,
+                                'memory_inspection_enabled': True
+                            }
+                        },
+                        'Reflection 🪞': {
+                            'implementation': 'Self-evaluates supervisory decisions and agent coordination effectiveness',
+                            'reflection_criteria': ['decision_quality', 'agent_coordination', 'escalation_appropriateness'],
+                            'max_reflection_loops': 2,
+                            'configuration': {
+                                'reflection_notes_required': True,
+                                'audit_logging': True,
+                                'timeout_seconds': 60
+                            }
+                        },
+                        'Planning 📋': {
+                            'implementation': 'Plans multi-agent coordination strategies and escalation responses',
+                            'planning_depth': 'Multi-agent coordination and supervision planning',
+                            'plan_format': 'JSON supervision strategies',
+                            'configuration': {
+                                'max_plan_depth': 4,
+                                'plan_format': 'json',
+                                'required_fields': ['supervision_id', 'agent_coordination', 'escalation_plan', 'success_criteria'],
+                                'replan_on_failure': True
+                            }
+                        }
+                    }
+                }
             }
         ]
     }
@@ -871,151 +1294,935 @@ def landing_page():
     if lifecycle_filter != "All":
         filtered_agents = [agent for agent in filtered_agents if agent['status'] == lifecycle_filter]
     
-    # Display agent cards
-    st.markdown("### Agent Cards")
+    # Main tabs for Pattern Cards and Agent Cards
+    main_tab1, main_tab2 = st.tabs(["🔄 Pattern Cards", "🤖 Agent Cards"])
     
-    cols = st.columns(2)
-    for i, agent in enumerate(filtered_agents):
-        with cols[i % 2]:
-            status_info = get_status_badge(agent['status'])
-            pattern_type_emoji = {
-                'retrieval': '🔍',
-                'orchestration': '🔄',
-                'monitoring': '📊',
-                'reasoning': '🧠',
-                'classification': '📋',
-                'supervision': '👥'
-            }.get(agent['patternType'], '🤖')
-            
-            # Create expandable agent card
-            with st.expander(f"{pattern_type_emoji} {agent['name']} - {status_info['text']}", expanded=False):
-                # Agent Overview tab
-                tab1, tab2, tab3, tab4, tab5 = st.tabs(["Agent Overview", "Pattern", "Policies", "Runtime", "Escalation"])
+    with main_tab1:
+        # Pattern Cards Tab
+        st.markdown("### Pattern Cards")
+        st.markdown("""
+        **Agentic AI patterns are essentially reusable building blocks for designing autonomous AI systems that don't just generate text, but reason, act, and improve over time. These are "design primitives" for scaling agentic workflows across enterprise and property-like domains, with all policies/rules observable as the agents are deployed.**
+        """)
+        
+        # Pattern Cards
+        patterns = [
+            {
+                "name": "Reflection 🪞",
+                "description": "The agent evaluates its own outputs, reasoning, or actions, then iteratively improves them.",
+                "example": "Insurance Claims Agent checking submitted forms for errors before submission",
+                "rules": [
+                    "Always separate generation from evaluation (two distinct phases).",
+                    "Use explicit criteria (accuracy, compliance, clarity) for self-checks.",
+                    "Limit recursion depth to avoid infinite loops.",
+                    "Log reflection steps for auditability"
+                ],
+                "explicit_policies": [
+                    "Rule: Every reflection cycle must produce a 'reflection note' (e.g., 'I found a factual inconsistency in step 3').",
+                    "Rule: Limit to max 3 reflection loops per task to prevent infinite recursion.",
+                    "Rule: Reflections must be scored against a rubric (accuracy, clarity, compliance) before revision is accepted.",
+                    "Rule: Store reflection notes in logs for audit review."
+                ]
+            },
+            {
+                "name": "Planning 📋",
+                "description": "The agent breaks down a high-level goal into sub-tasks, sequencing them logically.",
+                "example": "Multi-step property rebate application workflow - Enterprise AI orchestrating data retrieval, validation, and reporting",
+                "rules": [
+                    "Plans must be explicit, structured, and machine-readable (e.g., JSON, checklist).",
+                    "Each sub-task should have a clear success/failure condition.",
+                    "Plans should be revisable mid-execution if context changes.",
+                    "Avoid over-planning: cap task depth to prevent combinatorial explosion."
+                ],
+                "explicit_policies": [
+                    "Rule: Plans must be output in structured JSON with fields: task_id, description, dependencies, success_criteria.",
+                    "Rule: Each sub-task must have a binary success/failure condition.",
+                    "Rule: Plans deeper than 5 nested levels are automatically pruned.",
+                    "Rule: If a plan fails mid-execution, the agent must re-plan with updated context."
+                ]
+            },
+            {
+                "name": "Tool Use 🔧",
+                "description": "The agent invokes external tools, APIs, or systems to complete tasks beyond text generation.",
+                "example": "Calling APIs for tax rules - Triggering enterprise workflows (e.g., updating CRM records)",
+                "rules": [
+                    "Tools must be registered with metadata (capabilities, constraints, authentication).",
+                    "Validate inputs/outputs before and after tool calls.",
+                    "Fail gracefully if a tool is unavailable.",
+                    "Enforce least-privilege access (only use tools necessary for the task)."
+                ],
+                "explicit_policies": [
+                    "Rule: Tools must be whitelisted with metadata: capabilities, auth method, rate limits.",
+                    "Rule: Inputs must be validated against schema before sending to tool.",
+                    "Rule: Outputs must be sanitized (e.g., strip PII, enforce type checks).",
+                    "Rule: If a tool fails 3 times, agent must fallback to alternate tool or human escalation."
+                ]
+            },
+            {
+                "name": "Collaboration / Delegation 🤝",
+                "description": "Multiple specialized agents coordinate, hand off tasks, or negotiate roles.",
+                "example": "Multiple specialized agents coordinate, hand off tasks, or negotiate roles.",
+                "rules": [
+                    "Define clear roles (e.g., 'Researcher,' 'Validator,' 'Summarizer').",
+                    "Use structured protocols for handoffs (e.g., message schema).",
+                    "Resolve conflicts via arbitration rules (e.g., majority vote, critic override).",
+                    "Prevent circular delegation (avoid infinite loops of agents passing tasks)"
+                ],
+                "explicit_policies": [
+                    "Rule: Each agent must declare its role (e.g., 'Researcher,' 'Validator').",
+                    "Rule: Handoffs must include a handoff packet: task_summary, status, open_issues.",
+                    "Rule: Conflicts are resolved by critic agent override or majority vote.",
+                    "Rule: Circular delegation is forbidden (system checks for loops)."
+                ]
+            },
+            {
+                "name": "Memory & Learning 🧠",
+                "description": "The agent retains context across sessions, adapts from feedback, and improves over time.",
+                "example": "Remembering prior rebate submissions to pre-fill forms - Enterprise AI learning from past board briefings",
+                "rules": [
+                    "Separate short-term memory (session context) from long-term memory (persistent knowledge).",
+                    "Apply retention policies (expiry, summarization, redaction).",
+                    "Ensure transparency: memory must be inspectable and editable.",
+                    "Guard against contamination (don't store sensitive or irrelevant data)."
+                ],
+                "explicit_policies": [
+                    "Rule: Short-term memory expires after session ends unless explicitly promoted.",
+                    "Rule: Long-term memory must be summarized every 30 entries to prevent drift.",
+                    "Rule: Users must be able to inspect and delete memory entries.",
+                    "Rule: Sensitive data (e.g., passwords, PII) is never stored in memory."
+                ]
+            },
+            {
+                "name": "Critic / Reviewer 🧐",
+                "description": "A secondary agent (or role) critiques the primary agent's output before final delivery",
+                "example": "'Red team' agent checking for bias, gaps, or regulatory misalignment",
+                "rules": [
+                    "Critic must use explicit evaluation rubrics (accuracy, bias, compliance).",
+                    "Critic cannot modify outputs directly—only suggest changes.",
+                    "Final decision authority must be defined (critic vs. primary agent vs. orchestrator).",
+                    "Maintain traceability: log critiques alongside outputs."
+                ],
+                "explicit_policies": [
+                    "Rule: Critic must use a rubric (e.g., factual accuracy, bias, compliance).",
+                    "Rule: Critic outputs must be tagged as approve, revise, or reject.",
+                    "Rule: Critic cannot directly edit—only recommend changes.",
+                    "Rule: Final decision authority is explicitly assigned (critic vs. orchestrator)."
+                ]
+            },
+            {
+                "name": "Exploration / Simulation 🔄",
+                "description": "The agent runs multiple hypothetical scenarios before choosing an action.",
+                "example": "Portfolio yield strategy simulations - Testing rebate eligibility under different ownership structures",
+                "rules": [
+                    "Cap the number of scenarios to balance breadth vs. cost.",
+                    "Use scoring functions to rank scenarios (e.g., risk, efficiency, compliance).",
+                    "Document assumptions for each scenario.",
+                    "Ensure exploration doesn't delay time-sensitive tasks."
+                ],
+                "explicit_policies": [
+                    "Rule: Max N=10 scenarios per exploration cycle.",
+                    "Rule: Each scenario must include assumptions + projected outcome.",
+                    "Rule: Scenarios must be ranked using a scoring function (e.g., risk-adjusted return).",
+                    "Rule: Top 3 scenarios are retained; others are discarded to save resources."
+                ]
+            },
+            {
+                "name": "Orchestration 🎼",
+                "description": "A meta-agent coordinates multiple agents, tools, and workflows into a coherent pipeline.",
+                "example": "Enterprise AI hub managing compliance, reporting, and approvals end-to-end",
+                "rules": [
+                    "Orchestrator must maintain a global state and task registry.",
+                    "Define escalation rules for failures (retry, fallback, human-in-loop).",
+                    "Enforce modularity: agents/tools should be swappable without breaking the system.",
+                    "Monitor performance and resource usage across the pipeline."
+                ],
+                "explicit_policies": [
+                    "Rule: Orchestrator must maintain a global task registry with status updates.",
+                    "Rule: Failures trigger escalation policy: retry → fallback → human-in-loop.",
+                    "Rule: All agents/tools must be modular (swappable without breaking pipeline).",
+                    "Rule: Orchestrator must log resource usage (time, tokens, API calls)."
+                ]
+            }
+        ]
+        
+        # Display pattern cards in a grid
+        cols = st.columns(2)
+        for i, pattern in enumerate(patterns):
+            with cols[i % 2]:
+                with st.expander(f"{pattern['name']}", expanded=False):
+                    # Pattern Overview tab
+                    tab1, tab2, tab3, tab4 = st.tabs(["Pattern Overview", "Rules/Policies", "Explicit Policies", "Codified/Executable"])
+                    
+                    with tab1:
+                        st.markdown(f"**What it does:** {pattern['description']}")
+                        st.markdown(f"**Example Use Cases:** {pattern['example']}")
+                    
+                    with tab2:
+                        st.markdown("**Rules/Policies:**")
+                        for rule in pattern['rules']:
+                            st.write(f"• {rule}")
+                    
+                    with tab3:
+                        st.markdown("**Explicit Policies:**")
+                        for policy in pattern['explicit_policies']:
+                            st.write(f"• {policy}")
+                    
+                    with tab4:
+                        st.markdown("**Codified/Executable Configuration**")
+                        st.markdown("*DevOps Pipeline Observable Configuration*")
+                        
+                        # Generate executable configuration based on pattern type
+                        pattern_name = pattern['name'].split(' ')[0].lower()
+                        
+                        if pattern_name == "reflection":
+                            config = {
+                                "pattern": "reflection",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Reflection Pattern",
+                                    "description": "Self-evaluation and iterative improvement pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["self-improvement", "quality-assurance", "iterative"]
+                                },
+                                "configuration": {
+                                    "max_reflection_loops": 3,
+                                    "reflection_criteria": ["accuracy", "clarity", "compliance"],
+                                    "reflection_notes_required": True,
+                                    "audit_logging": True,
+                                    "timeout_seconds": 300
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "reflection_cycles_count",
+                                        "reflection_notes_generated",
+                                        "improvement_score_delta",
+                                        "reflection_time_ms"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "max_reflection_loops_exceeded",
+                                            "condition": "reflection_cycles > 3",
+                                            "severity": "warning"
+                                        },
+                                        {
+                                            "name": "reflection_timeout",
+                                            "condition": "reflection_time > 300s",
+                                            "severity": "error"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "reflection_cycle_start",
+                                        "reflection_note_generated",
+                                        "reflection_cycle_complete",
+                                        "reflection_timeout"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 2,
+                                        "resources": {
+                                            "cpu": "500m",
+                                            "memory": "1Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "reflection-pattern",
+                                        "health_check_endpoint": "/health/reflection"
+                                    }
+                                }
+                            }
+                        elif pattern_name == "planning":
+                            config = {
+                                "pattern": "planning",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Planning Pattern",
+                                    "description": "Goal decomposition and task sequencing pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["task-decomposition", "workflow", "orchestration"]
+                                },
+                                "configuration": {
+                                    "max_plan_depth": 5,
+                                    "plan_format": "json",
+                                    "required_fields": ["task_id", "description", "dependencies", "success_criteria"],
+                                    "replan_on_failure": True,
+                                    "plan_validation": True
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "plans_generated",
+                                        "plan_depth_distribution",
+                                        "plan_execution_success_rate",
+                                        "replan_events_count"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "plan_depth_exceeded",
+                                            "condition": "plan_depth > 5",
+                                            "severity": "warning"
+                                        },
+                                        {
+                                            "name": "plan_execution_failure",
+                                            "condition": "plan_success_rate < 0.8",
+                                            "severity": "error"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "plan_generation_start",
+                                        "plan_validation_result",
+                                        "plan_execution_start",
+                                        "replan_triggered"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 3,
+                                        "resources": {
+                                            "cpu": "1000m",
+                                            "memory": "2Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "planning-pattern",
+                                        "health_check_endpoint": "/health/planning"
+                                    }
+                                }
+                            }
+                        elif pattern_name == "tool":
+                            config = {
+                                "pattern": "tool_use",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Tool Use Pattern",
+                                    "description": "External tool and API integration pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["api-integration", "external-tools", "automation"]
+                                },
+                                "configuration": {
+                                    "max_retry_attempts": 3,
+                                    "tool_whitelist_required": True,
+                                    "input_validation": True,
+                                    "output_sanitization": True,
+                                    "rate_limiting": True
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "tool_calls_total",
+                                        "tool_success_rate",
+                                        "tool_response_time_ms",
+                                        "tool_retry_count"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "tool_failure_rate_high",
+                                            "condition": "tool_success_rate < 0.7",
+                                            "severity": "error"
+                                        },
+                                        {
+                                            "name": "tool_response_time_slow",
+                                            "condition": "avg_response_time > 5000ms",
+                                            "severity": "warning"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "tool_call_initiated",
+                                        "tool_call_success",
+                                        "tool_call_failure",
+                                        "tool_retry_attempt"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 4,
+                                        "resources": {
+                                            "cpu": "800m",
+                                            "memory": "1.5Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "tool-use-pattern",
+                                        "health_check_endpoint": "/health/tools"
+                                    }
+                                }
+                            }
+                        elif pattern_name == "collaboration":
+                            config = {
+                                "pattern": "collaboration",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Collaboration Pattern",
+                                    "description": "Multi-agent coordination and delegation pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["multi-agent", "delegation", "coordination"]
+                                },
+                                "configuration": {
+                                    "role_declaration_required": True,
+                                    "handoff_packet_format": "json",
+                                    "conflict_resolution": "critic_override",
+                                    "circular_delegation_check": True,
+                                    "handoff_timeout": 30
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "handoffs_total",
+                                        "collaboration_success_rate",
+                                        "conflict_resolution_count",
+                                        "circular_delegation_detected"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "circular_delegation_detected",
+                                            "condition": "circular_delegation_count > 0",
+                                            "severity": "error"
+                                        },
+                                        {
+                                            "name": "handoff_timeout",
+                                            "condition": "handoff_time > 30s",
+                                            "severity": "warning"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "agent_role_declared",
+                                        "handoff_initiated",
+                                        "handoff_completed",
+                                        "conflict_detected"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 5,
+                                        "resources": {
+                                            "cpu": "1200m",
+                                            "memory": "2.5Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "collaboration-pattern",
+                                        "health_check_endpoint": "/health/collaboration"
+                                    }
+                                }
+                            }
+                        elif pattern_name == "memory":
+                            config = {
+                                "pattern": "memory_learning",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Memory & Learning Pattern",
+                                    "description": "Context retention and adaptive learning pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["memory", "learning", "adaptation", "context"]
+                                },
+                                "configuration": {
+                                    "short_term_memory_ttl": 3600,
+                                    "long_term_memory_summary_threshold": 30,
+                                    "memory_inspection_enabled": True,
+                                    "pii_filtering": True,
+                                    "memory_encryption": True
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "memory_entries_created",
+                                        "memory_retrieval_count",
+                                        "memory_summary_events",
+                                        "pii_filtered_count"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "memory_usage_high",
+                                            "condition": "memory_usage_percent > 80",
+                                            "severity": "warning"
+                                        },
+                                        {
+                                            "name": "pii_detected",
+                                            "condition": "pii_filtered_count > 0",
+                                            "severity": "critical"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "memory_entry_created",
+                                        "memory_retrieved",
+                                        "memory_summarized",
+                                        "pii_filtered"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 3,
+                                        "resources": {
+                                            "cpu": "1000m",
+                                            "memory": "3Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "memory-learning-pattern",
+                                        "health_check_endpoint": "/health/memory"
+                                    }
+                                }
+                            }
+                        elif pattern_name == "critic":
+                            config = {
+                                "pattern": "critic_reviewer",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Critic/Reviewer Pattern",
+                                    "description": "Secondary agent critique and review pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["review", "critique", "quality-assurance", "validation"]
+                                },
+                                "configuration": {
+                                    "evaluation_rubric_required": True,
+                                    "critic_output_tags": ["approve", "revise", "reject"],
+                                    "critic_edit_restricted": True,
+                                    "decision_authority": "orchestrator",
+                                    "critique_traceability": True
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "critiques_performed",
+                                        "critique_approval_rate",
+                                        "critique_revision_rate",
+                                        "critique_rejection_rate"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "high_rejection_rate",
+                                            "condition": "rejection_rate > 0.3",
+                                            "severity": "warning"
+                                        },
+                                        {
+                                            "name": "critique_timeout",
+                                            "condition": "critique_time > 60s",
+                                            "severity": "error"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "critique_initiated",
+                                        "critique_completed",
+                                        "critique_approved",
+                                        "critique_rejected"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 2,
+                                        "resources": {
+                                            "cpu": "600m",
+                                            "memory": "1.2Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "critic-reviewer-pattern",
+                                        "health_check_endpoint": "/health/critic"
+                                    }
+                                }
+                            }
+                        elif pattern_name == "exploration":
+                            config = {
+                                "pattern": "exploration_simulation",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Exploration/Simulation Pattern",
+                                    "description": "Multi-scenario testing and exploration pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["simulation", "exploration", "scenario-testing", "optimization"]
+                                },
+                                "configuration": {
+                                    "max_scenarios": 10,
+                                    "scenario_ranking_required": True,
+                                    "top_scenarios_retained": 3,
+                                    "assumption_documentation": True,
+                                    "scenario_timeout": 120
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "scenarios_generated",
+                                        "scenarios_executed",
+                                        "scenario_ranking_time_ms",
+                                        "top_scenarios_retained"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "scenario_timeout",
+                                            "condition": "scenario_time > 120s",
+                                            "severity": "warning"
+                                        },
+                                        {
+                                            "name": "max_scenarios_exceeded",
+                                            "condition": "scenarios_generated > 10",
+                                            "severity": "error"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "scenario_generation_start",
+                                        "scenario_execution_start",
+                                        "scenario_ranking_complete",
+                                        "scenario_timeout"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 3,
+                                        "resources": {
+                                            "cpu": "1500m",
+                                            "memory": "2.5Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "exploration-simulation-pattern",
+                                        "health_check_endpoint": "/health/exploration"
+                                    }
+                                }
+                            }
+                        else:  # orchestration
+                            config = {
+                                "pattern": "orchestration",
+                                "version": "1.0.0",
+                                "metadata": {
+                                    "name": "Orchestration Pattern",
+                                    "description": "Meta-agent coordination and pipeline management pattern",
+                                    "author": "Agentic AI Team",
+                                    "created": "2025-01-24",
+                                    "tags": ["orchestration", "pipeline", "coordination", "meta-agent"]
+                                },
+                                "configuration": {
+                                    "global_state_required": True,
+                                    "task_registry_enabled": True,
+                                    "escalation_policy": "retry_fallback_human",
+                                    "modular_components": True,
+                                    "resource_monitoring": True
+                                },
+                                "observability": {
+                                    "metrics": [
+                                        "pipeline_executions",
+                                        "pipeline_success_rate",
+                                        "escalation_events",
+                                        "resource_usage_percent"
+                                    ],
+                                    "alerts": [
+                                        {
+                                            "name": "pipeline_failure_rate_high",
+                                            "condition": "pipeline_success_rate < 0.85",
+                                            "severity": "error"
+                                        },
+                                        {
+                                            "name": "resource_usage_high",
+                                            "condition": "resource_usage > 90%",
+                                            "severity": "warning"
+                                        }
+                                    ],
+                                    "logs": [
+                                        "pipeline_started",
+                                        "pipeline_completed",
+                                        "escalation_triggered",
+                                        "resource_limit_approached"
+                                    ]
+                                },
+                                "devops": {
+                                    "deployment": {
+                                        "environment": "production",
+                                        "replicas": 1,
+                                        "resources": {
+                                            "cpu": "2000m",
+                                            "memory": "4Gi"
+                                        }
+                                    },
+                                    "monitoring": {
+                                        "prometheus_metrics": True,
+                                        "grafana_dashboard": "orchestration-pattern",
+                                        "health_check_endpoint": "/health/orchestration"
+                                    }
+                                }
+                            }
+                        
+                        # Display the configuration in both JSON and YAML formats
+                        col1, col2 = st.columns(2)
+                        
+                        with col1:
+                            st.markdown("**JSON Configuration**")
+                            st.code(json.dumps(config, indent=2), language="json")
+                        
+                        with col2:
+                            st.markdown("**YAML Configuration**")
+                            yaml_config = yaml.dump(config, default_flow_style=False, indent=2)
+                            st.code(yaml_config, language="yaml")
+                        
+                        # DevOps Pipeline Integration
+                        st.markdown("**DevOps Pipeline Integration**")
+                        st.markdown("""
+                        This configuration can be integrated into your DevOps pipeline for:
+                        - **Deployment**: Kubernetes manifests, Docker configurations
+                        - **Monitoring**: Prometheus metrics, Grafana dashboards
+                        - **Alerting**: AlertManager rules, notification channels
+                        - **Logging**: Structured logging, log aggregation
+                        - **Security**: RBAC policies, network policies
+                        """)
+                        
+                        # Download buttons
+                        col1, col2, col3 = st.columns(3)
+                        with col1:
+                            st.download_button(
+                                label="📥 Download JSON",
+                                data=json.dumps(config, indent=2),
+                                file_name=f"{pattern_name}_pattern_config.json",
+                                mime="application/json"
+                            )
+                        with col2:
+                            st.download_button(
+                                label="📥 Download YAML",
+                                data=yaml.dump(config, default_flow_style=False, indent=2),
+                                file_name=f"{pattern_name}_pattern_config.yaml",
+                                mime="text/yaml"
+                            )
+                        with col3:
+                            st.download_button(
+                                label="📥 Download K8s Manifest",
+                                data=generate_k8s_manifest(config),
+                                file_name=f"{pattern_name}_pattern_k8s.yaml",
+                                mime="text/yaml"
+                            )
+        
+        # Meta-Policies section
+        st.markdown("---")
+        st.markdown("### Meta-Policies (apply to all patterns)")
+        meta_policies = [
+            "**Auditability**: Every decision, reflection, or critique must be logged.",
+            "**Safety**: Hard caps on recursion, scenario count, and tool retries.",
+            "**Governance**: All patterns must comply with enterprise risk and compliance frameworks.",
+            "**Transparency**: Outputs, plans, and critiques must be human-readable and inspectable."
+        ]
+        
+        for policy in meta_policies:
+            st.markdown(f"• {policy}")
+    
+    with main_tab2:
+        # Display agent cards
+        st.markdown("### Agent Cards")
+        
+        cols = st.columns(2)
+        for i, agent in enumerate(filtered_agents):
+            with cols[i % 2]:
+                status_info = get_status_badge(agent['status'])
+                pattern_type_emoji = {
+                    'retrieval': '🔍',
+                    'orchestration': '🔄',
+                    'monitoring': '📊',
+                    'reasoning': '🧠',
+                    'classification': '📋',
+                    'supervision': '👥'
+                }.get(agent['patternType'], '🤖')
                 
-                with tab1:
-                    # General Info
-                    st.markdown("### General Information")
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.markdown(f"**Agent ID:** `{agent['id']}`")
-                        st.markdown(f"**Agent Name:** {agent['name']}")
-                        st.markdown(f"**Pattern Type:** {agent['patternType'].title()}")
-                        st.markdown(f"**Version:** v1.0")
-                    with col2:
-                        st.markdown(f"**Owner:** {agent['owner']}")
-                        st.markdown(f"**Lifecycle State:** {agent['lifecycle']}")
-                        st.markdown(f"**Last Updated:** 2025-09-24")
-                        st.markdown(f"**Business Use Case:** {agent['businessUseCase']}")
+                # Create expandable agent card
+                with st.expander(f"{pattern_type_emoji} {agent['name']} - {status_info['text']}", expanded=False):
+                    # Agent Overview tab
+                    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Agent Overview", "Pattern", "Policies", "Runtime", "Escalation"])
                     
-                    # Capabilities
-                    st.markdown("### Capabilities")
-                    for capability in agent['capabilities']:
-                        st.write(f"• {capability}")
-                    
-                    # Dependencies
-                    st.markdown("### Dependencies")
-                    deps = agent['dependencies']
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        if 'llm' in deps:
-                            st.write(f"**LLM:** {deps['llm']}")
-                        if 'anomalyModel' in deps:
-                            st.write(f"**Models:** {deps['anomalyModel']}")
-                    with col2:
-                        if 'complianceAPI' in deps:
-                            st.write(f"**APIs:** {deps['complianceAPI']}")
-                        if 'paymentAPI' in deps:
-                            st.write(f"**APIs:** {deps['paymentAPI']}")
-                    
-                    # Risk and Compliance
-                    st.markdown("### Risk and Compliance")
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.markdown(f"**Risk Level:** {agent['risk']}")
-                        compliance_tags = agent['governanceHooks']['complianceTags']
-                        st.markdown("**Compliance Tags:**")
-                        for tag, status in compliance_tags.items():
-                            if status:
-                                st.success(f"✅ {tag.upper()}")
+                    with tab1:
+                        # General Info
+                        st.markdown("### General Information")
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.markdown(f"**Agent ID:** `{agent['id']}`")
+                            st.markdown(f"**Agent Name:** {agent['name']}")
+                            st.markdown(f"**Pattern Type:** {agent['patternType'].title()}")
+                            st.markdown(f"**Version:** v1.0")
+                        with col2:
+                            st.markdown(f"**Owner:** {agent['owner']}")
+                            st.markdown(f"**Lifecycle State:** {agent['lifecycle']}")
+                            st.markdown(f"**Last Updated:** 2025-09-24")
+                            st.markdown(f"**Business Use Case:** {agent['businessUseCase']}")
+                        
+                        # Capabilities
+                        st.markdown("### Capabilities")
+                        for capability in agent['capabilities']:
+                            st.write(f"• {capability}")
+                        
+                        # Dependencies
+                        st.markdown("### Dependencies")
+                        deps = agent['dependencies']
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            if 'llm' in deps:
+                                st.write(f"**LLM:** {deps['llm']}")
+                            if 'anomalyModel' in deps:
+                                st.write(f"**Models:** {deps['anomalyModel']}")
+                        with col2:
+                            if 'complianceAPI' in deps:
+                                st.write(f"**APIs:** {deps['complianceAPI']}")
+                            if 'paymentAPI' in deps:
+                                st.write(f"**APIs:** {deps['paymentAPI']}")
+                        
+                        # Risk and Compliance
+                        st.markdown("### Risk and Compliance")
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.markdown(f"**Risk Level:** {agent['risk']}")
+                            compliance_tags = agent['governanceHooks']['complianceTags']
+                            st.markdown("**Compliance Tags:**")
+                            for tag, status in compliance_tags.items():
+                                if status:
+                                    st.success(f"✅ {tag.upper()}")
+                                else:
+                                    st.error(f"❌ {tag.upper()}")
+                        with col2:
+                            st.markdown("**Human-in-the-Loop:**")
+                            if agent['risk'] == 'High':
+                                st.write("Mandatory for > $100K")
+                            elif agent['risk'] == 'Medium':
+                                st.write("Required for escalations")
                             else:
-                                st.error(f"❌ {tag.upper()}")
-                    with col2:
-                        st.markdown("**Human-in-the-Loop:**")
-                        if agent['risk'] == 'High':
-                            st.write("Mandatory for > $100K")
-                        elif agent['risk'] == 'Medium':
-                            st.write("Required for escalations")
+                                st.write("Optional")
+                        
+                        # Key Metrics
+                        st.markdown("### Key Metrics (30-day rolling)")
+                        monitoring = agent['monitoring']
+                        col1, col2, col3, col4 = st.columns(4)
+                        with col1:
+                            st.metric("Transactions", monitoring['callsThisWeek'])
+                        with col2:
+                            st.metric("Escalations", monitoring['escalations'])
+                        with col3:
+                            st.metric("Guardrail Triggers", monitoring['guardrailTriggers'])
+                        with col4:
+                            st.metric("Avg Anomaly Score", "0.42" if agent['id'] == 'payment-processor-v1' else "0.15")
+                        
+                        # Related Agents
+                        st.markdown("### Related Agents")
+                        related_agents = {
+                            'payment-processor-v1': ['Retriever Agent v1', 'Compliance Monitor v1'],
+                            'retriever-v1': ['Document Classifier v1', 'AI Supervisor v1'],
+                            'orchestrator-v2': ['Payment Processor v1', 'AI Supervisor v1'],
+                            'compliance-v1': ['Payment Processor v1', 'Document Classifier v1'],
+                            'negotiator-v1': ['AI Supervisor v1', 'Compliance Monitor v1'],
+                            'classifier-v1': ['Retriever Agent v1', 'Compliance Monitor v1'],
+                            'supervisor-v1': ['Payment Processor v1', 'Retriever Agent v1', 'Document Classifier v1']
+                        }
+                        for related in related_agents.get(agent['id'], []):
+                            st.write(f"• {related}")
+                    
+                    with tab2:
+                        # Pattern Implementations
+                        if 'patternImplementations' in agent:
+                            st.markdown("**🤖 Agentic Pattern Implementations**")
+                            
+                            # Primary Patterns
+                            st.markdown("**Primary Patterns:**")
+                            for pattern in agent['patternImplementations']['primary_patterns']:
+                                st.success(f"🎯 {pattern}")
+                            
+                            # Secondary Patterns
+                            st.markdown("**Secondary Patterns:**")
+                            for pattern in agent['patternImplementations']['secondary_patterns']:
+                                st.info(f"🔧 {pattern}")
+                            
+                            # Pattern Details
+                            st.markdown("**Pattern Implementation Details:**")
+                            for pattern_name, details in agent['patternImplementations']['pattern_details'].items():
+                                with st.expander(f"{pattern_name} - Implementation Details", expanded=False):
+                                    st.markdown(f"**Implementation:** {details['implementation']}")
+                                    
+                                    if 'tools_used' in details:
+                                        st.markdown("**Tools Used:**")
+                                        for tool in details['tools_used']:
+                                            st.write(f"• {tool}")
+                                    
+                                    if 'memory_type' in details:
+                                        st.markdown(f"**Memory Type:** {details['memory_type']}")
+                                    
+                                    if 'learning_mechanism' in details:
+                                        st.markdown(f"**Learning Mechanism:** {details['learning_mechanism']}")
+                                    
+                                    if 'critic_role' in details:
+                                        st.markdown(f"**Critic Role:** {details['critic_role']}")
+                                    
+                                    if 'decision_authority' in details:
+                                        st.markdown(f"**Decision Authority:** {details['decision_authority']}")
+                                    
+                                    if 'coordination_scope' in details:
+                                        st.markdown(f"**Coordination Scope:** {details['coordination_scope']}")
+                                    
+                                    if 'planning_depth' in details:
+                                        st.markdown(f"**Planning Depth:** {details['planning_depth']}")
+                                    
+                                    if 'scenario_testing' in details:
+                                        st.markdown(f"**Scenario Testing:** {details['scenario_testing']}")
+                                    
+                                    if 'reflection_criteria' in details:
+                                        st.markdown("**Reflection Criteria:**")
+                                        for criteria in details['reflection_criteria']:
+                                            st.write(f"• {criteria}")
+                                    
+                                    if 'delegation_protocol' in details:
+                                        st.markdown(f"**Delegation Protocol:** {details['delegation_protocol']}")
+                                    
+                                    if 'conflict_resolution' in details:
+                                        st.markdown(f"**Conflict Resolution:** {details['conflict_resolution']}")
+                                    
+                                    # Configuration
+                                    if 'configuration' in details:
+                                        st.markdown("**Configuration:**")
+                                        config_json = json.dumps(details['configuration'], indent=2)
+                                        st.code(config_json, language='json')
                         else:
-                            st.write("Optional")
+                            st.markdown("**Governance Policies:**")
+                            st.code(agent['governanceHooks']['policies'], language='yaml')
+                            
+                            st.markdown("**Compliance Status:**")
+                            compliance_tags = agent['governanceHooks']['complianceTags']
+                            for tag, status in compliance_tags.items():
+                                if status:
+                                    st.success(f"✅ {tag}")
+                                else:
+                                    st.error(f"❌ {tag}")
+                            
+                            st.markdown("**Approval History:**")
+                            st.write(" → ".join(agent['governanceHooks']['approvalHistory']))
                     
-                    # Key Metrics
-                    st.markdown("### Key Metrics (30-day rolling)")
-                    monitoring = agent['monitoring']
-                    col1, col2, col3, col4 = st.columns(4)
-                    with col1:
-                        st.metric("Transactions", monitoring['callsThisWeek'])
-                    with col2:
-                        st.metric("Escalations", monitoring['escalations'])
-                    with col3:
-                        st.metric("Guardrail Triggers", monitoring['guardrailTriggers'])
-                    with col4:
-                        st.metric("Avg Anomaly Score", "0.42" if agent['id'] == 'payment-processor-v1' else "0.15")
-                    
-                    # Related Agents
-                    st.markdown("### Related Agents")
-                    related_agents = {
-                        'payment-processor-v1': ['Retriever Agent v1', 'Compliance Monitor v1'],
-                        'retriever-v1': ['Document Classifier v1', 'AI Supervisor v1'],
-                        'orchestrator-v2': ['Payment Processor v1', 'AI Supervisor v1'],
-                        'compliance-v1': ['Payment Processor v1', 'Document Classifier v1'],
-                        'negotiator-v1': ['AI Supervisor v1', 'Compliance Monitor v1'],
-                        'classifier-v1': ['Retriever Agent v1', 'Compliance Monitor v1'],
-                        'supervisor-v1': ['Payment Processor v1', 'Retriever Agent v1', 'Document Classifier v1']
-                    }
-                    for related in related_agents.get(agent['id'], []):
-                        st.write(f"• {related}")
-                
-                with tab2:
-                    st.markdown("**Governance Policies:**")
-                    st.code(agent['governanceHooks']['policies'], language='yaml')
-                    
-                    st.markdown("**Compliance Status:**")
-                    compliance_tags = agent['governanceHooks']['complianceTags']
-                    for tag, status in compliance_tags.items():
-                        if status:
-                            st.success(f"✅ {tag}")
-                        else:
-                            st.error(f"❌ {tag}")
-                    
-                    st.markdown("**Approval History:**")
-                    st.write(" → ".join(agent['governanceHooks']['approvalHistory']))
-                
-                with tab3:
-                    st.markdown("**Input Filters:**")
-                    for filter_type in agent['runtimeGuardrails']['inputFilters']:
-                        st.write(f"• {filter_type}")
-                    
-                    st.markdown("**Output Validators:**")
-                    for validator in agent['runtimeGuardrails']['outputValidators']:
-                        st.write(f"• {validator}")
-                    
-                    st.markdown("**Rate Controls:**")
-                    rate_controls = agent['runtimeGuardrails']['rateControls']
-                    for control, value in rate_controls.items():
-                        st.write(f"• {control.replace('_', ' ').title()}: {value}")
-                    
-                    st.markdown("**Kill Switch:**")
-                    kill_switch = agent['runtimeGuardrails']['killSwitch']
-                    st.write(f"Enabled: {'✅' if kill_switch['enabled'] else '❌'}")
-                    for trigger in kill_switch['triggers']:
-                        st.write(f"• {trigger}")
-                    
-                    st.markdown("**Monitoring:**")
-                    monitoring = agent['monitoring']
-                    col1, col2 = st.columns(2)
-                    with col1:
-                        st.metric("Calls This Week", monitoring['callsThisWeek'])
-                        st.metric("Uptime", monitoring['uptime'])
+                    with tab3:
+                        st.markdown("**Input Filters:**")
+                        for filter_type in agent['runtimeGuardrails']['inputFilters']:
+                            st.write(f"• {filter_type}")
+                        
+                        st.markdown("**Output Validators:**")
+                        for validator in agent['runtimeGuardrails']['outputValidators']:
+                            st.write(f"• {validator}")
+                        
+                        st.markdown("**Rate Controls:**")
+                        rate_controls = agent['runtimeGuardrails']['rateControls']
+                        for control, value in rate_controls.items():
+                            st.write(f"• {control.replace('_', ' ').title()}: {value}")
+                        
+                        st.markdown("**Kill Switch:**")
+                        kill_switch = agent['runtimeGuardrails']['killSwitch']
+                        st.write(f"Enabled: {'✅' if kill_switch['enabled'] else '❌'}")
+                        for trigger in kill_switch['triggers']:
+                            st.write(f"• {trigger}")
+                        
+                        st.markdown("**Monitoring:**")
+                        monitoring = agent['monitoring']
+                        col1, col2 = st.columns(2)
+                        with col1:
+                            st.metric("Calls This Week", monitoring['callsThisWeek'])
+                            st.metric("Uptime", monitoring['uptime'])
                     with col2:
                         st.metric("Guardrail Triggers", monitoring['guardrailTriggers'])
                         st.metric("Escalations", monitoring['escalations'])
@@ -1265,51 +2472,50 @@ def landing_page():
                             st.checkbox("Slack Integration", value=True, key=f"slack_integration_{agent['id']}")
                             st.checkbox("Dashboard Alerts", value=True, key=f"dashboard_alerts_{agent['id']}")
                         
-                        # Save settings button
-                        if st.button("Save Settings", key=f"save_settings_{agent['id']}"):
-                            st.success("Escalation settings updated successfully!")
-                    
-                    with action_tab4:
-                        st.markdown("#### 🔔 Configure Alerts")
-                        st.markdown("**Alert Configuration:**")
+                            # Save settings button
+                            if st.button("Save Settings", key=f"save_settings_{agent['id']}"):
+                                st.success("Escalation settings updated successfully!")
                         
-                        # Alert rules
-                        st.markdown("**Active Alert Rules:**")
-                        alert_rules = [
-                            {"Rule": "High Risk Transaction", "Condition": "Amount > $5M", "Action": "Immediate Escalation", "Status": "Active"},
-                            {"Rule": "Anomaly Detection", "Condition": "Anomaly Score > 0.8", "Action": "Human Review", "Status": "Active"},
-                            {"Rule": "Performance Degradation", "Condition": "Response Time > 5s", "Action": "Auto-scaling", "Status": "Active"},
-                            {"Rule": "Error Rate Spike", "Condition": "Error Rate > 5%", "Action": "Investigation", "Status": "Active"}
-                        ]
-                        
-                        for rule in alert_rules:
-                            status_icon = "🟢" if rule["Status"] == "Active" else "🔴"
-                            st.markdown(f"- {status_icon} **{rule['Rule']}**: {rule['Condition']} → {rule['Action']}")
-                        
-                        # Create new alert
-                        st.markdown("**Create New Alert Rule:**")
-                        with st.form(key=f"new_alert_{agent['id']}"):
-                            alert_name = st.text_input("Alert Name", key=f"alert_name_{agent['id']}")
-                            alert_condition = st.text_input("Condition", key=f"alert_condition_{agent['id']}")
-                            alert_action = st.selectbox("Action", ["Immediate Escalation", "Human Review", "Auto-retry", "Logging Only"], key=f"alert_action_{agent['id']}")
-                            alert_severity = st.selectbox("Severity", ["High", "Medium", "Low"], key=f"alert_severity_{agent['id']}")
+                        with action_tab4:
+                            st.markdown("#### 🔔 Configure Alerts")
+                            st.markdown("**Alert Configuration:**")
                             
-                            if st.form_submit_button("Create Alert Rule"):
-                                st.success(f"Alert rule '{alert_name}' created successfully!")
-                        
-                        # Alert history
-                        st.markdown("**Recent Alert History:**")
-                        alert_history = [
-                            {"Time": "2025-01-24 14:30", "Alert": "High Risk Transaction", "Status": "Triggered", "Action": "Escalated"},
-                            {"Time": "2025-01-24 11:15", "Alert": "Anomaly Detection", "Status": "Triggered", "Action": "Human Review"},
-                            {"Time": "2025-01-23 16:45", "Alert": "Compliance Failure", "Status": "Triggered", "Action": "Blocked"},
-                            {"Time": "2025-01-23 09:22", "Alert": "API Timeout", "Status": "Resolved", "Action": "Retry"}
-                        ]
-                        
-                        for alert in alert_history:
-                            status_icon = "🔴" if alert["Status"] == "Triggered" else "🟢"
-                            st.markdown(f"- {status_icon} **{alert['Alert']}** ({alert['Time']}) → {alert['Action']}")
-            
+                            # Alert rules
+                            st.markdown("**Active Alert Rules:**")
+                            alert_rules = [
+                                {"Rule": "High Risk Transaction", "Condition": "Amount > $5M", "Action": "Immediate Escalation", "Status": "Active"},
+                                {"Rule": "Anomaly Detection", "Condition": "Anomaly Score > 0.8", "Action": "Human Review", "Status": "Active"},
+                                {"Rule": "Performance Degradation", "Condition": "Response Time > 5s", "Action": "Auto-scaling", "Status": "Active"},
+                                {"Rule": "Error Rate Spike", "Condition": "Error Rate > 5%", "Action": "Investigation", "Status": "Active"}
+                            ]
+                            
+                            for rule in alert_rules:
+                                status_icon = "🟢" if rule["Status"] == "Active" else "🔴"
+                                st.markdown(f"- {status_icon} **{rule['Rule']}**: {rule['Condition']} → {rule['Action']}")
+                            
+                            # Create new alert
+                            st.markdown("**Create New Alert Rule:**")
+                            with st.form(key=f"new_alert_{agent['id']}"):
+                                alert_name = st.text_input("Alert Name", key=f"alert_name_{agent['id']}")
+                                alert_condition = st.text_input("Condition", key=f"alert_condition_{agent['id']}")
+                                alert_action = st.selectbox("Action", ["Immediate Escalation", "Human Review", "Auto-retry", "Logging Only"], key=f"alert_action_{agent['id']}")
+                                alert_severity = st.selectbox("Severity", ["High", "Medium", "Low"], key=f"alert_severity_{agent['id']}")
+                                
+                                if st.form_submit_button("Create Alert Rule"):
+                                    st.success(f"Alert rule '{alert_name}' created successfully!")
+                            
+                            # Alert history
+                            st.markdown("**Recent Alert History:**")
+                            alert_history = [
+                                {"Time": "2025-01-24 14:30", "Alert": "High Risk Transaction", "Status": "Triggered", "Action": "Escalated"},
+                                {"Time": "2025-01-24 11:15", "Alert": "Anomaly Detection", "Status": "Triggered", "Action": "Human Review"},
+                                {"Time": "2025-01-23 16:45", "Alert": "Compliance Failure", "Status": "Triggered", "Action": "Blocked"},
+                                {"Time": "2025-01-23 09:22", "Alert": "API Timeout", "Status": "Resolved", "Action": "Retry"}
+                            ]
+                            
+                            for alert in alert_history:
+                                status_icon = "🔴" if alert["Status"] == "Triggered" else "🟢"
+                                st.markdown(f"- {status_icon} **{alert['Alert']}** ({alert['Time']}) → {alert['Action']}")
     
     # Stats
     stats = {
@@ -2755,6 +3961,133 @@ def process_flow_diagram():
         st.metric("Escalation Rate", "3.8%", "0.5%")
     with col4:
         st.metric("Success Rate", "99.7%", "0.1%")
+
+def generate_k8s_manifest(config):
+    """Generate Kubernetes manifest for the pattern configuration"""
+    pattern_name = config['pattern']
+    metadata = config['metadata']
+    devops_config = config['devops']
+    
+    manifest = {
+        'apiVersion': 'apps/v1',
+        'kind': 'Deployment',
+        'metadata': {
+            'name': f'{pattern_name}-pattern',
+            'labels': {
+                'app': pattern_name,
+                'pattern': 'agentic-ai',
+                'version': config['version']
+            }
+        },
+        'spec': {
+            'replicas': devops_config['deployment']['replicas'],
+            'selector': {
+                'matchLabels': {
+                    'app': pattern_name
+                }
+            },
+            'template': {
+                'metadata': {
+                    'labels': {
+                        'app': pattern_name,
+                        'pattern': 'agentic-ai'
+                    }
+                },
+                'spec': {
+                    'containers': [{
+                        'name': f'{pattern_name}-container',
+                        'image': f'agentic-ai/{pattern_name}:{config["version"]}',
+                        'ports': [{
+                            'containerPort': 8080,
+                            'name': 'http'
+                        }],
+                        'resources': {
+                            'requests': devops_config['deployment']['resources'],
+                            'limits': devops_config['deployment']['resources']
+                        },
+                        'env': [
+                            {'name': 'PATTERN_NAME', 'value': pattern_name},
+                            {'name': 'VERSION', 'value': config['version']},
+                            {'name': 'ENVIRONMENT', 'value': devops_config['deployment']['environment']}
+                        ],
+                        'livenessProbe': {
+                            'httpGet': {
+                                'path': devops_config['monitoring']['health_check_endpoint'],
+                                'port': 8080
+                            },
+                            'initialDelaySeconds': 30,
+                            'periodSeconds': 10
+                        },
+                        'readinessProbe': {
+                            'httpGet': {
+                                'path': devops_config['monitoring']['health_check_endpoint'],
+                                'port': 8080
+                            },
+                            'initialDelaySeconds': 5,
+                            'periodSeconds': 5
+                        }
+                    }]
+                }
+            }
+        }
+    }
+    
+    # Add Service
+    service = {
+        'apiVersion': 'v1',
+        'kind': 'Service',
+        'metadata': {
+            'name': f'{pattern_name}-service',
+            'labels': {
+                'app': pattern_name
+            }
+        },
+        'spec': {
+            'selector': {
+                'app': pattern_name
+            },
+            'ports': [{
+                'port': 80,
+                'targetPort': 8080,
+                'name': 'http'
+            }],
+            'type': 'ClusterIP'
+        }
+    }
+    
+    # Add ConfigMap for observability
+    configmap = {
+        'apiVersion': 'v1',
+        'kind': 'ConfigMap',
+        'metadata': {
+            'name': f'{pattern_name}-config',
+            'labels': {
+                'app': pattern_name
+            }
+        },
+        'data': {
+            'pattern_config.json': json.dumps(config, indent=2),
+            'prometheus.yml': f'''
+global:
+  scrape_interval: 15s
+scrape_configs:
+  - job_name: '{pattern_name}-pattern'
+    static_configs:
+      - targets: ['{pattern_name}-service:80']
+    metrics_path: '/metrics'
+    scrape_interval: 5s
+'''
+        }
+    }
+    
+    # Combine all manifests
+    combined_manifest = {
+        'deployment': manifest,
+        'service': service,
+        'configmap': configmap
+    }
+    
+    return yaml.dump(combined_manifest, default_flow_style=False, indent=2)
 
 def main():
     # Initialize session state
