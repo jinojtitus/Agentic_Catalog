@@ -1469,27 +1469,29 @@ def landing_page():
                             
                             # Flow diagram for Reflection pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph reflection_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightblue];
-                                
-                                A["Input/Output"] -> B["Initial Generation"];
-                                B -> C["Self-Evaluation"];
-                                C -> D{"Quality Check"};
-                                D ->|"Pass"| E["Output Delivery"];
-                                D ->|"Fail"| F["Identify Issues"];
-                                F -> G["Generate Improvements"];
-                                G -> H["Apply Changes"];
-                                H -> I{"Max Loops?"};
-                                I ->|"No"| C;
-                                I ->|"Yes"| J["Escalate to Human"];
-                                J -> E;
-                                
-                                C -> K["Log Reflection Notes"];
-                                K -> L["Update Audit Trail"];
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Input → Generate → Evaluate
+                                         ↑         ↓
+                                    Apply Fixes ← Quality?
+                                         ↓
+                                    Max Loops? → Human
+                                         ↓
+                                    Final Output
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Self-Evaluation**: Quality assessment")
+                                st.markdown("• **Iterative Improvement**: Refinement cycles")
+                                st.markdown("• **Quality Gates**: Pass/fail criteria")
+                                st.markdown("• **Escalation**: Human intervention")
+                                st.markdown("• **Audit Trail**: Complete logging")
                             
                         elif pattern_name == "planning":
                             st.markdown("**Core Concept:** Hierarchical goal decomposition and task sequencing for complex workflows.")
@@ -1500,31 +1502,27 @@ def landing_page():
                             
                             # Flow diagram for Planning pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph planning_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightgreen];
-                                
-                                A["High-Level Goal"] -> B["Goal Analysis"];
-                                B -> C["Task Decomposition"];
-                                C -> D["Dependency Mapping"];
-                                D -> E["Plan Generation"];
-                                E -> F["Plan Validation"];
-                                F -> G{"Valid Plan?"};
-                                G ->|"Yes"| H["Execute Plan"];
-                                G ->|"No"| I["Refine Plan"];
-                                I -> F;
-                                H -> J["Monitor Progress"];
-                                J -> K{"Task Complete?"};
-                                K ->|"No"| L["Update Status"];
-                                L -> J;
-                                K ->|"Yes"| M["Check Dependencies"];
-                                M -> N{"All Dependencies Met?"};
-                                N ->|"Yes"| O["Execute Next Task"];
-                                N ->|"No"| J;
-                                O -> J;
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Goal → Analyze → Break Down
+                                         ↓
+                                Dependencies → Plan → Validate
+                                         ↓
+                                Execute → Monitor → Complete
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Hierarchical Decomposition**: Goal breakdown")
+                                st.markdown("• **Dependency Mapping**: Task sequencing")
+                                st.markdown("• **Plan Validation**: Feasibility check")
+                                st.markdown("• **Progress Monitoring**: Status tracking")
+                                st.markdown("• **Adaptive Execution**: Real-time adjustment")
                             
                         elif pattern_name == "tool":
                             st.markdown("**Core Concept:** External tool integration with validation, error handling, and fallback mechanisms.")
@@ -1536,29 +1534,29 @@ def landing_page():
                             
                             # Flow diagram for Tool Use pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph tool_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightyellow];
-                                
-                                A["Tool Request"] -> B["Tool Selection"];
-                                B -> C["Input Validation"];
-                                C -> D{"Valid Input?"};
-                                D ->|"No"| E["Return Error"];
-                                D ->|"Yes"| F["Execute Tool"];
-                                F -> G{"Tool Success?"};
-                                G ->|"Yes"| H["Output Sanitization"];
-                                G ->|"No"| I{"Retry Count < Max?"};
-                                I ->|"Yes"| J["Wait & Retry"];
-                                J -> F;
-                                I ->|"No"| K["Fallback Tool"];
-                                K -> L{"Fallback Available?"};
-                                L ->|"Yes"| F;
-                                L ->|"No"| M["Escalate to Human"];
-                                H -> N["Return Result"];
-                                M -> N;
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Request → Select → Validate
+                                         ↓
+                                Execute → Success? → Sanitize
+                                         ↓
+                                Retry → Fallback → Human
+                                         ↓
+                                Return Result
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Tool Selection**: Appropriate tool choice")
+                                st.markdown("• **Input Validation**: Parameter verification")
+                                st.markdown("• **Error Handling**: Retry & fallback")
+                                st.markdown("• **Output Sanitization**: Result cleaning")
+                                st.markdown("• **Escalation Path**: Human intervention")
                             
                         elif pattern_name == "collaboration":
                             st.markdown("**Core Concept:** Multi-agent coordination with role-based delegation and conflict resolution.")
@@ -1570,31 +1568,29 @@ def landing_page():
                             
                             # Flow diagram for Collaboration pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph collaboration_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightcoral];
-                                
-                                A["Task Assignment"] -> B["Role Identification"];
-                                B -> C["Agent Selection"];
-                                C -> D["Task Delegation"];
-                                D -> E["Agent Processing"];
-                                E -> F{"Task Complete?"};
-                                F ->|"Yes"| G["Result Validation"];
-                                F ->|"No"| H["Progress Update"];
-                                H -> I{"Need Help?"};
-                                I ->|"Yes"| J["Request Assistance"];
-                                I ->|"No"| E;
-                                J -> K["Find Collaborator"];
-                                K -> L["Handoff Task"];
-                                L -> E;
-                                G -> M{"Quality Check Pass?"};
-                                M ->|"Yes"| N["Return Result"];
-                                M ->|"No"| O["Conflict Resolution"];
-                                O -> P["Revised Task"];
-                                P -> E;
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Task → Roles → Agents
+                                         ↓
+                                Delegate → Process → Results
+                                         ↓
+                                Coordinate → Validate → Combine
+                                         ↓
+                                Conflict? → Resolve → Final
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Role-Based Delegation**: Specialized agents")
+                                st.markdown("• **Parallel Processing**: Simultaneous work")
+                                st.markdown("• **Coordination Hub**: Result aggregation")
+                                st.markdown("• **Conflict Resolution**: Disagreement handling")
+                                st.markdown("• **Consensus Building**: Agreement negotiation")
                             
                         elif pattern_name == "memory":
                             st.markdown("**Core Concept:** Context retention and adaptive learning with memory management and knowledge evolution.")
@@ -1606,29 +1602,29 @@ def landing_page():
                             
                             # Flow diagram for Memory & Learning pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph memory_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightpink];
-                                
-                                A["New Experience"] -> B["Context Analysis"];
-                                B -> C["Memory Classification"];
-                                C -> D{"Memory Type?"};
-                                D ->|"Short-term"| E["Session Memory"];
-                                D ->|"Long-term"| F["Persistent Storage"];
-                                E -> G["Context Retrieval"];
-                                F -> H["Knowledge Update"];
-                                H -> I["Learning Process"];
-                                I -> J["Behavior Adaptation"];
-                                J -> K["Performance Evaluation"];
-                                K -> L{"Improvement?"};
-                                L ->|"Yes"| M["Update Knowledge"];
-                                L ->|"No"| N["Retain Current"];
-                                M -> O["Memory Consolidation"];
-                                N -> O;
-                                O -> P["Ready for Next Task"];
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Experience → Analyze → Classify
+                                         ↓
+                                Short-term / Long-term Storage
+                                         ↓
+                                Learning → Adapt → Evaluate
+                                         ↓
+                                Improved? → Update Model
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Memory Classification**: Short/long-term storage")
+                                st.markdown("• **Context Analysis**: Experience significance")
+                                st.markdown("• **Learning Process**: Behavior adaptation")
+                                st.markdown("• **Performance Evaluation**: Learning effectiveness")
+                                st.markdown("• **Knowledge Consolidation**: Integration")
                             
                         elif pattern_name == "critic":
                             st.markdown("**Core Concept:** Secondary validation and quality assurance through independent critique and review.")
@@ -1640,30 +1636,29 @@ def landing_page():
                             
                             # Flow diagram for Critic/Reviewer pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph critic_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightsteelblue];
-                                
-                                A["Primary Output"] -> B["Critic Assignment"];
-                                B -> C["Rubric Application"];
-                                C -> D["Quality Assessment"];
-                                D -> E["Critique Generation"];
-                                E -> F{"Assessment Result"};
-                                F ->|"Approve"| G["Output Approved"];
-                                F ->|"Revise"| H["Revision Request"];
-                                F ->|"Reject"| I["Output Rejected"];
-                                H -> J["Primary Agent"];
-                                J -> K["Apply Revisions"];
-                                K -> L["Resubmit"];
-                                L -> C;
-                                I -> M["Escalation Process"];
-                                M -> N["Human Review"];
-                                N -> O["Final Decision"];
-                                G -> P["Output Delivery"];
-                                O -> P;
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Output → Assign → Rubric
+                                         ↓
+                                Assess → Review → Decision
+                                         ↓
+                                Approve / Revise / Reject
+                                         ↓
+                                Deliver / Fix / Human
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Independent Review**: Unbiased evaluation")
+                                st.markdown("• **Quality Rubrics**: Structured criteria")
+                                st.markdown("• **Revision Process**: Iterative improvement")
+                                st.markdown("• **Escalation Path**: Human expert review")
+                                st.markdown("• **Audit Trail**: Complete traceability")
                             
                         elif pattern_name == "exploration":
                             st.markdown("**Core Concept:** Multi-scenario testing and exploration for optimal decision-making.")
@@ -1675,31 +1670,29 @@ def landing_page():
                             
                             # Flow diagram for Exploration/Simulation pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph exploration_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightcyan];
-                                
-                                A["Decision Point"] -> B["Scenario Generation"];
-                                B -> C["Multiple Scenarios"];
-                                C -> D["Parallel Simulation"];
-                                D -> E["Outcome Measurement"];
-                                E -> F["Scoring & Ranking"];
-                                F -> G["Top Scenarios"];
-                                G -> H["Assumption Validation"];
-                                H -> I{"Valid Assumptions?"};
-                                I ->|"Yes"| J["Select Best Scenario"];
-                                I ->|"No"| K["Refine Scenarios"];
-                                K -> D;
-                                J -> L["Execute Scenario"];
-                                L -> M["Monitor Results"];
-                                M -> N{"Expected Outcome?"};
-                                N ->|"Yes"| O["Success"];
-                                N ->|"No"| P["Learn & Adapt"];
-                                P -> Q["Update Knowledge"];
-                                Q -> R["Ready for Next"];
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Decision → Generate → Simulate
+                                         ↓
+                                Measure → Score → Select Best
+                                         ↓
+                                Validate → Execute → Monitor
+                                         ↓
+                                Match? → Update Model
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Multi-Scenario Generation**: Multiple situations")
+                                st.markdown("• **Parallel Simulation**: Simultaneous testing")
+                                st.markdown("• **Outcome Measurement**: Result quantification")
+                                st.markdown("• **Assumption Validation**: Scenario verification")
+                                st.markdown("• **Learning Integration**: Model updates")
                             
                         else:  # orchestration
                             st.markdown("**Core Concept:** Meta-agent coordination managing multiple agents, tools, and workflows in a unified pipeline.")
@@ -1711,34 +1704,29 @@ def landing_page():
                             
                             # Flow diagram for Orchestration pattern
                             st.markdown("### Pattern Flow Diagram")
-                            st.graphviz_chart("""
-                            digraph orchestration_flow {
-                                rankdir=TB;
-                                node [shape=box, style=filled, fillcolor=lightgoldenrodyellow];
-                                
-                                A["Workflow Request"] -> B["Pipeline Analysis"];
-                                B -> C["Resource Planning"];
-                                C -> D["Agent Allocation"];
-                                D -> E["Task Distribution"];
-                                E -> F["Parallel Execution"];
-                                F -> G["Progress Monitoring"];
-                                G -> H{"All Tasks Complete?"};
-                                H ->|"No"| I["Status Check"];
-                                I -> J{"Any Failures?"};
-                                J ->|"Yes"| K["Failure Analysis"];
-                                J ->|"No"| G;
-                                K -> L["Recovery Strategy"];
-                                L -> M["Retry/Reassign"];
-                                M -> F;
-                                H ->|"Yes"| N["Result Aggregation"];
-                                N -> O["Quality Validation"];
-                                O -> P{"Validation Pass?"};
-                                P ->|"Yes"| Q["Output Delivery"];
-                                P ->|"No"| R["Refinement Process"];
-                                R -> S["Re-execute Pipeline"];
-                                S -> F;
-                            }
-                            """)
+                            
+                            col1, col2 = st.columns([1, 1])
+                            
+                            with col1:
+                                st.markdown("""
+                                ```
+                                Request → Analyze → Plan
+                                         ↓
+                                Allocate → Distribute → Monitor
+                                         ↓
+                                Complete? → Aggregate → Validate
+                                         ↓
+                                Quality? → Deliver Output
+                                ```
+                                """)
+                            
+                            with col2:
+                                st.markdown("**Key Features:**")
+                                st.markdown("• **Pipeline Management**: End-to-end orchestration")
+                                st.markdown("• **Resource Allocation**: Agent/tool optimization")
+                                st.markdown("• **Progress Monitoring**: Execution tracking")
+                                st.markdown("• **Failure Recovery**: Error handling")
+                                st.markdown("• **Quality Validation**: Output standards")
                         
                         # Pattern Benefits and Use Cases
                         st.markdown("### Pattern Benefits")
