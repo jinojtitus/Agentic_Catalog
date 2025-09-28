@@ -1450,23 +1450,418 @@ def landing_page():
             with cols[i % 2]:
                 with st.expander(f"{pattern['name']}", expanded=False):
                     # Pattern Overview tab
-                    tab1, tab2, tab3, tab4 = st.tabs(["Pattern Overview", "Rules/Policies", "Explicit Policies", "Codified/Executable"])
+                    tab1, tab2, tab3 = st.tabs(["Pattern Overview", "Rules & Policies", "Codified/Executable"])
                     
                     with tab1:
                         st.markdown(f"**What it does:** {pattern['description']}")
                         st.markdown(f"**Example Use Cases:** {pattern['example']}")
+                        
+                        # Pattern Details
+                        st.markdown("### Pattern Details")
+                        pattern_name = pattern['name'].split(' ')[0].lower()
+                        
+                        if pattern_name == "reflection":
+                            st.markdown("**Core Concept:** Self-evaluation and iterative improvement through structured self-assessment cycles.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Evaluation Engine**: Assesses output quality against predefined criteria")
+                            st.markdown("- **Improvement Loop**: Iteratively refines outputs based on evaluation results")
+                            st.markdown("- **Audit Trail**: Maintains logs of all reflection cycles for transparency")
+                            
+                            # Flow diagram for Reflection pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph reflection_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightblue];
+                                
+                                A["Input/Output"] -> B["Initial Generation"];
+                                B -> C["Self-Evaluation"];
+                                C -> D{"Quality Check"};
+                                D ->|"Pass"| E["Output Delivery"];
+                                D ->|"Fail"| F["Identify Issues"];
+                                F -> G["Generate Improvements"];
+                                G -> H["Apply Changes"];
+                                H -> I{"Max Loops?"};
+                                I ->|"No"| C;
+                                I ->|"Yes"| J["Escalate to Human"];
+                                J -> E;
+                                
+                                C -> K["Log Reflection Notes"];
+                                K -> L["Update Audit Trail"];
+                            }
+                            """)
+                            
+                        elif pattern_name == "planning":
+                            st.markdown("**Core Concept:** Hierarchical goal decomposition and task sequencing for complex workflows.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Goal Decomposer**: Breaks down high-level objectives into actionable tasks")
+                            st.markdown("- **Dependency Manager**: Handles task dependencies and sequencing")
+                            st.markdown("- **Plan Executor**: Monitors and adjusts plan execution in real-time")
+                            
+                            # Flow diagram for Planning pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph planning_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightgreen];
+                                
+                                A["High-Level Goal"] -> B["Goal Analysis"];
+                                B -> C["Task Decomposition"];
+                                C -> D["Dependency Mapping"];
+                                D -> E["Plan Generation"];
+                                E -> F["Plan Validation"];
+                                F -> G{"Valid Plan?"};
+                                G ->|"Yes"| H["Execute Plan"];
+                                G ->|"No"| I["Refine Plan"];
+                                I -> F;
+                                H -> J["Monitor Progress"];
+                                J -> K{"Task Complete?"};
+                                K ->|"No"| L["Update Status"];
+                                L -> J;
+                                K ->|"Yes"| M["Check Dependencies"];
+                                M -> N{"All Dependencies Met?"};
+                                N ->|"Yes"| O["Execute Next Task"];
+                                N ->|"No"| J;
+                                O -> J;
+                            }
+                            """)
+                            
+                        elif pattern_name == "tool":
+                            st.markdown("**Core Concept:** External tool integration with validation, error handling, and fallback mechanisms.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Tool Registry**: Manages available tools and their capabilities")
+                            st.markdown("- **Input Validator**: Ensures inputs meet tool requirements")
+                            st.markdown("- **Execution Engine**: Handles tool calls with retry logic")
+                            st.markdown("- **Output Sanitizer**: Cleans and validates tool outputs")
+                            
+                            # Flow diagram for Tool Use pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph tool_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightyellow];
+                                
+                                A["Tool Request"] -> B["Tool Selection"];
+                                B -> C["Input Validation"];
+                                C -> D{"Valid Input?"};
+                                D ->|"No"| E["Return Error"];
+                                D ->|"Yes"| F["Execute Tool"];
+                                F -> G{"Tool Success?"};
+                                G ->|"Yes"| H["Output Sanitization"];
+                                G ->|"No"| I{"Retry Count < Max?"};
+                                I ->|"Yes"| J["Wait & Retry"];
+                                J -> F;
+                                I ->|"No"| K["Fallback Tool"];
+                                K -> L{"Fallback Available?"};
+                                L ->|"Yes"| F;
+                                L ->|"No"| M["Escalate to Human"];
+                                H -> N["Return Result"];
+                                M -> N;
+                            }
+                            """)
+                            
+                        elif pattern_name == "collaboration":
+                            st.markdown("**Core Concept:** Multi-agent coordination with role-based delegation and conflict resolution.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Role Manager**: Defines and manages agent roles and capabilities")
+                            st.markdown("- **Delegation Engine**: Handles task handoffs between agents")
+                            st.markdown("- **Conflict Resolver**: Manages disagreements and arbitration")
+                            st.markdown("- **Coordination Hub**: Central communication and state management")
+                            
+                            # Flow diagram for Collaboration pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph collaboration_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightcoral];
+                                
+                                A["Task Assignment"] -> B["Role Identification"];
+                                B -> C["Agent Selection"];
+                                C -> D["Task Delegation"];
+                                D -> E["Agent Processing"];
+                                E -> F{"Task Complete?"};
+                                F ->|"Yes"| G["Result Validation"];
+                                F ->|"No"| H["Progress Update"];
+                                H -> I{"Need Help?"};
+                                I ->|"Yes"| J["Request Assistance"];
+                                I ->|"No"| E;
+                                J -> K["Find Collaborator"];
+                                K -> L["Handoff Task"];
+                                L -> E;
+                                G -> M{"Quality Check Pass?"};
+                                M ->|"Yes"| N["Return Result"];
+                                M ->|"No"| O["Conflict Resolution"];
+                                O -> P["Revised Task"];
+                                P -> E;
+                            }
+                            """)
+                            
+                        elif pattern_name == "memory":
+                            st.markdown("**Core Concept:** Context retention and adaptive learning with memory management and knowledge evolution.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Memory Store**: Short-term and long-term memory systems")
+                            st.markdown("- **Learning Engine**: Adapts behavior based on experience")
+                            st.markdown("- **Context Manager**: Maintains session and cross-session context")
+                            st.markdown("- **Knowledge Base**: Persistent knowledge storage and retrieval")
+                            
+                            # Flow diagram for Memory & Learning pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph memory_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightpink];
+                                
+                                A["New Experience"] -> B["Context Analysis"];
+                                B -> C["Memory Classification"];
+                                C -> D{"Memory Type?"};
+                                D ->|"Short-term"| E["Session Memory"];
+                                D ->|"Long-term"| F["Persistent Storage"];
+                                E -> G["Context Retrieval"];
+                                F -> H["Knowledge Update"];
+                                H -> I["Learning Process"];
+                                I -> J["Behavior Adaptation"];
+                                J -> K["Performance Evaluation"];
+                                K -> L{"Improvement?"};
+                                L ->|"Yes"| M["Update Knowledge"];
+                                L ->|"No"| N["Retain Current"];
+                                M -> O["Memory Consolidation"];
+                                N -> O;
+                                O -> P["Ready for Next Task"];
+                            }
+                            """)
+                            
+                        elif pattern_name == "critic":
+                            st.markdown("**Core Concept:** Secondary validation and quality assurance through independent critique and review.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Critique Engine**: Evaluates outputs against quality rubrics")
+                            st.markdown("- **Review Process**: Structured assessment and feedback generation")
+                            st.markdown("- **Decision Authority**: Clear escalation and approval workflows")
+                            st.markdown("- **Audit Trail**: Complete traceability of critique decisions")
+                            
+                            # Flow diagram for Critic/Reviewer pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph critic_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightsteelblue];
+                                
+                                A["Primary Output"] -> B["Critic Assignment"];
+                                B -> C["Rubric Application"];
+                                C -> D["Quality Assessment"];
+                                D -> E["Critique Generation"];
+                                E -> F{"Assessment Result"};
+                                F ->|"Approve"| G["Output Approved"];
+                                F ->|"Revise"| H["Revision Request"];
+                                F ->|"Reject"| I["Output Rejected"];
+                                H -> J["Primary Agent"];
+                                J -> K["Apply Revisions"];
+                                K -> L["Resubmit"];
+                                L -> C;
+                                I -> M["Escalation Process"];
+                                M -> N["Human Review"];
+                                N -> O["Final Decision"];
+                                G -> P["Output Delivery"];
+                                O -> P;
+                            }
+                            """)
+                            
+                        elif pattern_name == "exploration":
+                            st.markdown("**Core Concept:** Multi-scenario testing and exploration for optimal decision-making.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Scenario Generator**: Creates multiple hypothetical situations")
+                            st.markdown("- **Simulation Engine**: Executes scenarios and measures outcomes")
+                            st.markdown("- **Scoring System**: Ranks scenarios based on defined criteria")
+                            st.markdown("- **Selection Logic**: Chooses optimal scenario for execution")
+                            
+                            # Flow diagram for Exploration/Simulation pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph exploration_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightcyan];
+                                
+                                A["Decision Point"] -> B["Scenario Generation"];
+                                B -> C["Multiple Scenarios"];
+                                C -> D["Parallel Simulation"];
+                                D -> E["Outcome Measurement"];
+                                E -> F["Scoring & Ranking"];
+                                F -> G["Top Scenarios"];
+                                G -> H["Assumption Validation"];
+                                H -> I{"Valid Assumptions?"};
+                                I ->|"Yes"| J["Select Best Scenario"];
+                                I ->|"No"| K["Refine Scenarios"];
+                                K -> D;
+                                J -> L["Execute Scenario"];
+                                L -> M["Monitor Results"];
+                                M -> N{"Expected Outcome?"};
+                                N ->|"Yes"| O["Success"];
+                                N ->|"No"| P["Learn & Adapt"];
+                                P -> Q["Update Knowledge"];
+                                Q -> R["Ready for Next"];
+                            }
+                            """)
+                            
+                        else:  # orchestration
+                            st.markdown("**Core Concept:** Meta-agent coordination managing multiple agents, tools, and workflows in a unified pipeline.")
+                            st.markdown("**Key Components:**")
+                            st.markdown("- **Pipeline Manager**: Orchestrates end-to-end workflow execution")
+                            st.markdown("- **Resource Coordinator**: Manages agent and tool allocation")
+                            st.markdown("- **State Monitor**: Tracks global system state and progress")
+                            st.markdown("- **Escalation Handler**: Manages failures and recovery procedures")
+                            
+                            # Flow diagram for Orchestration pattern
+                            st.markdown("### Pattern Flow Diagram")
+                            st.graphviz_chart("""
+                            digraph orchestration_flow {
+                                rankdir=TB;
+                                node [shape=box, style=filled, fillcolor=lightgoldenrodyellow];
+                                
+                                A["Workflow Request"] -> B["Pipeline Analysis"];
+                                B -> C["Resource Planning"];
+                                C -> D["Agent Allocation"];
+                                D -> E["Task Distribution"];
+                                E -> F["Parallel Execution"];
+                                F -> G["Progress Monitoring"];
+                                G -> H{"All Tasks Complete?"};
+                                H ->|"No"| I["Status Check"];
+                                I -> J{"Any Failures?"};
+                                J ->|"Yes"| K["Failure Analysis"];
+                                J ->|"No"| G;
+                                K -> L["Recovery Strategy"];
+                                L -> M["Retry/Reassign"];
+                                M -> F;
+                                H ->|"Yes"| N["Result Aggregation"];
+                                N -> O["Quality Validation"];
+                                O -> P{"Validation Pass?"};
+                                P ->|"Yes"| Q["Output Delivery"];
+                                P ->|"No"| R["Refinement Process"];
+                                R -> S["Re-execute Pipeline"];
+                                S -> F;
+                            }
+                            """)
+                        
+                        # Pattern Benefits and Use Cases
+                        st.markdown("### Pattern Benefits")
+                        benefits = {
+                            "reflection": [
+                                "Improved output quality through self-assessment",
+                                "Reduced human intervention needs",
+                                "Enhanced transparency and auditability",
+                                "Continuous learning and adaptation"
+                            ],
+                            "planning": [
+                                "Structured approach to complex tasks",
+                                "Clear task dependencies and sequencing",
+                                "Adaptive planning based on real-time feedback",
+                                "Reduced execution errors and delays"
+                            ],
+                            "tool": [
+                                "Seamless integration with external systems",
+                                "Robust error handling and fallback mechanisms",
+                                "Input/output validation and sanitization",
+                                "Scalable tool management and monitoring"
+                            ],
+                            "collaboration": [
+                                "Distributed problem-solving capabilities",
+                                "Role-based specialization and expertise",
+                                "Conflict resolution and consensus building",
+                                "Scalable multi-agent coordination"
+                            ],
+                            "memory": [
+                                "Context-aware decision making",
+                                "Learning from past experiences",
+                                "Personalized and adaptive responses",
+                                "Knowledge accumulation and evolution"
+                            ],
+                            "critic": [
+                                "Quality assurance and validation",
+                                "Independent review and oversight",
+                                "Reduced bias and error propagation",
+                                "Clear accountability and traceability"
+                            ],
+                            "exploration": [
+                                "Optimal decision making through exploration",
+                                "Risk assessment and scenario planning",
+                                "Adaptive strategy selection",
+                                "Learning from hypothetical outcomes"
+                            ],
+                            "orchestration": [
+                                "End-to-end workflow management",
+                                "Resource optimization and allocation",
+                                "Centralized monitoring and control",
+                                "Scalable and maintainable systems"
+                            ]
+                        }
+                        
+                        for benefit in benefits.get(pattern_name, []):
+                            st.markdown(f"• {benefit}")
+                        
+                        # Implementation Considerations
+                        st.markdown("### Implementation Considerations")
+                        considerations = {
+                            "reflection": [
+                                "Set clear evaluation criteria and rubrics",
+                                "Implement recursion limits to prevent infinite loops",
+                                "Maintain comprehensive audit logs",
+                                "Balance reflection depth with performance requirements"
+                            ],
+                            "planning": [
+                                "Define clear task decomposition rules",
+                                "Implement robust dependency management",
+                                "Plan for mid-execution adjustments",
+                                "Monitor and optimize planning performance"
+                            ],
+                            "tool": [
+                                "Maintain comprehensive tool registry",
+                                "Implement robust error handling",
+                                "Ensure input/output validation",
+                                "Monitor tool performance and availability"
+                            ],
+                            "collaboration": [
+                                "Define clear agent roles and responsibilities",
+                                "Implement effective communication protocols",
+                                "Establish conflict resolution mechanisms",
+                                "Monitor collaboration effectiveness"
+                            ],
+                            "memory": [
+                                "Design appropriate memory hierarchies",
+                                "Implement privacy and security controls",
+                                "Balance memory capacity with performance",
+                                "Ensure memory consistency and reliability"
+                            ],
+                            "critic": [
+                                "Develop comprehensive evaluation rubrics",
+                                "Ensure critic independence and objectivity",
+                                "Implement clear decision authority",
+                                "Maintain detailed critique audit trails"
+                            ],
+                            "exploration": [
+                                "Define scenario generation parameters",
+                                "Implement efficient simulation engines",
+                                "Develop robust scoring mechanisms",
+                                "Balance exploration breadth with computational cost"
+                            ],
+                            "orchestration": [
+                                "Design scalable pipeline architectures",
+                                "Implement comprehensive monitoring",
+                                "Plan for failure recovery and resilience",
+                                "Ensure resource efficiency and optimization"
+                            ]
+                        }
+                        
+                        for consideration in considerations.get(pattern_name, []):
+                            st.markdown(f"• {consideration}")
                     
                     with tab2:
                         st.markdown("**Rules/Policies:**")
                         for rule in pattern['rules']:
                             st.write(f"• {rule}")
-                    
-                    with tab3:
+                        
                         st.markdown("**Explicit Policies:**")
                         for policy in pattern['explicit_policies']:
                             st.write(f"• {policy}")
                     
-                    with tab4:
+                    with tab3:
                         st.markdown("**Codified/Executable Configuration**")
                         st.markdown("*DevOps Pipeline Observable Configuration*")
                         
@@ -4096,11 +4491,6 @@ def main():
     
     # iOS-style Sidebar navigation
     with st.sidebar:
-        st.markdown("""
-        <div style="text-align: center; margin-bottom: 2rem;">
-            <h2 style="color: #1d1d1f; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 700; margin: 0;">📱 Navigation</h2>
-        </div>
-        """, unsafe_allow_html=True)
         
         # Agentic Operating System Section
         st.markdown("""
