@@ -5,6 +5,7 @@ import plotly.graph_objects as go
 from datetime import datetime, timedelta
 import json
 import yaml
+import numpy as np
 
 # Page configuration - iOS style
 st.set_page_config(
@@ -362,6 +363,233 @@ st.markdown("""
 
 # Sample data
 @st.cache_data
+def generate_escalation_data(agent):
+    """Generate comprehensive escalation data for an agent based on 100+ iterations"""
+    
+    # Base escalation data by agent type
+    escalation_templates = {
+        'orchestration': {
+            'total_escalations': 47,
+            'avg_resolution_time': '8.5m',
+            'success_rate': 89,
+            'critical_issues': 3,
+            'daily_avg': 1.6,
+            'pattern_analysis': {
+                'Workflow Timeout': 35,
+                'Dependency Failure': 28,
+                'Resource Exhaustion': 20,
+                'Validation Error': 12,
+                'Business Rule Violation': 5
+            },
+            'patterns_identified': [
+                {'pattern': 'Peak Load Escalations', 'description': 'Escalations spike during 2-4 PM business hours', 'frequency': 68},
+                {'pattern': 'Cascade Failures', 'description': 'Single service failure triggers multiple escalations', 'frequency': 42},
+                {'pattern': 'Resource Contention', 'description': 'Memory issues during high-volume processing', 'frequency': 31}
+            ],
+            'resolution_strategies': [
+                {'strategy': 'Auto-retry with exponential backoff', 'effectiveness': 78},
+                {'strategy': 'Circuit breaker pattern', 'effectiveness': 85},
+                {'strategy': 'Resource scaling', 'effectiveness': 92}
+            ],
+            'prevention_measures': [
+                'Implement proactive resource monitoring',
+                'Add circuit breakers for external dependencies',
+                'Optimize workflow execution paths',
+                'Increase timeout thresholds during peak hours'
+            ],
+            'performance_improvements': [
+                {'area': 'Workflow Optimization', 'improvement': '25% faster execution', 'impact': 'Reduced timeout escalations by 40%'},
+                {'area': 'Resource Management', 'improvement': '30% better memory utilization', 'impact': 'Eliminated resource exhaustion escalations'},
+                {'area': 'Error Handling', 'improvement': '50% better error recovery', 'impact': 'Improved success rate from 78% to 89%'}
+            ]
+        },
+        'retrieval': {
+            'total_escalations': 23,
+            'avg_resolution_time': '4.2m',
+            'success_rate': 94,
+            'critical_issues': 1,
+            'daily_avg': 0.8,
+            'pattern_analysis': {
+                'Query Timeout': 40,
+                'Vector DB Error': 25,
+                'No Results Found': 20,
+                'Classification Error': 10,
+                'Permission Denied': 5
+            },
+            'patterns_identified': [
+                {'pattern': 'Complex Query Escalations', 'description': 'Multi-vector searches cause timeouts', 'frequency': 52},
+                {'pattern': 'Index Performance', 'description': 'Vector index degradation during peak usage', 'frequency': 38},
+                {'pattern': 'Classification Confidence', 'description': 'Low confidence classifications trigger escalations', 'frequency': 29}
+            ],
+            'resolution_strategies': [
+                {'strategy': 'Query optimization and caching', 'effectiveness': 88},
+                {'strategy': 'Index maintenance automation', 'effectiveness': 91},
+                {'strategy': 'Confidence threshold adjustment', 'effectiveness': 76}
+            ],
+            'prevention_measures': [
+                'Implement query result caching',
+                'Schedule regular index maintenance',
+                'Add query complexity analysis',
+                'Optimize vector similarity calculations'
+            ],
+            'performance_improvements': [
+                {'area': 'Query Performance', 'improvement': '60% faster queries', 'impact': 'Reduced timeout escalations by 70%'},
+                {'area': 'Index Optimization', 'improvement': '40% better search accuracy', 'impact': 'Improved result relevance by 35%'},
+                {'area': 'Caching Strategy', 'improvement': '80% cache hit rate', 'impact': 'Reduced database load by 50%'}
+            ]
+        },
+        'monitoring': {
+            'total_escalations': 31,
+            'avg_resolution_time': '6.8m',
+            'success_rate': 87,
+            'critical_issues': 2,
+            'daily_avg': 1.1,
+            'pattern_analysis': {
+                'Threshold Breach': 35,
+                'Anomaly Detection': 30,
+                'Compliance Violation': 20,
+                'System Health': 10,
+                'Data Quality': 5
+            },
+            'patterns_identified': [
+                {'pattern': 'False Positive Anomalies', 'description': 'Normal business patterns flagged as anomalies', 'frequency': 45},
+                {'pattern': 'Threshold Sensitivity', 'description': 'Overly sensitive thresholds trigger unnecessary escalations', 'frequency': 38},
+                {'pattern': 'Data Quality Issues', 'description': 'Poor input data quality causes monitoring failures', 'frequency': 32}
+            ],
+            'resolution_strategies': [
+                {'strategy': 'Adaptive threshold adjustment', 'effectiveness': 82},
+                {'strategy': 'Machine learning anomaly detection', 'effectiveness': 89},
+                {'strategy': 'Data quality validation', 'effectiveness': 85}
+            ],
+            'prevention_measures': [
+                'Implement adaptive threshold algorithms',
+                'Add data quality pre-processing',
+                'Use ML-based anomaly detection',
+                'Create business context-aware monitoring'
+            ],
+            'performance_improvements': [
+                {'area': 'Anomaly Detection', 'improvement': '45% fewer false positives', 'impact': 'Reduced unnecessary escalations by 60%'},
+                {'area': 'Threshold Management', 'improvement': 'Dynamic threshold adjustment', 'impact': 'Improved accuracy by 35%'},
+                {'area': 'Data Quality', 'improvement': '90% data validation success', 'impact': 'Eliminated data quality escalations'}
+            ]
+        }
+    }
+    
+    # Get template for agent type or use default
+    template = escalation_templates.get(agent['patternType'], escalation_templates['orchestration'])
+    
+    # Generate recent events
+    recent_events = [
+        {
+            'timestamp': '2025-01-20 14:32:15',
+            'type': 'Workflow Timeout',
+            'severity': 'High',
+            'status': 'Resolved',
+            'description': 'Payment processing workflow exceeded 30-second timeout limit during peak hours',
+            'impact': '15 pending payments delayed, customer complaints received',
+            'resolution': 'Implemented circuit breaker pattern and increased timeout to 45 seconds',
+            'duration': '12 minutes',
+            'lessons_learned': 'Peak hour load requires dynamic timeout adjustment'
+        },
+        {
+            'timestamp': '2025-01-20 14:28:42',
+            'type': 'Dependency Failure',
+            'severity': 'Medium',
+            'status': 'Investigating',
+            'description': 'External banking API returned 503 error, affecting payment validation',
+            'impact': 'Payment validation temporarily unavailable',
+            'resolution': 'Switched to backup API endpoint, investigating root cause',
+            'duration': 'Ongoing',
+            'lessons_learned': 'Need better fallback mechanisms for critical dependencies'
+        },
+        {
+            'timestamp': '2025-01-20 14:25:18',
+            'type': 'Validation Error',
+            'severity': 'Low',
+            'status': 'Resolved',
+            'description': 'Input data failed schema validation due to missing required field',
+            'impact': 'Single transaction rejected, no customer impact',
+            'resolution': 'Updated validation rules to handle optional fields gracefully',
+            'duration': '3 minutes',
+            'lessons_learned': 'Schema validation needs to be more flexible for edge cases'
+        }
+    ]
+    
+    # Generate critical issues
+    critical_issues_list = [
+        {
+            'title': 'Peak Hour Performance Degradation',
+            'root_cause': 'Insufficient resource allocation during 2-4 PM business hours',
+            'business_impact': 'Customer satisfaction decreased by 15% due to processing delays',
+            'recommended_actions': [
+                'Implement auto-scaling based on load patterns',
+                'Add resource monitoring and alerting',
+                'Optimize database queries for peak usage',
+                'Consider load balancing across multiple instances'
+            ],
+            'priority': 'High'
+        },
+        {
+            'title': 'External API Dependency Risk',
+            'root_cause': 'Single point of failure in banking API integration',
+            'business_impact': 'Complete payment processing halt when API is unavailable',
+            'recommended_actions': [
+                'Implement multiple API provider fallbacks',
+                'Add circuit breaker pattern with graceful degradation',
+                'Create cached responses for common queries',
+                'Establish SLA monitoring with providers'
+            ],
+            'priority': 'High'
+        }
+    ]
+    
+    # Generate action items
+    action_items = [
+        {
+            'title': 'Implement Auto-scaling for Peak Hours',
+            'description': 'Configure Kubernetes HPA to scale resources during 2-4 PM',
+            'priority': 'High',
+            'due_date': '2025-01-25'
+        },
+        {
+            'title': 'Add Circuit Breaker Pattern',
+            'description': 'Implement circuit breaker for external API calls to prevent cascade failures',
+            'priority': 'High',
+            'due_date': '2025-01-30'
+        },
+        {
+            'title': 'Optimize Database Queries',
+            'description': 'Review and optimize slow queries identified during peak hours',
+            'priority': 'Medium',
+            'due_date': '2025-02-05'
+        }
+    ]
+    
+    # Generate thresholds
+    thresholds = [
+        {'metric': 'Response Time', 'value': '30s', 'status': 'Active'},
+        {'metric': 'Error Rate', 'value': '5%', 'status': 'Active'},
+        {'metric': 'Memory Usage', 'value': '80%', 'status': 'Active'},
+        {'metric': 'CPU Usage', 'value': '85%', 'status': 'Active'}
+    ]
+    
+    # Generate escalation rules
+    escalation_rules = [
+        'Escalate to Level 2 if resolution time exceeds 5 minutes',
+        'Immediate escalation for any Critical severity issues',
+        'Auto-retry up to 3 times before escalation',
+        'Notify stakeholders for High severity issues within 2 minutes'
+    ]
+    
+    return {
+        **template,
+        'recent_events': recent_events,
+        'critical_issues_list': critical_issues_list,
+        'action_items': action_items,
+        'thresholds': thresholds,
+        'escalation_rules': escalation_rules
+    }
+
 def load_agent_data():
     return {
         'agents': [
@@ -422,6 +650,28 @@ def load_agent_data():
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'escalation_reasoning'}
                 },
                 'monitoring': {'callsThisWeek': 1245, 'guardrailTriggers': 3, 'escalations': 1, 'avgResponseTime': '245ms', 'uptime': '99.8%'},
+                'runtime_tools': {
+                    'llm_tools': [
+                        {'name': 'Azure OpenAI GPT-4', 'purpose': 'Document analysis and classification', 'status': 'active'},
+                        {'name': 'text-embedding-ada-002', 'purpose': 'Semantic vector generation', 'status': 'active'}
+                    ],
+                    'vector_tools': [
+                        {'name': 'Pinecone Vector DB', 'purpose': 'Document similarity search', 'status': 'active'},
+                        {'name': 'Azure Cognitive Search', 'purpose': 'Hybrid search capabilities', 'status': 'active'}
+                    ],
+                    'storage_tools': [
+                        {'name': 'Azure Blob Storage', 'purpose': 'Document storage and retrieval', 'status': 'active'},
+                        {'name': 'Azure Cosmos DB', 'purpose': 'Metadata and classification results', 'status': 'active'}
+                    ],
+                    'api_tools': [
+                        {'name': 'Document Processing API', 'purpose': 'PDF parsing and text extraction', 'status': 'active'},
+                        {'name': 'Classification API', 'purpose': 'Document type classification', 'status': 'active'}
+                    ],
+                    'governance_tools': [
+                        {'name': 'Azure AI Content Safety', 'purpose': 'Content filtering and safety checks', 'status': 'active'},
+                        {'name': 'Audit Logger', 'purpose': 'Compliance and decision logging', 'status': 'active'}
+                    ]
+                },
                 'patternImplementations': {
                     'primary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠'],
                     'secondary_patterns': ['Reflection 🪞', 'Critic/Reviewer 🧐'],
@@ -525,6 +775,28 @@ def load_agent_data():
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'workflow_escalation'}
                 },
                 'monitoring': {'callsThisWeek': 892, 'guardrailTriggers': 5, 'escalations': 2, 'avgResponseTime': '1.2s', 'uptime': '98.5%'},
+                'runtime_tools': {
+                    'llm_tools': [
+                        {'name': 'Azure OpenAI GPT-4', 'purpose': 'Workflow planning and orchestration', 'status': 'active'},
+                        {'name': 'Claude-3-Sonnet', 'purpose': 'Complex reasoning and decision making', 'status': 'active'}
+                    ],
+                    'workflow_tools': [
+                        {'name': 'Temporal Workflow Engine', 'purpose': 'Distributed workflow orchestration', 'status': 'active'},
+                        {'name': 'Apache Airflow', 'purpose': 'Data pipeline orchestration', 'status': 'active'}
+                    ],
+                    'messaging_tools': [
+                        {'name': 'RabbitMQ', 'purpose': 'Inter-agent communication', 'status': 'active'},
+                        {'name': 'Apache Kafka', 'purpose': 'Event streaming and processing', 'status': 'active'}
+                    ],
+                    'database_tools': [
+                        {'name': 'PostgreSQL', 'purpose': 'Workflow state and metadata storage', 'status': 'active'},
+                        {'name': 'Redis', 'purpose': 'Caching and session management', 'status': 'active'}
+                    ],
+                    'monitoring_tools': [
+                        {'name': 'Prometheus', 'purpose': 'Metrics collection and alerting', 'status': 'active'},
+                        {'name': 'Grafana', 'purpose': 'Visualization and dashboards', 'status': 'active'}
+                    ]
+                },
                 'patternImplementations': {
                     'primary_patterns': ['Orchestration 🎼', 'Planning 📋'],
                     'secondary_patterns': ['Tool Use 🔧', 'Collaboration / Delegation 🤝', 'Exploration / Simulation 🔄'],
@@ -641,6 +913,28 @@ def load_agent_data():
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'compliance_finding'}
                 },
                 'monitoring': {'callsThisWeek': 0, 'guardrailTriggers': 0, 'escalations': 0, 'avgResponseTime': 'N/A', 'uptime': 'N/A'},
+                'runtime_tools': {
+                    'llm_tools': [
+                        {'name': 'Azure OpenAI GPT-4', 'purpose': 'Policy analysis and compliance checking', 'status': 'active'},
+                        {'name': 'text-embedding-ada-002', 'purpose': 'Document similarity for compliance matching', 'status': 'active'}
+                    ],
+                    'compliance_tools': [
+                        {'name': 'RegTech API', 'purpose': 'Regulatory requirement checking', 'status': 'active'},
+                        {'name': 'Compliance Database', 'purpose': 'Policy and regulation storage', 'status': 'active'}
+                    ],
+                    'document_tools': [
+                        {'name': 'Azure Form Recognizer', 'purpose': 'Document structure analysis', 'status': 'active'},
+                        {'name': 'PDF Parser API', 'purpose': 'Document content extraction', 'status': 'active'}
+                    ],
+                    'audit_tools': [
+                        {'name': 'Audit Logger', 'purpose': 'Compliance decision logging', 'status': 'active'},
+                        {'name': 'Report Generator', 'purpose': 'Compliance report creation', 'status': 'active'}
+                    ],
+                    'governance_tools': [
+                        {'name': 'Policy Engine', 'purpose': 'Rule-based compliance validation', 'status': 'active'},
+                        {'name': 'Risk Assessment API', 'purpose': 'Compliance risk scoring', 'status': 'active'}
+                    ]
+                },
                 'patternImplementations': {
                     'primary_patterns': ['Tool Use 🔧', 'Critic/Reviewer 🧐'],
                     'secondary_patterns': ['Memory & Learning 🧠', 'Reflection 🪞'],
@@ -795,6 +1089,28 @@ def load_agent_data():
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'payment_decision'}
                 },
                 'monitoring': {'callsThisWeek': 23, 'guardrailTriggers': 7, 'escalations': 3, 'avgResponseTime': '3.2s', 'uptime': '99.9%'},
+                'runtime_tools': {
+                    'llm_tools': [
+                        {'name': 'Azure OpenAI GPT-4', 'purpose': 'Payment analysis and decision making', 'status': 'active'},
+                        {'name': 'Claude-3-Sonnet', 'purpose': 'Complex financial reasoning', 'status': 'active'}
+                    ],
+                    'payment_tools': [
+                        {'name': 'Stripe API', 'purpose': 'Payment processing and validation', 'status': 'active'},
+                        {'name': 'PayPal API', 'purpose': 'Alternative payment processing', 'status': 'active'}
+                    ],
+                    'banking_tools': [
+                        {'name': 'Banking API Gateway', 'purpose': 'Bank account verification', 'status': 'active'},
+                        {'name': 'ACH Processing API', 'purpose': 'Automated clearing house transactions', 'status': 'active'}
+                    ],
+                    'security_tools': [
+                        {'name': 'Fraud Detection API', 'purpose': 'Transaction fraud analysis', 'status': 'active'},
+                        {'name': 'Encryption Service', 'purpose': 'Payment data encryption', 'status': 'active'}
+                    ],
+                    'compliance_tools': [
+                        {'name': 'PCI DSS Validator', 'purpose': 'Payment card compliance checking', 'status': 'active'},
+                        {'name': 'AML Screening API', 'purpose': 'Anti-money laundering checks', 'status': 'active'}
+                    ]
+                },
                 'patternImplementations': {
                     'primary_patterns': ['Orchestration 🎼', 'Tool Use 🔧', 'Exploration / Simulation 🔄'],
                     'secondary_patterns': ['Reflection 🪞', 'Critic/Reviewer 🧐', 'Memory & Learning 🧠'],
@@ -920,6 +1236,28 @@ def load_agent_data():
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'negotiation_decision'}
                 },
                 'monitoring': {'callsThisWeek': 12, 'guardrailTriggers': 2, 'escalations': 1, 'avgResponseTime': '45s', 'uptime': '99.5%'},
+                'runtime_tools': {
+                    'llm_tools': [
+                        {'name': 'Azure OpenAI GPT-4', 'purpose': 'Negotiation strategy and communication', 'status': 'active'},
+                        {'name': 'Claude-3-Sonnet', 'purpose': 'Complex multi-party reasoning', 'status': 'active'}
+                    ],
+                    'communication_tools': [
+                        {'name': 'Slack API', 'purpose': 'Real-time communication with stakeholders', 'status': 'active'},
+                        {'name': 'Microsoft Teams API', 'purpose': 'Enterprise communication platform', 'status': 'active'}
+                    ],
+                    'document_tools': [
+                        {'name': 'Contract Analysis API', 'purpose': 'Contract terms and conditions analysis', 'status': 'active'},
+                        {'name': 'Document Generator', 'purpose': 'Proposal and agreement creation', 'status': 'active'}
+                    ],
+                    'crm_tools': [
+                        {'name': 'Salesforce API', 'purpose': 'Customer relationship management', 'status': 'active'},
+                        {'name': 'HubSpot API', 'purpose': 'Lead and deal management', 'status': 'active'}
+                    ],
+                    'analytics_tools': [
+                        {'name': 'Negotiation Analytics', 'purpose': 'Success rate and outcome analysis', 'status': 'active'},
+                        {'name': 'Sentiment Analysis API', 'purpose': 'Stakeholder sentiment tracking', 'status': 'active'}
+                    ]
+                },
                 'patternImplementations': {
                     'primary_patterns': ['Collaboration / Delegation 🤝', 'Planning 📋', 'Reflection 🪞'],
                     'secondary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠', 'Critic/Reviewer 🧐'],
@@ -1047,6 +1385,28 @@ def load_agent_data():
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'classification_decision'}
                 },
                 'monitoring': {'callsThisWeek': 2156, 'guardrailTriggers': 12, 'escalations': 3, 'avgResponseTime': '2.1s', 'uptime': '99.9%'},
+                'runtime_tools': {
+                    'llm_tools': [
+                        {'name': 'Azure OpenAI GPT-4', 'purpose': 'Document classification and analysis', 'status': 'active'},
+                        {'name': 'text-embedding-ada-002', 'purpose': 'Semantic document understanding', 'status': 'active'}
+                    ],
+                    'ml_tools': [
+                        {'name': 'Azure ML Studio', 'purpose': 'Custom classification models', 'status': 'active'},
+                        {'name': 'Hugging Face Transformers', 'purpose': 'Pre-trained classification models', 'status': 'active'}
+                    ],
+                    'vector_tools': [
+                        {'name': 'Pinecone Vector DB', 'purpose': 'Document similarity search', 'status': 'active'},
+                        {'name': 'Azure Cognitive Search', 'purpose': 'Hybrid search capabilities', 'status': 'active'}
+                    ],
+                    'document_tools': [
+                        {'name': 'Azure Form Recognizer', 'purpose': 'Document structure analysis', 'status': 'active'},
+                        {'name': 'OCR Service', 'purpose': 'Text extraction from images', 'status': 'active'}
+                    ],
+                    'storage_tools': [
+                        {'name': 'Azure Blob Storage', 'purpose': 'Document storage and retrieval', 'status': 'active'},
+                        {'name': 'Elasticsearch', 'purpose': 'Full-text search and indexing', 'status': 'active'}
+                    ]
+                },
                 'patternImplementations': {
                     'primary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠', 'Reflection 🪞'],
                     'secondary_patterns': ['Critic/Reviewer 🧐', 'Planning 📋'],
@@ -1163,6 +1523,28 @@ def load_agent_data():
                     'decisionJournals': {'enabled': True, 'required': True, 'template': 'supervisory_decision'}
                 },
                 'monitoring': {'callsThisWeek': 156, 'guardrailTriggers': 8, 'escalations': 5, 'avgResponseTime': '1.8s', 'uptime': '99.7%'},
+                'runtime_tools': {
+                    'llm_tools': [
+                        {'name': 'Azure OpenAI GPT-4', 'purpose': 'Supervisory decision making and coordination', 'status': 'active'},
+                        {'name': 'Claude-3-Sonnet', 'purpose': 'Complex multi-agent reasoning', 'status': 'active'}
+                    ],
+                    'orchestration_tools': [
+                        {'name': 'Kubernetes API', 'purpose': 'Agent deployment and scaling', 'status': 'active'},
+                        {'name': 'Docker Registry', 'purpose': 'Agent container management', 'status': 'active'}
+                    ],
+                    'monitoring_tools': [
+                        {'name': 'Prometheus', 'purpose': 'Agent performance metrics', 'status': 'active'},
+                        {'name': 'Grafana', 'purpose': 'Visualization and dashboards', 'status': 'active'}
+                    ],
+                    'communication_tools': [
+                        {'name': 'Agent Communication Bus', 'purpose': 'Inter-agent messaging', 'status': 'active'},
+                        {'name': 'Event Streaming Platform', 'purpose': 'Real-time event processing', 'status': 'active'}
+                    ],
+                    'governance_tools': [
+                        {'name': 'Policy Engine', 'purpose': 'Agent behavior enforcement', 'status': 'active'},
+                        {'name': 'Audit System', 'purpose': 'Agent action logging and compliance', 'status': 'active'}
+                    ]
+                },
                 'patternImplementations': {
                     'primary_patterns': ['Orchestration 🎼', 'Collaboration / Delegation 🤝', 'Critic/Reviewer 🧐'],
                     'secondary_patterns': ['Tool Use 🔧', 'Memory & Learning 🧠', 'Reflection 🪞', 'Planning 📋'],
@@ -1294,8 +1676,8 @@ def landing_page():
     if lifecycle_filter != "All":
         filtered_agents = [agent for agent in filtered_agents if agent['status'] == lifecycle_filter]
     
-    # Main tabs for Pattern Cards and Agent Cards
-    main_tab1, main_tab2 = st.tabs(["🔄 Pattern Cards", "🤖 Agent Cards"])
+    # Main tabs for Pattern Cards, Tools Layer, and Agent Cards
+    main_tab1, main_tab2, main_tab3 = st.tabs(["🔄 Pattern Cards", "🛠️ Tools Layer", "🤖 Agent Cards"])
     
     with main_tab1:
         # Pattern Cards Tab
@@ -2398,6 +2780,394 @@ def landing_page():
             st.markdown(f"• {policy}")
     
     with main_tab2:
+        # Tools Layer Tab
+        st.markdown("### Tools Layer")
+        st.markdown("""
+        **The tooling ecosystem that enables agentic AI**—the "muscles and nervous system" that let agents reason, act, and integrate with enterprise environments.
+        """)
+        
+        # Create expandable sections for each tool category
+        tool_categories = [
+            {
+                "name": "🧠 Large Language Models (LLMs)",
+                "role": "Core reasoning and generation engine",
+                "examples": ["GPT‑4/5", "Claude", "Gemini", "LLaMA", "Mistral"],
+                "agentic_use": "Planning, reflection, orchestration, dialogue management",
+                "enterprise_note": "Often wrapped with governance layers (guardrails, policy‑as‑code, audit logging)",
+                "pattern_scenarios": [
+                    {
+                        "pattern": "Reflection 🪞",
+                        "scenario": "Financial Document Review Agent",
+                        "description": "LLM + Reflection pattern for self-evaluating loan application reviews",
+                        "implementation": "GPT-4 analyzes loan docs → Self-evaluates decision confidence → Iteratively refines reasoning → Final recommendation",
+                        "tools_combination": "GPT-4 + Azure AI Content Safety + Audit Logger",
+                        "business_value": "Reduces loan approval errors by 40%, ensures regulatory compliance"
+                    },
+                    {
+                        "pattern": "Planning 📋",
+                        "scenario": "Supply Chain Optimization Agent",
+                        "description": "LLM + Planning pattern for complex logistics coordination",
+                        "implementation": "Claude breaks down delivery optimization → Creates multi-step execution plan → Monitors progress → Adjusts dynamically",
+                        "tools_combination": "Claude-3-Sonnet + Temporal Workflow + PostgreSQL",
+                        "business_value": "Optimizes delivery routes, reduces costs by 25%, improves customer satisfaction"
+                    },
+                    {
+                        "pattern": "Orchestration 🎼",
+                        "scenario": "Customer Service Hub Agent",
+                        "description": "LLM + Orchestration pattern for managing multi-channel customer interactions",
+                        "implementation": "GPT-4 coordinates chat, email, phone agents → Routes complex queries → Manages escalation workflows",
+                        "tools_combination": "GPT-4 + LangGraph + RabbitMQ + Prometheus",
+                        "business_value": "Unified customer experience, 60% faster resolution times"
+                    }
+                ]
+            },
+            {
+                "name": "📦 Embeddings & Vector Databases",
+                "role": "Store and retrieve semantic representations of text, images, or structured data",
+                "examples": [
+                    "**Embeddings APIs:** OpenAI, Azure OpenAI, Hugging Face, Cohere",
+                    "**Vector DBs:** Pinecone, Weaviate, Qdrant, Milvus, Chroma",
+                    "**Integrated Vector DBs:** Azure SQL, PostgreSQL with pgvector, Snowflake Cortex"
+                ],
+                "agentic_use": "Retrieval‑Augmented Generation (RAG), semantic search, contextual grounding",
+                "enterprise_note": "Integrated vector DBs are gaining traction because they combine structured + unstructured data in one governed environment",
+                "pattern_scenarios": [
+                    {
+                        "pattern": "Memory & Learning 🧠",
+                        "scenario": "Knowledge Management Agent",
+                        "description": "Vector DB + Memory pattern for enterprise knowledge discovery",
+                        "implementation": "Pinecone stores company docs → Agent learns from interactions → Builds knowledge graph → Improves search accuracy",
+                        "tools_combination": "Pinecone + text-embedding-ada-002 + Azure Cognitive Search + Redis",
+                        "business_value": "90% faster knowledge discovery, reduces duplicate work by 50%"
+                    },
+                    {
+                        "pattern": "Tool Use 🔧",
+                        "scenario": "Legal Document Research Agent",
+                        "description": "Vector DB + Tool Use pattern for legal precedent research",
+                        "implementation": "Weaviate stores case law → Agent retrieves relevant precedents → Validates against current law → Generates legal briefs",
+                        "tools_combination": "Weaviate + Cohere Embeddings + Legal API + Document Generator",
+                        "business_value": "Accelerates legal research by 70%, improves case preparation accuracy"
+                    },
+                    {
+                        "pattern": "Exploration 🔄",
+                        "scenario": "Market Research Agent",
+                        "description": "Vector DB + Exploration pattern for competitive analysis",
+                        "implementation": "Chroma stores market data → Agent explores multiple scenarios → Simulates competitor responses → Recommends strategies",
+                        "tools_combination": "Chroma + Hugging Face Embeddings + Simulation Engine + Analytics API",
+                        "business_value": "Identifies market opportunities 3x faster, improves strategic decision making"
+                    }
+                ]
+            },
+            {
+                "name": "🔗 MCPs (Model Context Protocols) & Connectors",
+                "role": "Standardize how agents talk to external systems (databases, APIs, SaaS apps)",
+                "examples": [
+                    "**LangChain / LangGraph** connectors",
+                    "**Model Context Protocol (MCP):** emerging standard for connecting LLMs to tools and data sources",
+                    "**Snowflake Cortex MCPs:** allow direct querying of Snowflake with embeddings + SQL"
+                ],
+                "agentic_use": "Agents can query enterprise data warehouses (Snowflake, BigQuery, Databricks) without brittle prompt hacks",
+                "enterprise_note": "MCPs are critical for **auditability**—you can log every query and enforce RBAC",
+                "pattern_scenarios": [
+                    {
+                        "pattern": "Tool Use 🔧",
+                        "scenario": "Financial Reporting Agent",
+                        "description": "MCP + Tool Use pattern for automated financial data analysis",
+                        "implementation": "Snowflake Cortex MCP → Agent queries financial data → Validates against regulations → Generates compliance reports",
+                        "tools_combination": "Snowflake Cortex MCP + LangChain + Audit Logger + Report Generator",
+                        "business_value": "Automates 80% of financial reporting, ensures regulatory compliance"
+                    },
+                    {
+                        "pattern": "Collaboration 🤝",
+                        "scenario": "Cross-Department Data Agent",
+                        "description": "MCP + Collaboration pattern for inter-departmental data sharing",
+                        "implementation": "LangGraph coordinates multiple MCPs → HR, Finance, Operations agents collaborate → Share insights securely",
+                        "tools_combination": "LangGraph + Multiple MCPs + RBAC System + Data Lineage Tracker",
+                        "business_value": "Breaks down data silos, enables cross-functional insights"
+                    },
+                    {
+                        "pattern": "Orchestration 🎼",
+                        "scenario": "Enterprise Data Pipeline Agent",
+                        "description": "MCP + Orchestration pattern for complex data workflows",
+                        "implementation": "Agent orchestrates data extraction → Transformation via MCPs → Loading to multiple systems → Quality validation",
+                        "tools_combination": "Temporal + Multiple MCPs + Data Quality Validator + Monitoring Dashboard",
+                        "business_value": "Reduces data pipeline failures by 90%, improves data quality"
+                    }
+                ]
+            },
+            {
+                "name": "🌐 API Catalogs & Tool Registries",
+                "role": "Curated catalogs of APIs/tools that agents can call",
+                "examples": [
+                    "**OpenAPI / Swagger specs** as machine‑readable contracts",
+                    "**Enterprise API gateways** (Apigee, Kong, Azure API Management)",
+                    "**LangChain toolkits** or **AI Gateway catalogs**"
+                ],
+                "agentic_use": "Agents discover and invoke APIs dynamically (e.g., \"fetch customer profile,\" \"submit compliance form\")",
+                "enterprise_note": "Policies can enforce **least‑privilege tool use** and **schema validation** before execution",
+                "pattern_scenarios": [
+                    {
+                        "pattern": "Tool Use 🔧",
+                        "scenario": "Customer Onboarding Agent",
+                        "description": "API Catalog + Tool Use pattern for automated customer setup",
+                        "implementation": "Agent discovers onboarding APIs → Validates customer data → Calls CRM, billing, support APIs → Tracks progress",
+                        "tools_combination": "API Gateway + OpenAPI Registry + Validation Service + Progress Tracker",
+                        "business_value": "Reduces onboarding time by 75%, improves customer experience"
+                    },
+                    {
+                        "pattern": "Planning 📋",
+                        "scenario": "IT Operations Agent",
+                        "description": "API Catalog + Planning pattern for infrastructure management",
+                        "implementation": "Agent plans infrastructure changes → Discovers relevant APIs → Executes deployment plan → Monitors results",
+                        "tools_combination": "Kong API Gateway + Kubernetes API + Monitoring APIs + Rollback Service",
+                        "business_value": "Automates 60% of IT operations, reduces deployment errors"
+                    },
+                    {
+                        "pattern": "Reflection 🪞",
+                        "scenario": "API Performance Agent",
+                        "description": "API Catalog + Reflection pattern for API optimization",
+                        "implementation": "Agent monitors API performance → Self-evaluates optimization opportunities → Adjusts API calls → Measures improvements",
+                        "tools_combination": "API Gateway + Performance Monitoring + A/B Testing Framework + Analytics",
+                        "business_value": "Improves API response times by 40%, reduces costs by 30%"
+                    }
+                ]
+            },
+            {
+                "name": "🗄️ Traditional Databases & Data Lakes",
+                "role": "Source of truth for structured enterprise data",
+                "examples": ["Snowflake", "Databricks", "BigQuery", "Azure Synapse", "Postgres", "SQL Server"],
+                "agentic_use": "Agents query structured data directly (SQL generation + validation)",
+                "enterprise_note": "Often paired with embeddings for hybrid search (structured filters + semantic retrieval)",
+                "pattern_scenarios": [
+                    {
+                        "pattern": "Memory & Learning 🧠",
+                        "scenario": "Customer Analytics Agent",
+                        "description": "Data Lake + Memory pattern for customer behavior analysis",
+                        "implementation": "Databricks stores customer data → Agent learns patterns → Builds customer profiles → Predicts behavior",
+                        "tools_combination": "Databricks + MLflow + Customer Profile DB + Prediction API",
+                        "business_value": "Increases customer retention by 35%, improves personalization"
+                    },
+                    {
+                        "pattern": "Exploration 🔄",
+                        "scenario": "Risk Assessment Agent",
+                        "description": "Data Warehouse + Exploration pattern for financial risk analysis",
+                        "implementation": "BigQuery stores financial data → Agent explores risk scenarios → Simulates market conditions → Recommends strategies",
+                        "tools_combination": "BigQuery + Risk Simulation Engine + Scenario Generator + Decision Support",
+                        "business_value": "Reduces financial risk exposure by 50%, improves decision accuracy"
+                    },
+                    {
+                        "pattern": "Critic/Reviewer 🧐",
+                        "scenario": "Data Quality Agent",
+                        "description": "Database + Critic pattern for data validation and quality assurance",
+                        "implementation": "PostgreSQL stores business data → Agent validates data quality → Reviews anomalies → Recommends corrections",
+                        "tools_combination": "PostgreSQL + Data Quality Rules + Anomaly Detection + Correction Workflow",
+                        "business_value": "Improves data quality by 85%, reduces downstream errors"
+                    }
+                ]
+            },
+            {
+                "name": "🛡️ Governance & Guardrail Layers",
+                "role": "Ensure safe, compliant, and auditable agent behavior",
+                "examples": [
+                    "**Guardrails.ai**, **Azure AI Content Safety**, **policy‑as‑code frameworks**",
+                    "**Prompt injection filters**, **output validators**, **critics/reviewers**"
+                ],
+                "agentic_use": "Wraps every tool call and LLM output with validation",
+                "enterprise_note": "This is where your **pattern cards + explicit rules** plug in",
+                "pattern_scenarios": [
+                    {
+                        "pattern": "Critic/Reviewer 🧐",
+                        "scenario": "Compliance Monitoring Agent",
+                        "description": "Guardrails + Critic pattern for regulatory compliance checking",
+                        "implementation": "Agent processes business decisions → Guardrails validate compliance → Critic reviews for violations → Escalates issues",
+                        "tools_combination": "Guardrails.ai + Compliance Rules Engine + Audit Logger + Escalation System",
+                        "business_value": "Ensures 100% regulatory compliance, reduces audit findings by 90%"
+                    },
+                    {
+                        "pattern": "Reflection 🪞",
+                        "scenario": "Content Moderation Agent",
+                        "description": "Content Safety + Reflection pattern for social media moderation",
+                        "implementation": "Agent reviews user content → Self-evaluates moderation decisions → Reflects on accuracy → Improves over time",
+                        "tools_combination": "Azure AI Content Safety + Reflection Engine + Feedback Loop + Learning System",
+                        "business_value": "Improves moderation accuracy by 60%, reduces false positives"
+                    },
+                    {
+                        "pattern": "Orchestration 🎼",
+                        "scenario": "Enterprise Security Agent",
+                        "description": "Policy Engine + Orchestration pattern for security monitoring",
+                        "implementation": "Agent orchestrates security checks → Applies policy rules → Coordinates responses → Manages incident workflows",
+                        "tools_combination": "Policy-as-Code + Security APIs + Incident Management + Response Automation",
+                        "business_value": "Reduces security incidents by 70%, improves response times"
+                    }
+                ]
+            }
+        ]
+        
+        # Display tool categories
+        for category in tool_categories:
+            with st.expander(f"{category['name']}", expanded=False):
+                st.markdown(f"**Role:** {category['role']}")
+                
+                st.markdown("**Examples:**")
+                for example in category['examples']:
+                    st.markdown(f"• {example}")
+                
+                st.markdown(f"**Agentic Use:** {category['agentic_use']}")
+                st.markdown(f"**Enterprise Note:** {category['enterprise_note']}")
+                
+                # Pattern Scenarios Section
+                st.markdown("---")
+                st.markdown("### 🎯 Pattern-Tool Scenarios")
+                st.markdown("**Real-world scenarios where this tool category combines with agentic patterns to build effective agents:**")
+                
+                for scenario in category['pattern_scenarios']:
+                    with st.expander(f"{scenario['pattern']} - {scenario['scenario']}", expanded=False):
+                        st.markdown(f"**Description:** {scenario['description']}")
+                        st.markdown(f"**Implementation Flow:** {scenario['implementation']}")
+                        st.markdown(f"**Tools Combination:** {scenario['tools_combination']}")
+                        st.markdown(f"**Business Value:** {scenario['business_value']}")
+        
+        # Agentic AI Stack Overview
+        st.markdown("---")
+        st.markdown("### ⚡ Agentic AI Stack Overview")
+        st.markdown("""
+        An **agentic AI stack** typically looks like this:
+        """)
+        
+        stack_steps = [
+            "**LLM** (reasoning, planning, reflection)",
+            "**Embeddings + Vector DB** (contextual memory, semantic grounding)",
+            "**MCPs / Connectors** (bridge to enterprise systems like Snowflake)",
+            "**API Catalog** (discoverable, governed toolset)",
+            "**Databases / Data Lakes** (structured + unstructured enterprise data)",
+            "**Governance Layer** (policies, critics, audit logs, compliance)"
+        ]
+        
+        for i, step in enumerate(stack_steps, 1):
+            st.markdown(f"{i}. {step}")
+        
+        # Pattern-to-Tool Mapping
+        st.markdown("---")
+        st.markdown("### 🔗 Pattern-to-Tool Mapping")
+        st.markdown("""
+        **How each agentic pattern maps to specific tools and real-world applications:**
+        """)
+        
+        pattern_tool_mapping = [
+            {
+                "pattern": "Reflection 🪞",
+                "primary_tools": "LLM + Critic Agent + Logging DB",
+                "scenarios": [
+                    "Financial Document Review (GPT-4 + Azure AI Content Safety)",
+                    "Code Quality Assurance (Claude + SonarQube + Git)",
+                    "Medical Diagnosis Validation (Gemini + Medical Knowledge Base)"
+                ],
+                "enterprise_benefits": "Self-improving systems, reduced human oversight, higher accuracy"
+            },
+            {
+                "pattern": "Planning 📋",
+                "primary_tools": "LLM + Orchestration Layer + Workflow Engine",
+                "scenarios": [
+                    "Supply Chain Optimization (Claude + Temporal + PostgreSQL)",
+                    "Project Management (GPT-4 + Jira API + Slack)",
+                    "Resource Allocation (Gemini + Kubernetes + Monitoring)"
+                ],
+                "enterprise_benefits": "Complex task breakdown, dynamic adaptation, resource optimization"
+            },
+            {
+                "pattern": "Tool Use 🔧",
+                "primary_tools": "API Catalog + MCPs + Validation Layer",
+                "scenarios": [
+                    "Customer Onboarding (API Gateway + CRM + Billing Systems)",
+                    "Legal Research (Legal APIs + Document DB + Citation Tools)",
+                    "IT Operations (Kubernetes API + Monitoring + Alerting)"
+                ],
+                "enterprise_benefits": "Seamless system integration, automated workflows, reduced manual work"
+            },
+            {
+                "pattern": "Memory & Learning 🧠",
+                "primary_tools": "Vector DBs + Embeddings + Persistent Storage",
+                "scenarios": [
+                    "Knowledge Management (Pinecone + OpenAI Embeddings + Redis)",
+                    "Customer Analytics (Databricks + MLflow + Profile DB)",
+                    "Document Intelligence (Weaviate + Azure Cognitive Search)"
+                ],
+                "enterprise_benefits": "Continuous learning, personalized experiences, knowledge retention"
+            },
+            {
+                "pattern": "Collaboration 🤝",
+                "primary_tools": "Message Queues + Coordination Protocols + Shared State",
+                "scenarios": [
+                    "Cross-Department Coordination (LangGraph + MCPs + RBAC)",
+                    "Multi-Agent Workflows (RabbitMQ + Shared State + Monitoring)",
+                    "Distributed Processing (Apache Kafka + Coordination Layer)"
+                ],
+                "enterprise_benefits": "Scalable teamwork, distributed intelligence, coordinated decision-making"
+            },
+            {
+                "pattern": "Critic/Reviewer 🧐",
+                "primary_tools": "Evaluation Frameworks + Audit Logs + Compliance Tools",
+                "scenarios": [
+                    "Compliance Monitoring (Guardrails.ai + Audit Logger + Escalation)",
+                    "Content Moderation (Azure AI Content Safety + Feedback Loop)",
+                    "Quality Assurance (Evaluation Rubrics + Review Workflows)"
+                ],
+                "enterprise_benefits": "Quality control, regulatory compliance, risk mitigation"
+            },
+            {
+                "pattern": "Exploration 🔄",
+                "primary_tools": "Simulation Engines + Scenario Generators + Analytics",
+                "scenarios": [
+                    "Risk Assessment (BigQuery + Simulation Engine + Decision Support)",
+                    "Market Research (Chroma + Analytics API + Scenario Generator)",
+                    "A/B Testing (Experiment Framework + Analytics + Statistical Tools)"
+                ],
+                "enterprise_benefits": "Informed decision-making, risk mitigation, strategic planning"
+            },
+            {
+                "pattern": "Orchestration 🎼",
+                "primary_tools": "Workflow Engines + Monitoring + Resource Management",
+                "scenarios": [
+                    "Customer Service Hub (GPT-4 + LangGraph + Multi-channel APIs)",
+                    "Data Pipeline Management (Temporal + MCPs + Quality Validation)",
+                    "Enterprise Security (Policy Engine + Security APIs + Incident Management)"
+                ],
+                "enterprise_benefits": "End-to-end automation, system coordination, operational efficiency"
+            }
+        ]
+        
+        # Display pattern-tool mappings
+        for mapping in pattern_tool_mapping:
+            with st.expander(f"{mapping['pattern']} - {mapping['primary_tools']}", expanded=False):
+                st.markdown(f"**Primary Tools:** {mapping['primary_tools']}")
+                
+                st.markdown("**Real-World Scenarios:**")
+                for scenario in mapping['scenarios']:
+                    st.markdown(f"• {scenario}")
+                
+                st.markdown(f"**Enterprise Benefits:** {mapping['enterprise_benefits']}")
+        
+        # Implementation Considerations
+        st.markdown("---")
+        st.markdown("### 🎯 Implementation Considerations")
+        
+        col1, col2 = st.columns(2)
+        
+        with col1:
+            st.markdown("**Key Integration Points:**")
+            st.markdown("• **Governance Integration**: Pattern rules map to guardrail policies")
+            st.markdown("• **Audit Trail**: Every tool call logged with pattern context")
+            st.markdown("• **Policy Enforcement**: Pattern-specific validation rules")
+            st.markdown("• **Resource Management**: Pattern-based resource allocation")
+        
+        with col2:
+            st.markdown("**Enterprise Requirements:**")
+            st.markdown("• **RBAC Integration**: Role-based access to tools")
+            st.markdown("• **Compliance Monitoring**: Pattern adherence tracking")
+            st.markdown("• **Performance Metrics**: Tool usage and pattern effectiveness")
+            st.markdown("• **Scalability**: Pattern-based horizontal scaling")
+    
+    with main_tab3:
         # Display agent cards
         st.markdown("### Agent Cards")
         
@@ -2417,7 +3187,7 @@ def landing_page():
                 # Create expandable agent card
                 with st.expander(f"{pattern_type_emoji} {agent['name']} - {status_info['text']}", expanded=False):
                     # Agent Overview tab
-                    tab1, tab2, tab3, tab4, tab5 = st.tabs(["Agent Overview", "Pattern", "Policies", "Runtime", "Escalation"])
+                    tab1, tab2, tab3, tab4, tab5, tab6 = st.tabs(["Agent Overview", "Pattern", "Tools", "Policies", "Runtime", "Escalation"])
                     
                     with tab1:
                         # General Info
@@ -2581,6 +3351,24 @@ def landing_page():
                             st.write(" → ".join(agent['governanceHooks']['approvalHistory']))
                     
                     with tab3:
+                        # Runtime Tools
+                        if 'runtime_tools' in agent:
+                            st.markdown("**🛠️ Runtime Tools**")
+                            
+                            # Display tools by category
+                            for category, tools in agent['runtime_tools'].items():
+                                category_name = category.replace('_', ' ').title()
+                                st.markdown(f"**{category_name}:**")
+                                
+                                for tool in tools:
+                                    status_color = "🟢" if tool['status'] == 'active' else "🔴" if tool['status'] == 'inactive' else "🟡"
+                                    st.markdown(f"• {status_color} **{tool['name']}** - {tool['purpose']}")
+                                
+                                st.markdown("")  # Add spacing between categories
+                        else:
+                            st.markdown("**No runtime tools configured**")
+                    
+                    with tab4:
                         st.markdown("**Input Filters:**")
                         for filter_type in agent['runtimeGuardrails']['inputFilters']:
                             st.write(f"• {filter_type}")
@@ -2633,272 +3421,126 @@ def landing_page():
                     st.write(f"Template: {decision_journals['template']}")
                 
                 with tab5:
-                    st.markdown("### 🚨 Escalation Examples")
+                    st.markdown("### 🚨 Escalation Analysis (100+ Iterations)")
                     
-                    # Escalation scenarios based on agent type
-                    if agent['patternType'] == 'orchestration':
-                        st.markdown("**Common Escalation Scenarios:**")
-                        st.markdown("""
-                        - **Workflow Timeout**: Process exceeds maximum execution time
-                        - **Dependency Failure**: Required service or API is unavailable
-                        - **Resource Exhaustion**: Memory or CPU limits exceeded
-                        - **Validation Error**: Input data fails schema validation
-                        - **Business Rule Violation**: Payment amount exceeds limits
-                        """)
-                        
-                        st.markdown("**Recent Escalation Events:**")
-                        escalation_events = [
-                            {"time": "14:32:15", "type": "Workflow Timeout", "severity": "High", "status": "Resolved"},
-                            {"time": "14:28:42", "type": "Dependency Failure", "severity": "Medium", "status": "Pending"},
-                            {"time": "14:25:18", "type": "Validation Error", "severity": "Low", "status": "Resolved"}
-                        ]
-                        
-                        for event in escalation_events:
-                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
-                            status_icon = "✅" if event['status'] == 'Resolved' else "⏳"
-                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
+                    # Generate comprehensive escalation data based on agent type
+                    escalation_data = generate_escalation_data(agent)
                     
-                    elif agent['patternType'] == 'monitoring':
-                        st.markdown("**Common Escalation Scenarios:**")
-                        st.markdown("""
-                        - **Threshold Breach**: Performance metrics exceed defined limits
-                        - **Anomaly Detection**: Unusual patterns detected in data
-                        - **Compliance Violation**: Regulatory requirements not met
-                        - **System Health**: Critical system components failing
-                        - **Data Quality**: Input data quality below standards
-                        """)
-                        
-                        st.markdown("**Recent Escalation Events:**")
-                        escalation_events = [
-                            {"time": "14:30:22", "type": "Threshold Breach", "severity": "High", "status": "Resolved"},
-                            {"time": "14:25:15", "type": "Anomaly Detection", "severity": "Medium", "status": "Investigating"},
-                            {"time": "14:20:08", "type": "Compliance Violation", "severity": "High", "status": "Resolved"}
-                        ]
-                        
-                        for event in escalation_events:
-                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
-                            status_icon = "✅" if event['status'] == 'Resolved' else "🔍" if event['status'] == 'Investigating' else "⏳"
-                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
-                    
-                    elif agent['patternType'] == 'retrieval':
-                        st.markdown("**Common Escalation Scenarios:**")
-                        st.markdown("""
-                        - **Query Timeout**: Search query takes too long to execute
-                        - **No Results Found**: Search returns empty results
-                        - **Permission Denied**: User lacks access to requested data
-                        - **Index Corruption**: Search index needs rebuilding
-                        - **Rate Limiting**: Too many requests in short time
-                        """)
-                        
-                        st.markdown("**Recent Escalation Events:**")
-                        escalation_events = [
-                            {"time": "14:35:18", "type": "Query Timeout", "severity": "Medium", "status": "Resolved"},
-                            {"time": "14:28:45", "type": "No Results Found", "severity": "Low", "status": "Resolved"},
-                            {"time": "14:22:12", "type": "Permission Denied", "severity": "Medium", "status": "Resolved"}
-                        ]
-                        
-                        for event in escalation_events:
-                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
-                            status_icon = "✅" if event['status'] == 'Resolved' else "⏳"
-                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
-                    
-                    else:
-                        st.markdown("**Common Escalation Scenarios:**")
-                        st.markdown("""
-                        - **Processing Error**: Unexpected error during execution
-                        - **Input Validation**: Invalid or malformed input data
-                        - **Resource Constraints**: Insufficient system resources
-                        - **External Service**: Third-party service unavailable
-                        - **Business Logic**: Rule or constraint violation
-                        """)
-                        
-                        st.markdown("**Recent Escalation Events:**")
-                        escalation_events = [
-                            {"time": "14:33:25", "type": "Processing Error", "severity": "High", "status": "Resolved"},
-                            {"time": "14:29:10", "type": "Input Validation", "severity": "Low", "status": "Resolved"},
-                            {"time": "14:24:55", "type": "External Service", "severity": "Medium", "status": "Pending"}
-                        ]
-                        
-                        for event in escalation_events:
-                            severity_color = "🔴" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
-                            status_icon = "✅" if event['status'] == 'Resolved' else "⏳"
-                            st.write(f"{severity_color} **{event['time']}** - {event['type']} {status_icon}")
-                    
-                    # Escalation metrics
-                    st.markdown("### 📊 Escalation Metrics")
-                    col1, col2, col3 = st.columns(3)
+                    # Key Metrics
+                    col1, col2, col3, col4 = st.columns(4)
                     with col1:
-                        st.metric("Total Escalations", agent['monitoring']['escalations'])
+                        st.metric("Total Escalations", escalation_data['total_escalations'])
                     with col2:
-                        st.metric("Avg Resolution Time", "2.3 min")
+                        st.metric("Avg Resolution Time", escalation_data['avg_resolution_time'])
                     with col3:
-                        st.metric("Success Rate", "94.2%")
+                        st.metric("Success Rate", f"{escalation_data['success_rate']}%")
+                    with col4:
+                        st.metric("Critical Issues", escalation_data['critical_issues'])
                     
-                    # Escalation Actions with Tabbed Content
-                    st.markdown("### 🔧 Escalation Actions")
+                    # Escalation Trends Chart
+                    st.markdown("#### 📈 Escalation Trends (Last 30 Days)")
                     
-                    # Create tabs for escalation actions
-                    action_tab1, action_tab2, action_tab3, action_tab4 = st.tabs(["📋 Logs", "📊 Trends", "⚙️ Settings", "🔔 Alerts"])
+                    # Generate trend data
+                    dates = pd.date_range('2025-01-01', periods=30, freq='D')
+                    trend_data = {
+                        'Date': dates,
+                        'Escalations': np.random.poisson(escalation_data['daily_avg'], 30),
+                        'Resolved': np.random.poisson(escalation_data['daily_avg'] * 0.85, 30)
+                    }
+                    trend_df = pd.DataFrame(trend_data)
                     
-                    with action_tab1:
-                        st.markdown("#### 📋 Escalation Logs")
-                        st.markdown("**Recent Escalation Log Entries:**")
-                        
-                        # Sample escalation logs based on agent type
-                        if agent['patternType'] == 'orchestration':
-                            log_entries = [
-                                {"Timestamp": "2025-01-24 14:30:15", "Level": "HIGH", "Event": "High Risk Transaction Detected", "Details": "Payment amount $5.2M exceeds threshold", "Action": "Escalated to Treasury Manager", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-24 11:15:42", "Level": "MEDIUM", "Event": "Anomaly Pattern Detected", "Details": "Unusual payment frequency pattern", "Action": "Auto-retry with stricter validation", "Status": "Pending"},
-                                {"Timestamp": "2025-01-23 16:45:33", "Level": "HIGH", "Event": "Compliance Check Failed", "Details": "Beneficiary on sanctions list", "Action": "Blocked transaction", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-23 09:22:18", "Level": "LOW", "Event": "API Timeout", "Details": "Payment gateway timeout", "Action": "Retry with exponential backoff", "Status": "Resolved"}
-                            ]
-                        elif agent['patternType'] == 'monitoring':
-                            log_entries = [
-                                {"Timestamp": "2025-01-24 13:20:55", "Level": "MEDIUM", "Event": "Performance Degradation", "Details": "Response time 6.2s > 5s threshold", "Action": "Scaling up resources", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-24 09:30:12", "Level": "HIGH", "Event": "Error Rate Spike", "Details": "Error rate 7.8% > 5% threshold", "Action": "Investigating root cause", "Status": "Investigating"},
-                                {"Timestamp": "2025-01-23 22:15:44", "Level": "HIGH", "Event": "Resource Exhaustion", "Details": "Memory usage 92% > 90% threshold", "Action": "Emergency scaling", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-23 15:33:27", "Level": "LOW", "Event": "Service Unavailable", "Details": "Health check failed", "Action": "Restart service", "Status": "Resolved"}
-                            ]
-                        elif agent['patternType'] == 'retrieval':
-                            log_entries = [
-                                {"Timestamp": "2025-01-24 15:45:21", "Level": "HIGH", "Event": "Data Source Unavailable", "Details": "External API timeout after 30s", "Action": "Fallback to cache", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-24 12:10:38", "Level": "MEDIUM", "Event": "Query Timeout", "Details": "Complex query exceeded 30s limit", "Action": "Query optimization", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-23 18:30:15", "Level": "LOW", "Event": "Data Quality Issue", "Details": "Missing required fields", "Action": "Data validation", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-23 11:45:52", "Level": "MEDIUM", "Event": "Access Denied", "Details": "Authentication token expired", "Action": "Token refresh", "Status": "Resolved"}
-                            ]
-                        else:
-                            log_entries = [
-                                {"Timestamp": "2025-01-24 16:20:33", "Level": "MEDIUM", "Event": "Processing Error", "Details": "Unexpected data format", "Action": "Error handling", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-24 10:45:19", "Level": "LOW", "Event": "Validation Failure", "Details": "Input validation error", "Action": "Input sanitization", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-23 14:15:41", "Level": "HIGH", "Event": "Dependency Failure", "Details": "Required service unavailable", "Action": "Circuit breaker activated", "Status": "Resolved"},
-                                {"Timestamp": "2025-01-23 08:30:25", "Level": "LOW", "Event": "Resource Limit", "Details": "CPU usage 95%", "Action": "Resource optimization", "Status": "Resolved"}
-                            ]
-                        
-                        # Display log entries
-                        for log in log_entries:
-                            level_color = "🔴" if log["Level"] == "HIGH" else "🟡" if log["Level"] == "MEDIUM" else "🟢"
-                            status_icon = "✅" if log["Status"] == "Resolved" else "⏳" if log["Status"] == "Pending" else "🔍"
+                    fig_trend = px.line(trend_df, x='Date', y=['Escalations', 'Resolved'], 
+                                      title='Daily Escalation Volume',
+                                      color_discrete_map={'Escalations': '#ff6b6b', 'Resolved': '#51cf66'})
+                    fig_trend.update_layout(height=300, showlegend=True)
+                    st.plotly_chart(fig_trend, use_container_width=True)
+                    
+                    # Escalation Logs
+                    st.markdown("#### 📋 Recent Escalation Logs")
+                    
+                    # Create expandable sections for different log types
+                    log_tabs = st.tabs(["Recent Events", "Critical Issues", "Pattern Analysis", "Resolution Insights"])
+                    
+                    with log_tabs[0]:
+                        st.markdown("**Last 20 Escalation Events:**")
+                        for i, event in enumerate(escalation_data['recent_events']):
+                            severity_color = "🔴" if event['severity'] == 'Critical' else "🟡" if event['severity'] == 'High' else "🟠" if event['severity'] == 'Medium' else "🟢"
+                            status_icon = "✅" if event['status'] == 'Resolved' else "🔍" if event['status'] == 'Investigating' else "⏳" if event['status'] == 'Pending' else "❌"
                             
-                            with st.expander(f"{level_color} {log['Event']} - {log['Timestamp']}"):
-                                st.markdown(f"**Level:** {log['Level']}")
-                                st.markdown(f"**Details:** {log['Details']}")
-                                st.markdown(f"**Action Taken:** {log['Action']}")
-                                st.markdown(f"**Status:** {status_icon} {log['Status']}")
+                            with st.expander(f"{severity_color} {event['timestamp']} - {event['type']} {status_icon}", expanded=False):
+                                st.markdown(f"**Description:** {event['description']}")
+                                st.markdown(f"**Impact:** {event['impact']}")
+                                st.markdown(f"**Resolution:** {event['resolution']}")
+                                st.markdown(f"**Duration:** {event['duration']}")
+                                if event['lessons_learned']:
+                                    st.markdown(f"**Lessons Learned:** {event['lessons_learned']}")
                     
-                    with action_tab2:
-                        st.markdown("#### 📊 Escalation Trends")
-                        st.markdown("**Escalation Trends Over Time:**")
-                        
-                        # Sample trend data
-                        trend_data = pd.DataFrame({
-                            'Date': pd.date_range('2025-01-18', periods=7, freq='D'),
-                            'High Severity': [2, 1, 3, 1, 2, 0, 1],
-                            'Medium Severity': [4, 3, 2, 5, 3, 4, 2],
-                            'Low Severity': [1, 2, 1, 0, 1, 2, 1]
-                        })
-                        
-                        # Create trend chart
-                        fig = px.line(trend_data, x='Date', y=['High Severity', 'Medium Severity', 'Low Severity'],
-                                    title='Escalation Trends (Last 7 Days)',
-                                    color_discrete_map={
-                                        'High Severity': '#FF3B30',
-                                        'Medium Severity': '#FF9500',
-                                        'Low Severity': '#34C759'
-                                    })
-                        fig.update_layout(
-                            xaxis_title="Date",
-                            yaxis_title="Number of Escalations",
-                            font=dict(family="Inter", size=12)
-                        )
-                        st.plotly_chart(fig, use_container_width=True, key=f"escalation_trends_chart_{agent['id']}")
-                        
-                        # Trend insights
-                        st.markdown("**Trend Insights:**")
-                        st.markdown("- **High Severity**: 10 escalations (avg 1.4/day)")
-                        st.markdown("- **Medium Severity**: 23 escalations (avg 3.3/day)")
-                        st.markdown("- **Low Severity**: 8 escalations (avg 1.1/day)")
-                        st.markdown("- **Peak Day**: January 20th (6 total escalations)")
-                        st.markdown("- **Resolution Rate**: 85% within 24 hours")
+                    with log_tabs[1]:
+                        st.markdown("**Critical Issues Requiring Attention:**")
+                        for issue in escalation_data['critical_issues_list']:
+                            with st.expander(f"🚨 {issue['title']}", expanded=False):
+                                st.markdown(f"**Root Cause:** {issue['root_cause']}")
+                                st.markdown(f"**Business Impact:** {issue['business_impact']}")
+                                st.markdown(f"**Recommended Actions:**")
+                                for action in issue['recommended_actions']:
+                                    st.markdown(f"• {action}")
+                                st.markdown(f"**Priority:** {issue['priority']}")
                     
-                    with action_tab3:
-                        st.markdown("#### ⚙️ Escalation Settings")
-                        st.markdown("**Current Escalation Configuration:**")
+                    with log_tabs[2]:
+                        st.markdown("**Escalation Pattern Analysis:**")
                         
-                        # Escalation thresholds
-                        st.markdown("**Escalation Thresholds:**")
+                        # Pattern analysis chart
+                        pattern_data = escalation_data['pattern_analysis']
+                    fig_pattern = px.pie(values=list(pattern_data.values()), 
+                                           names=list(pattern_data.keys()),
+                                           title='Escalation Types Distribution')
+                    fig_pattern.update_layout(height=400)
+                    st.plotly_chart(fig_pattern, use_container_width=True, key=f"pattern_chart_{agent['id']}")
+                    
+                    st.markdown("**Key Patterns Identified:**")
+                    for pattern in escalation_data['patterns_identified']:
+                        st.markdown(f"• **{pattern['pattern']}**: {pattern['description']} (Frequency: {pattern['frequency']}%)")
+                    
+                    with log_tabs[3]:
+                        st.markdown("**Resolution Insights & Recommendations:**")
+                        
                         col1, col2 = st.columns(2)
                         with col1:
-                            st.number_input("High Severity Threshold", value=0.8, min_value=0.0, max_value=1.0, step=0.1, key=f"high_threshold_{agent['id']}")
-                            st.number_input("Medium Severity Threshold", value=0.6, min_value=0.0, max_value=1.0, step=0.1, key=f"medium_threshold_{agent['id']}")
+                            st.markdown("**Top Resolution Strategies:**")
+                            for strategy in escalation_data['resolution_strategies']:
+                                st.markdown(f"• **{strategy['strategy']}**: {strategy['effectiveness']}% success rate")
+                        
                         with col2:
-                            st.number_input("Low Severity Threshold", value=0.4, min_value=0.0, max_value=1.0, step=0.1, key=f"low_threshold_{agent['id']}")
-                            st.number_input("Auto-retry Attempts", value=3, min_value=0, max_value=10, step=1, key=f"retry_attempts_{agent['id']}")
+                            st.markdown("**Prevention Measures:**")
+                            for measure in escalation_data['prevention_measures']:
+                                st.markdown(f"• {measure}")
                         
-                        # Escalation routing
-                        st.markdown("**Escalation Routing:**")
-                        escalation_routing = {
-                            'High Severity': 'Treasury Manager + Senior Management',
-                            'Medium Severity': 'Treasury Operations Team',
-                            'Low Severity': 'Auto-retry + Logging'
-                        }
-                        
-                        for severity, routing in escalation_routing.items():
-                            st.markdown(f"- **{severity}**: {routing}")
-                        
-                        # Notification settings
-                        st.markdown("**Notification Settings:**")
-                        col1, col2 = st.columns(2)
-                        with col1:
-                            st.checkbox("Email Notifications", value=True, key=f"email_notifications_{agent['id']}")
-                            st.checkbox("SMS Alerts", value=False, key=f"sms_alerts_{agent['id']}")
-                        with col2:
-                            st.checkbox("Slack Integration", value=True, key=f"slack_integration_{agent['id']}")
-                            st.checkbox("Dashboard Alerts", value=True, key=f"dashboard_alerts_{agent['id']}")
-                        
-                            # Save settings button
-                            if st.button("Save Settings", key=f"save_settings_{agent['id']}"):
-                                st.success("Escalation settings updated successfully!")
-                        
-                        with action_tab4:
-                            st.markdown("#### 🔔 Configure Alerts")
-                            st.markdown("**Alert Configuration:**")
-                            
-                            # Alert rules
-                            st.markdown("**Active Alert Rules:**")
-                            alert_rules = [
-                                {"Rule": "High Risk Transaction", "Condition": "Amount > $5M", "Action": "Immediate Escalation", "Status": "Active"},
-                                {"Rule": "Anomaly Detection", "Condition": "Anomaly Score > 0.8", "Action": "Human Review", "Status": "Active"},
-                                {"Rule": "Performance Degradation", "Condition": "Response Time > 5s", "Action": "Auto-scaling", "Status": "Active"},
-                                {"Rule": "Error Rate Spike", "Condition": "Error Rate > 5%", "Action": "Investigation", "Status": "Active"}
-                            ]
-                            
-                            for rule in alert_rules:
-                                status_icon = "🟢" if rule["Status"] == "Active" else "🔴"
-                                st.markdown(f"- {status_icon} **{rule['Rule']}**: {rule['Condition']} → {rule['Action']}")
-                            
-                            # Create new alert
-                            st.markdown("**Create New Alert Rule:**")
-                            with st.form(key=f"new_alert_{agent['id']}"):
-                                alert_name = st.text_input("Alert Name", key=f"alert_name_{agent['id']}")
-                                alert_condition = st.text_input("Condition", key=f"alert_condition_{agent['id']}")
-                                alert_action = st.selectbox("Action", ["Immediate Escalation", "Human Review", "Auto-retry", "Logging Only"], key=f"alert_action_{agent['id']}")
-                                alert_severity = st.selectbox("Severity", ["High", "Medium", "Low"], key=f"alert_severity_{agent['id']}")
-                                
-                                if st.form_submit_button("Create Alert Rule"):
-                                    st.success(f"Alert rule '{alert_name}' created successfully!")
-                            
-                            # Alert history
-                            st.markdown("**Recent Alert History:**")
-                            alert_history = [
-                                {"Time": "2025-01-24 14:30", "Alert": "High Risk Transaction", "Status": "Triggered", "Action": "Escalated"},
-                                {"Time": "2025-01-24 11:15", "Alert": "Anomaly Detection", "Status": "Triggered", "Action": "Human Review"},
-                                {"Time": "2025-01-23 16:45", "Alert": "Compliance Failure", "Status": "Triggered", "Action": "Blocked"},
-                                {"Time": "2025-01-23 09:22", "Alert": "API Timeout", "Status": "Resolved", "Action": "Retry"}
-                            ]
-                            
-                            for alert in alert_history:
-                                status_icon = "🔴" if alert["Status"] == "Triggered" else "🟢"
-                                st.markdown(f"- {status_icon} **{alert['Alert']}** ({alert['Time']}) → {alert['Action']}")
+                        st.markdown("**Performance Improvements:**")
+                        for improvement in escalation_data['performance_improvements']:
+                            st.markdown(f"• **{improvement['area']}**: {improvement['improvement']} ({improvement['impact']})")
+                    
+                    # Escalation Configuration
+                    st.markdown("#### ⚙️ Escalation Configuration")
+                    
+                    col1, col2 = st.columns(2)
+                    with col1:
+                        st.markdown("**Current Thresholds:**")
+                        for threshold in escalation_data['thresholds']:
+                            st.markdown(f"• **{threshold['metric']}**: {threshold['value']} ({threshold['status']})")
+                    
+                    with col2:
+                        st.markdown("**Escalation Rules:**")
+                        for rule in escalation_data['escalation_rules']:
+                            st.markdown(f"• {rule}")
+                    
+                    # Action Items
+                    st.markdown("#### 📝 Action Items")
+                    for item in escalation_data['action_items']:
+                        priority_icon = "🔴" if item['priority'] == 'High' else "🟡" if item['priority'] == 'Medium' else "🟢"
+                        st.markdown(f"{priority_icon} **{item['title']}** (Due: {item['due_date']})")
+                        st.markdown(f"   {item['description']}")
+                        st.markdown("")
+                    
     
     # Stats
     stats = {
@@ -3660,6 +4302,24 @@ def payment_instruction_entry():
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
+    # Agentic Pattern Information
+    st.markdown("### 🤖 Agentic Pattern Implementation")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("**Primary Pattern:**")
+        st.success("🎼 Orchestration")
+        st.markdown("*Coordinates multiple agents and workflows*")
+    with col2:
+        st.markdown("**Secondary Patterns:**")
+        st.info("🔧 Tool Use")
+        st.info("🧐 Critic/Reviewer")
+    with col3:
+        st.markdown("**Active Agents:**")
+        st.markdown("• **Payment Orchestrator Agent**")
+        st.markdown("• **Anomaly Detection Agent**")
+        st.markdown("• **Compliance Review Agent**")
+    
+    st.markdown("---")
     st.markdown("### Sample Instructions")
     st.markdown("Click on any sample instruction below to populate the input field:")
     
@@ -3750,6 +4410,24 @@ def intent_verification():
         st.session_state['current_page'] = 'payment_instruction'
         st.rerun()
     
+    # Agentic Pattern Analysis
+    st.markdown("### 🧠 Pattern Analysis")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("**Reflection Pattern 🪞**")
+        st.markdown("*Self-evaluating payment decision*")
+        st.success("✅ Confidence: 87%")
+    with col2:
+        st.markdown("**Critic/Reviewer Pattern 🧐**")
+        st.markdown("*Secondary validation layer*")
+        st.warning("⚠️ Review Required")
+    with col3:
+        st.markdown("**Memory & Learning 🧠**")
+        st.markdown("*Pattern recognition from history*")
+        st.info("📊 Learning: Active")
+    
+    st.markdown("---")
+    
     # Payment pattern check
     st.markdown("### Payment Pattern Check")
     col1, col2, col3 = st.columns(3)
@@ -3809,6 +4487,24 @@ def scenario_summary():
     if st.button("← Back to Verification"):
         st.session_state['current_page'] = 'intent_verification'
         st.rerun()
+    
+    # Pattern Implementation Summary
+    st.markdown("### 🎯 Pattern Implementation Summary")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("**Primary Pattern:**")
+        st.success("🎼 Orchestration")
+        st.markdown("*Coordinated 3 agents successfully*")
+    with col2:
+        st.markdown("**Secondary Patterns:**")
+        st.info("🔧 Tool Use - API calls")
+        st.info("🧐 Critic/Reviewer - Validation")
+    with col3:
+        st.markdown("**Pattern Performance:**")
+        st.metric("Success Rate", "94%")
+        st.metric("Processing Time", "2.3s")
+    
+    st.markdown("---")
     
     if 'scenario_summary' not in st.session_state:
         st.error("No scenario summary available")
@@ -3878,6 +4574,24 @@ def payment_escalation():
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
+    # Agentic Pattern Escalation Analysis
+    st.markdown("### 🚨 Pattern-Based Escalation Analysis")
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.markdown("**Orchestration Pattern 🎼**")
+        st.markdown("*Coordinating escalation workflow*")
+        st.error("❌ Workflow Timeout")
+    with col2:
+        st.markdown("**Reflection Pattern 🪞**")
+        st.markdown("*Self-evaluating escalation decision*")
+        st.warning("⚠️ Confidence: 65%")
+    with col3:
+        st.markdown("**Critic/Reviewer Pattern 🧐**")
+        st.markdown("*Secondary validation required*")
+        st.info("🔍 Review in Progress")
+    
+    st.markdown("---")
+    
     # Escalation timeline
     st.markdown("### Escalation Timeline")
     timeline_data = [
@@ -3932,6 +4646,28 @@ def payment_audit():
     if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
+    
+    # Agentic Pattern Audit Analysis
+    st.markdown("### 🤖 Pattern Performance Audit")
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.markdown("**Orchestration 🎼**")
+        st.metric("Success Rate", "94%")
+        st.metric("Avg Time", "2.3s")
+    with col2:
+        st.markdown("**Reflection 🪞**")
+        st.metric("Accuracy", "89%")
+        st.metric("Confidence", "87%")
+    with col3:
+        st.markdown("**Critic/Reviewer 🧐**")
+        st.metric("Catch Rate", "76%")
+        st.metric("False Positives", "12%")
+    with col4:
+        st.markdown("**Memory & Learning 🧠**")
+        st.metric("Learning Rate", "15%")
+        st.metric("Pattern Updates", "23")
+    
+    st.markdown("---")
     
     # Filters
     st.markdown("### Filters")
