@@ -10,7 +10,7 @@ import numpy as np
 # Page configuration - iOS style
 st.set_page_config(
     page_title="Agentic Operating System",
-    page_icon="?",
+    page_icon="🤖",
     layout="wide",
     initial_sidebar_state="expanded",
     menu_items={
@@ -590,6 +590,229 @@ def generate_escalation_data(agent):
         'escalation_rules': escalation_rules
     }
 
+def parse_payment_intent(instruction_text):
+    """Parse payment instruction text to extract structured intent"""
+    import re
+    
+    # Default values
+    intent = {
+        'amount': 'Not specified',
+        'beneficiary': 'Not specified',
+        'date': 'Not specified',
+        'urgency': 'Normal',
+        'confidence': 0.85
+    }
+    
+    # Extract amount (look for currency patterns)
+    amount_patterns = [
+        r'\$[\d,]+(?:\.\d{2})?\s*(?:CAD|USD|EUR|GBP)',
+        r'[\d,]+(?:\.\d{2})?\s*(?:CAD|USD|EUR|GBP)',
+        r'\$[\d,]+(?:\.\d{2})?',
+        r'[\d,]+(?:\.\d{2})?\s*(?:million|thousand|k|m)',
+    ]
+    
+    for pattern in amount_patterns:
+        match = re.search(pattern, instruction_text, re.IGNORECASE)
+        if match:
+            intent['amount'] = match.group(0)
+            break
+    
+    # Extract beneficiary (look for vendor/supplier names)
+    beneficiary_patterns = [
+        r'(?:to|pay|send|transfer)\s+([A-Z][A-Za-z\s&]+?)(?:\s+by|\s+for|\s+urgently|\s+immediately|$)',
+        r'(?:vendor|supplier|contractor|partner)\s+([A-Z][A-Za-z\s&]+?)(?:\s+by|\s+for|\s+urgently|\s+immediately|$)',
+        r'([A-Z][A-Za-z\s&]+?)(?:\s+by|\s+for|\s+urgently|\s+immediately)',
+    ]
+    
+    for pattern in beneficiary_patterns:
+        match = re.search(pattern, instruction_text, re.IGNORECASE)
+        if match:
+            intent['beneficiary'] = match.group(1).strip()
+            break
+    
+    # Extract date/time
+    date_patterns = [
+        r'(?:by|before|until)\s+(friday|monday|tuesday|wednesday|thursday|saturday|sunday)',
+        r'(?:by|before|until)\s+(end\s+of\s+month|next\s+week|tomorrow|today)',
+        r'(?:by|before|until)\s+(\d{1,2}/\d{1,2}/\d{2,4})',
+        r'(?:by|before|until)\s+(\d{1,2}-\d{1,2}-\d{2,4})',
+    ]
+    
+    for pattern in date_patterns:
+        match = re.search(pattern, instruction_text, re.IGNORECASE)
+        if match:
+            intent['date'] = match.group(1).strip()
+            break
+    
+    # Determine urgency
+    urgency_keywords = {
+        'urgent': ['urgent', 'urgently', 'asap', 'immediately', 'right away'],
+        'high': ['high priority', 'important', 'critical', 'expedite'],
+        'normal': ['normal', 'regular', 'standard']
+    }
+    
+    text_lower = instruction_text.lower()
+    for urgency, keywords in urgency_keywords.items():
+        if any(keyword in text_lower for keyword in keywords):
+            intent['urgency'] = urgency.title()
+            break
+    
+    # Calculate confidence based on extracted fields
+    confidence = 0.5
+    if intent['amount'] != 'Not specified':
+        confidence += 0.2
+    if intent['beneficiary'] != 'Not specified':
+        confidence += 0.2
+    if intent['date'] != 'Not specified':
+        confidence += 0.1
+    
+    intent['confidence'] = min(confidence, 0.95)
+    
+    return intent
+
+@st.cache_data
+def generate_codified_policies(agent):
+    """Generate codified policies in YAML and JSON format for runtime observation"""
+    
+    # Extract policies from governance hooks
+    policies_text = agent['governanceHooks']['policies']
+    
+    # Parse policies into structured format
+    policy_lines = [line.strip() for line in policies_text.split('\n') if line.strip() and not line.strip().startswith('policies:')]
+    
+    # Generate structured policy data
+    policy_data = {
+        'agent_id': agent['id'],
+        'agent_name': agent['name'],
+        'version': '1.0.0',
+        'last_updated': '2025-01-24T10:00:00Z',
+        'policies': {
+            'governance': {
+                'compliance_tags': agent['governanceHooks']['complianceTags'],
+                'approval_history': agent['governanceHooks']['approvalHistory'],
+                'audit_logs': agent['governanceHooks']['auditLogs']
+            },
+            'runtime_guardrails': {
+                'input_filters': agent['runtimeGuardrails']['inputFilters'],
+                'output_validators': agent['runtimeGuardrails']['outputValidators'],
+                'rate_controls': agent['runtimeGuardrails']['rateControls'],
+                'scope_controls': agent['runtimeGuardrails']['scopeControls'],
+                'kill_switch': agent['runtimeGuardrails']['killSwitch']
+            },
+            'escalation_mechanisms': {
+                'tiered_escalation': agent['escalationMechanisms']['tieredEscalation'],
+                'notification_channels': agent['escalationMechanisms']['notificationChannels'],
+                'decision_journals': agent['escalationMechanisms']['decisionJournals']
+            },
+            'business_rules': policy_lines
+        },
+        'monitoring': {
+            'calls_this_week': agent['monitoring']['callsThisWeek'],
+            'guardrail_triggers': agent['monitoring']['guardrailTriggers'],
+            'escalations': agent['monitoring']['escalations'],
+            'uptime': agent['monitoring']['uptime'],
+            'avg_response_time': agent['monitoring']['avgResponseTime']
+        }
+    }
+    
+    # Generate YAML
+    yaml_content = f"""# Agent Policy Configuration
+# Agent: {agent['name']} ({agent['id']})
+# Generated: {policy_data['last_updated']}
+
+agent:
+  id: {agent['id']}
+  name: {agent['name']}
+  version: {policy_data['version']}
+  lifecycle: {agent['lifecycle']}
+  owner: {agent['owner']}
+
+governance:
+  compliance_tags:
+{chr(10).join([f"    {tag}: {status}" for tag, status in agent['governanceHooks']['complianceTags'].items()])}
+  approval_history: {agent['governanceHooks']['approvalHistory']}
+  audit_logs:
+    entries: {agent['governanceHooks']['auditLogs']['entries']}
+    last_escalation: {agent['governanceHooks']['auditLogs']['lastEscalation']}
+
+runtime_guardrails:
+  input_filters:
+{chr(10).join([f"    - {filter_type}" for filter_type in agent['runtimeGuardrails']['inputFilters']])}
+  output_validators:
+{chr(10).join([f"    - {validator}" for validator in agent['runtimeGuardrails']['outputValidators']])}
+  rate_controls:
+{chr(10).join([f"    {control}: {value}" for control, value in agent['runtimeGuardrails']['rateControls'].items()])}
+  scope_controls:
+{chr(10).join([f"    {scope}: {value}" for scope, value in agent['runtimeGuardrails']['scopeControls'].items()])}
+  kill_switch:
+    enabled: {agent['runtimeGuardrails']['killSwitch']['enabled']}
+    triggers:
+{chr(10).join([f"      - {trigger}" for trigger in agent['runtimeGuardrails']['killSwitch']['triggers']])}
+
+escalation_mechanisms:
+  tiered_escalation:
+{chr(10).join([f"    - level: {level['level']}\n      action: {level['action']}\n      status: {level['status']}\n      timeout: {level['timeout']}" for level in agent['escalationMechanisms']['tieredEscalation']])}
+  notification_channels:
+{chr(10).join([f"    - {channel}" for channel in agent['escalationMechanisms']['notificationChannels']])}
+  decision_journals:
+    enabled: {agent['escalationMechanisms']['decisionJournals']['enabled']}
+    required: {agent['escalationMechanisms']['decisionJournals']['required']}
+    template: {agent['escalationMechanisms']['decisionJournals']['template']}
+
+business_rules:
+{chr(10).join([f"  - {rule}" for rule in policy_lines])}
+
+monitoring:
+  calls_this_week: {agent['monitoring']['callsThisWeek']}
+  guardrail_triggers: {agent['monitoring']['guardrailTriggers']}
+  escalations: {agent['monitoring']['escalations']}
+  uptime: {agent['monitoring']['uptime']}
+  avg_response_time: {agent['monitoring']['avgResponseTime']}
+"""
+    
+    # Generate JSON
+    json_content = json.dumps(policy_data, indent=2)
+    
+    # Generate runtime observation data
+    compliance_rate = max(85, 100 - (agent['monitoring']['guardrailTriggers'] * 2))
+    compliance_trend = np.random.choice([-2, -1, 0, 1, 2])
+    active_policies = len(policy_lines) + len(agent['runtimeGuardrails']['inputFilters']) + len(agent['runtimeGuardrails']['outputValidators'])
+    violations_24h = max(0, agent['monitoring']['guardrailTriggers'] - np.random.randint(0, 3))
+    
+    # Generate execution log
+    execution_log = []
+    for i in range(5):
+        policies = ['Input Validation', 'Output Compliance', 'Rate Limiting', 'Scope Control', 'Kill Switch']
+        statuses = ['compliant', 'warning', 'violation']
+        status = np.random.choice(statuses, p=[0.7, 0.2, 0.1])
+        execution_log.append({
+            'policy': np.random.choice(policies),
+            'timestamp': f"2025-01-24 {np.random.randint(8, 18):02d}:{np.random.randint(0, 60):02d}:{np.random.randint(0, 60):02d}",
+            'status': status,
+            'details': f"Policy executed with {status} status" if status != 'compliant' else None
+        })
+    
+    # Generate validation results
+    validation_results = []
+    for policy in ['Input Filters', 'Output Validators', 'Rate Controls', 'Scope Controls', 'Kill Switch']:
+        valid = np.random.choice([True, False], p=[0.8, 0.2])
+        validation_results.append({
+            'policy_name': policy,
+            'valid': valid,
+            'message': 'Policy configuration is valid' if valid else 'Policy configuration needs attention'
+        })
+    
+    return {
+        'yaml': yaml_content,
+        'json': json_content,
+        'compliance_rate': compliance_rate,
+        'compliance_trend': compliance_trend,
+        'active_policies': active_policies,
+        'violations_24h': violations_24h,
+        'execution_log': execution_log,
+        'validation_results': validation_results
+    }
+
 def load_agent_data():
     return {
         'agents': [
@@ -673,10 +896,10 @@ def load_agent_data():
                     ]
                 },
                 'patternImplementations': {
-                    'primary_patterns': ['Tool Use ?', 'Memory & Learning ?'],
-                    'secondary_patterns': ['Reflection ?', 'Critic/Reviewer \U0001F9D0'],
+                    'primary_patterns': ['Tool Use 🛠️', 'Memory & Learning 🧠'],
+                    'secondary_patterns': ['Reflection 🔄', 'Critic/Reviewer \U0001F9D0'],
                     'pattern_details': {
-                        'Tool Use ?': {
+                        'Tool Use 🛠️': {
                             'implementation': 'Uses vector database and embedding APIs for document retrieval',
                             'tools_used': ['Pinecone Vector DB', 'Azure OpenAI Embeddings', 'Azure Blob Storage'],
                             'configuration': {
@@ -686,7 +909,7 @@ def load_agent_data():
                                 'output_sanitization': True
                             }
                         },
-                        'Memory & Learning ?': {
+                        'Memory & Learning 🧠': {
                             'implementation': 'Learns from document classification patterns and improves routing accuracy',
                             'memory_type': 'Long-term pattern recognition',
                             'learning_mechanism': 'Feedback loop from classification accuracy',
@@ -696,7 +919,7 @@ def load_agent_data():
                                 'memory_inspection_enabled': True
                             }
                         },
-                        'Reflection ?': {
+                        'Reflection 🔄': {
                             'implementation': 'Self-evaluates classification confidence and accuracy before routing',
                             'reflection_criteria': ['accuracy', 'confidence', 'compliance'],
                             'max_reflection_loops': 2,
@@ -798,10 +1021,10 @@ def load_agent_data():
                     ]
                 },
                 'patternImplementations': {
-                    'primary_patterns': ['Orchestration ?', 'Planning ?'],
-                    'secondary_patterns': ['Tool Use ?', 'Collaboration / Delegation ?', 'Exploration / Simulation ?'],
+                    'primary_patterns': ['Orchestration 🎯', 'Planning 📋'],
+                    'secondary_patterns': ['Tool Use 🛠️', 'Collaboration / Delegation 🤝', 'Exploration / Simulation 🔬'],
                     'pattern_details': {
-                        'Orchestration ?': {
+                        'Orchestration 🎯': {
                             'implementation': 'Meta-agent coordinating multiple workflow steps and task management',
                             'coordination_scope': 'End-to-end workflow execution',
                             'global_state_management': True,
@@ -812,7 +1035,7 @@ def load_agent_data():
                                 'modular_components': True
                             }
                         },
-                        'Planning ?': {
+                        'Planning 📋': {
                             'implementation': 'Breaks down complex workflows into executable sub-tasks',
                             'planning_depth': 'Multi-level task decomposition',
                             'plan_format': 'JSON workflow definitions',
@@ -823,7 +1046,7 @@ def load_agent_data():
                                 'replan_on_failure': True
                             }
                         },
-                        'Tool Use ?': {
+                        'Tool Use 🛠️': {
                             'implementation': 'Integrates with workflow engine, message queue, and monitoring systems',
                             'tools_used': ['Temporal Workflow Engine', 'RabbitMQ', 'PostgreSQL', 'Prometheus'],
                             'configuration': {
@@ -833,7 +1056,7 @@ def load_agent_data():
                                 'rate_limiting': True
                             }
                         },
-                        'Collaboration / Delegation ?': {
+                        'Collaboration / Delegation 🤝': {
                             'implementation': 'Coordinates with specialized agents for different workflow steps',
                             'delegation_protocol': 'Structured handoff with context preservation',
                             'conflict_resolution': 'Workflow state arbitration',
@@ -844,7 +1067,7 @@ def load_agent_data():
                                 'circular_delegation_check': True
                             }
                         },
-                        'Exploration / Simulation ?': {
+                        'Exploration / Simulation 🔬': {
                             'implementation': 'Simulates workflow execution paths before committing to execution',
                             'scenario_testing': 'Workflow path validation and optimization',
                             'configuration': {
@@ -936,10 +1159,10 @@ def load_agent_data():
                     ]
                 },
                 'patternImplementations': {
-                    'primary_patterns': ['Tool Use ?', 'Critic/Reviewer \U0001F9D0'],
-                    'secondary_patterns': ['Memory & Learning ?', 'Reflection ?'],
+                    'primary_patterns': ['Tool Use 🛠️', 'Critic/Reviewer \U0001F9D0'],
+                    'secondary_patterns': ['Memory & Learning 🧠', 'Reflection 🔄'],
                     'pattern_details': {
-                        'Tool Use ?': {
+                        'Tool Use 🛠️': {
                             'implementation': 'Integrates with compliance APIs and regulatory databases',
                             'tools_used': ['Compliance API', 'Regulatory Database', 'Audit Logging System'],
                             'configuration': {
@@ -959,7 +1182,7 @@ def load_agent_data():
                                 'critique_traceability': True
                             }
                         },
-                        'Memory & Learning ?': {
+                        'Memory & Learning 🧠': {
                             'implementation': 'Learns from compliance patterns and regulatory updates',
                             'memory_type': 'Regulatory knowledge base',
                             'learning_mechanism': 'Pattern recognition from compliance violations',
@@ -969,7 +1192,7 @@ def load_agent_data():
                                 'memory_inspection_enabled': True
                             }
                         },
-                        'Reflection ?': {
+                        'Reflection 🔄': {
                             'implementation': 'Self-evaluates compliance findings for accuracy and completeness',
                             'reflection_criteria': ['accuracy', 'completeness', 'regulatory_alignment'],
                             'max_reflection_loops': 2,
@@ -1112,10 +1335,10 @@ def load_agent_data():
                     ]
                 },
                 'patternImplementations': {
-                    'primary_patterns': ['Orchestration ?', 'Tool Use ?', 'Exploration / Simulation ?'],
-                    'secondary_patterns': ['Reflection ?', 'Critic/Reviewer \U0001F9D0', 'Memory & Learning ?'],
+                    'primary_patterns': ['Orchestration 🎯', 'Tool Use 🛠️', 'Exploration / Simulation 🔬'],
+                    'secondary_patterns': ['Reflection 🔄', 'Critic/Reviewer \U0001F9D0', 'Memory & Learning 🧠'],
                     'pattern_details': {
-                        'Orchestration ?': {
+                        'Orchestration 🎯': {
                             'implementation': 'Coordinates multi-step payment processing workflow with anomaly detection',
                             'coordination_scope': 'End-to-end payment execution pipeline',
                             'global_state_management': True,
@@ -1126,7 +1349,7 @@ def load_agent_data():
                                 'modular_components': True
                             }
                         },
-                        'Tool Use ?': {
+                        'Tool Use 🛠️': {
                             'implementation': 'Integrates with payment APIs, anomaly detection models, and verification systems',
                             'tools_used': ['Payment API', 'Anomaly Detection Model', 'Account Verification API', 'Banking APIs'],
                             'configuration': {
@@ -1136,7 +1359,7 @@ def load_agent_data():
                                 'output_sanitization': True
                             }
                         },
-                        'Exploration / Simulation ?': {
+                        'Exploration / Simulation 🔬': {
                             'implementation': 'Simulates payment scenarios and risk assessments before execution',
                             'scenario_testing': 'Payment risk analysis and compliance validation',
                             'configuration': {
@@ -1146,7 +1369,7 @@ def load_agent_data():
                                 'assumption_documentation': True
                             }
                         },
-                        'Reflection ?': {
+                        'Reflection 🔄': {
                             'implementation': 'Self-evaluates payment confidence and anomaly scores before execution',
                             'reflection_criteria': ['confidence', 'anomaly_score', 'compliance', 'risk_assessment'],
                             'max_reflection_loops': 3,
@@ -1166,7 +1389,7 @@ def load_agent_data():
                                 'critique_traceability': True
                             }
                         },
-                        'Memory & Learning ?': {
+                        'Memory & Learning 🧠': {
                             'implementation': 'Learns from payment patterns and fraud detection to improve accuracy',
                             'memory_type': 'Payment pattern recognition and fraud detection',
                             'learning_mechanism': 'Feedback loop from payment success/failure patterns',
@@ -1259,10 +1482,10 @@ def load_agent_data():
                     ]
                 },
                 'patternImplementations': {
-                    'primary_patterns': ['Collaboration / Delegation ?', 'Planning ?', 'Reflection ?'],
-                    'secondary_patterns': ['Tool Use ?', 'Memory & Learning ?', 'Critic/Reviewer \U0001F9D0'],
+                    'primary_patterns': ['Collaboration / Delegation 🤝', 'Planning 📋', 'Reflection 🔄'],
+                    'secondary_patterns': ['Tool Use 🛠️', 'Memory & Learning 🧠', 'Critic/Reviewer \U0001F9D0'],
                     'pattern_details': {
-                        'Collaboration / Delegation ?': {
+                        'Collaboration / Delegation 🤝': {
                             'implementation': 'Coordinates with legal team and counterparty agents during negotiations',
                             'delegation_protocol': 'Structured negotiation handoffs with legal oversight',
                             'conflict_resolution': 'Legal team arbitration with negotiation state preservation',
@@ -1273,7 +1496,7 @@ def load_agent_data():
                                 'circular_delegation_check': True
                             }
                         },
-                        'Planning ?': {
+                        'Planning 📋': {
                             'implementation': 'Develops multi-step negotiation strategies and fallback plans',
                             'planning_depth': 'Strategic negotiation planning with contingency planning',
                             'plan_format': 'JSON negotiation strategies',
@@ -1284,7 +1507,7 @@ def load_agent_data():
                                 'replan_on_failure': True
                             }
                         },
-                        'Reflection ?': {
+                        'Reflection 🔄': {
                             'implementation': 'Self-evaluates negotiation progress and strategy effectiveness',
                             'reflection_criteria': ['strategy_effectiveness', 'counterparty_response', 'legal_compliance'],
                             'max_reflection_loops': 3,
@@ -1294,7 +1517,7 @@ def load_agent_data():
                                 'timeout_seconds': 300
                             }
                         },
-                        'Tool Use ?': {
+                        'Tool Use 🛠️': {
                             'implementation': 'Integrates with legal databases, contract templates, and communication systems',
                             'tools_used': ['Legal Database', 'Contract Templates', 'Communication APIs', 'Document Management'],
                             'configuration': {
@@ -1304,7 +1527,7 @@ def load_agent_data():
                                 'output_sanitization': True
                             }
                         },
-                        'Memory & Learning ?': {
+                        'Memory & Learning 🧠': {
                             'implementation': 'Learns from negotiation outcomes and counterparty behavior patterns',
                             'memory_type': 'Negotiation strategy and outcome patterns',
                             'learning_mechanism': 'Feedback loop from negotiation success/failure patterns',
@@ -1408,10 +1631,10 @@ def load_agent_data():
                     ]
                 },
                 'patternImplementations': {
-                    'primary_patterns': ['Tool Use ?', 'Memory & Learning ?', 'Reflection ?'],
-                    'secondary_patterns': ['Critic/Reviewer \U0001F9D0', 'Planning ?'],
+                    'primary_patterns': ['Tool Use 🛠️', 'Memory & Learning 🧠', 'Reflection 🔄'],
+                    'secondary_patterns': ['Critic/Reviewer \U0001F9D0', 'Planning 📋'],
                     'pattern_details': {
-                        'Tool Use ?': {
+                        'Tool Use 🛠️': {
                             'implementation': 'Integrates with classification models, vector databases, and document storage systems',
                             'tools_used': ['Custom Classification Model v3', 'Pinecone Vector DB', 'Azure Blob Storage', 'Azure OpenAI GPT-4'],
                             'configuration': {
@@ -1421,7 +1644,7 @@ def load_agent_data():
                                 'output_sanitization': True
                             }
                         },
-                        'Memory & Learning ?': {
+                        'Memory & Learning 🧠': {
                             'implementation': 'Learns from classification patterns and improves accuracy over time',
                             'memory_type': 'Document classification patterns and accuracy feedback',
                             'learning_mechanism': 'Feedback loop from classification accuracy and user corrections',
@@ -1431,7 +1654,7 @@ def load_agent_data():
                                 'memory_inspection_enabled': True
                             }
                         },
-                        'Reflection ?': {
+                        'Reflection 🔄': {
                             'implementation': 'Self-evaluates classification confidence and accuracy before finalizing decisions',
                             'reflection_criteria': ['confidence', 'accuracy', 'consistency', 'compliance'],
                             'max_reflection_loops': 2,
@@ -1451,7 +1674,7 @@ def load_agent_data():
                                 'critique_traceability': True
                             }
                         },
-                        'Planning ?': {
+                        'Planning 📋': {
                             'implementation': 'Plans classification strategies for complex multi-document scenarios',
                             'planning_depth': 'Document classification workflow planning',
                             'plan_format': 'JSON classification strategies',
@@ -1546,10 +1769,10 @@ def load_agent_data():
                     ]
                 },
                 'patternImplementations': {
-                    'primary_patterns': ['Orchestration ?', 'Collaboration / Delegation ?', 'Critic/Reviewer \U0001F9D0'],
-                    'secondary_patterns': ['Tool Use ?', 'Memory & Learning ?', 'Reflection ?', 'Planning ?'],
+                    'primary_patterns': ['Orchestration 🎯', 'Collaboration / Delegation 🤝', 'Critic/Reviewer \U0001F9D0'],
+                    'secondary_patterns': ['Tool Use 🛠️', 'Memory & Learning 🧠', 'Reflection 🔄', 'Planning 📋'],
                     'pattern_details': {
-                        'Orchestration ?': {
+                        'Orchestration 🎯': {
                             'implementation': 'Meta-agent coordinating multiple AI agents and managing system-wide operations',
                             'coordination_scope': 'Multi-agent system supervision and coordination',
                             'global_state_management': True,
@@ -1560,7 +1783,7 @@ def load_agent_data():
                                 'modular_components': True
                             }
                         },
-                        'Collaboration / Delegation ?': {
+                        'Collaboration / Delegation 🤝': {
                             'implementation': 'Coordinates and delegates tasks between specialized agents',
                             'delegation_protocol': 'Structured agent handoffs with supervisory oversight',
                             'conflict_resolution': 'Supervisor arbitration with escalation paths',
@@ -1581,7 +1804,7 @@ def load_agent_data():
                                 'critique_traceability': True
                             }
                         },
-                        'Tool Use ?': {
+                        'Tool Use 🛠️': {
                             'implementation': 'Integrates with monitoring systems, messaging, and orchestration tools',
                             'tools_used': ['Temporal Workflow Engine', 'Prometheus + Grafana', 'RabbitMQ', 'PostgreSQL'],
                             'configuration': {
@@ -1591,7 +1814,7 @@ def load_agent_data():
                                 'output_sanitization': True
                             }
                         },
-                        'Memory & Learning ?': {
+                        'Memory & Learning 🧠': {
                             'implementation': 'Learns from agent performance patterns and escalation outcomes',
                             'memory_type': 'Agent performance patterns and supervisory decisions',
                             'learning_mechanism': 'Feedback loop from agent performance and escalation outcomes',
@@ -1601,7 +1824,7 @@ def load_agent_data():
                                 'memory_inspection_enabled': True
                             }
                         },
-                        'Reflection ?': {
+                        'Reflection 🔄': {
                             'implementation': 'Self-evaluates supervisory decisions and agent coordination effectiveness',
                             'reflection_criteria': ['decision_quality', 'agent_coordination', 'escalation_appropriateness'],
                             'max_reflection_loops': 2,
@@ -1611,7 +1834,7 @@ def load_agent_data():
                                 'timeout_seconds': 60
                             }
                         },
-                        'Planning ?': {
+                        'Planning 📋': {
                             'implementation': 'Plans multi-agent coordination strategies and escalation responses',
                             'planning_depth': 'Multi-agent coordination and supervision planning',
                             'plan_format': 'JSON supervision strategies',
@@ -1631,13 +1854,13 @@ def load_agent_data():
 def get_status_badge(status):
     status_map = {
         'approved': {'text': 'Approved ✅', 'class': 'status-approved'},
-        'pilot': {'text': 'Pilot ?', 'class': 'status-pilot'},
-        'draft': {'text': 'Draft ?', 'class': 'status-draft'}
+        'pilot': {'text': 'Pilot 🧪', 'class': 'status-pilot'},
+        'draft': {'text': 'Draft 📝', 'class': 'status-draft'}
     }
     return status_map.get(status, {'text': status, 'class': ''})
 
 def landing_page():
-    st.markdown('<h1 class="main-header">? Agentic Operating System</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🤖 Agentic Operating System</h1>', unsafe_allow_html=True)
     st.markdown('<p style="text-align: center; font-size: 1.2rem; color: #6e6e73; margin-bottom: 2rem; font-family: \'Inter\', -apple-system, BlinkMacSystemFont, \'Segoe UI\', sans-serif;">Manage and monitor your AI agents</p>', unsafe_allow_html=True)
     
     data = load_agent_data()
@@ -1647,7 +1870,7 @@ def landing_page():
     col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
     
     with col1:
-        search_term = st.text_input("? Search by pattern, risk, domain...", key="search")
+        search_term = st.text_input("🔍 Search by pattern, risk, domain...", key="search")
     
     with col2:
         pattern_filter = st.selectbox("Pattern Type", ["All"] + list(set([agent['patternName'] for agent in agents])))
@@ -1677,7 +1900,7 @@ def landing_page():
         filtered_agents = [agent for agent in filtered_agents if agent['status'] == lifecycle_filter]
     
     # Main tabs for Pattern Cards, Tools Layer, and Agent Cards
-    main_tab1, main_tab2, main_tab3 = st.tabs(["? Pattern Cards", "?️ Tools Layer", "? Agent Cards"])
+    main_tab1, main_tab2, main_tab3 = st.tabs(["🔄 Pattern Cards", "🛠️ Tools Layer", "🤖 Agent Cards"])
     
     with main_tab1:
         # Pattern Cards Tab
@@ -1689,7 +1912,7 @@ def landing_page():
         # Pattern Cards
         patterns = [
             {
-                "name": "Reflection ?",
+                "name": "Reflection 🔄",
                 "description": "The agent evaluates its own outputs, reasoning, or actions, then iteratively improves them.",
                 "example": "Insurance Claims Agent checking submitted forms for errors before submission",
                 "rules": [
@@ -1706,7 +1929,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "Planning ?",
+                "name": "Planning 📋",
                 "description": "The agent breaks down a high-level goal into sub-tasks, sequencing them logically.",
                 "example": "Multi-step property rebate application workflow - Enterprise AI orchestrating data retrieval, validation, and reporting",
                 "rules": [
@@ -1723,7 +1946,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "Tool Use ?",
+                "name": "Tool Use 🛠️",
                 "description": "The agent invokes external tools, APIs, or systems to complete tasks beyond text generation.",
                 "example": "Calling APIs for tax rules - Triggering enterprise workflows (e.g., updating CRM records)",
                 "rules": [
@@ -1740,7 +1963,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "Collaboration / Delegation ?",
+                "name": "Collaboration / Delegation 🤝",
                 "description": "Multiple specialized agents coordinate, hand off tasks, or negotiate roles.",
                 "example": "Multiple specialized agents coordinate, hand off tasks, or negotiate roles.",
                 "rules": [
@@ -1757,7 +1980,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "Memory & Learning ?",
+                "name": "Memory & Learning 🧠",
                 "description": "The agent retains context across sessions, adapts from feedback, and improves over time.",
                 "example": "Remembering prior rebate submissions to pre-fill forms - Enterprise AI learning from past board briefings",
                 "rules": [
@@ -1791,7 +2014,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "Exploration / Simulation ?",
+                "name": "Exploration / Simulation 🔬",
                 "description": "The agent runs multiple hypothetical scenarios before choosing an action.",
                 "example": "Portfolio yield strategy simulations - Testing rebate eligibility under different ownership structures",
                 "rules": [
@@ -1808,7 +2031,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "Orchestration ?",
+                "name": "Orchestration 🎯",
                 "description": "A meta-agent coordinates multiple agents, tools, and workflows into a coherent pipeline.",
                 "example": "Enterprise AI hub managing compliance, reporting, and approvals end-to-end",
                 "rules": [
@@ -1859,9 +2082,9 @@ def landing_page():
                                 ```
                                 Input → Generate → Evaluate
                                          ↑         ↓
-                                    Apply Fixes ← Quality?
+                                    Apply Fixes ← Quality ✅
                                          ↓
-                                    Max Loops? → Human
+                                    Max Loops 🔄 → Human
                                          ↓
                                     Final Output
                                 ```
@@ -1924,7 +2147,7 @@ def landing_page():
                                 ```
                                 Request → Select → Validate
                                          ↓
-                                Execute → Success? → Sanitize
+                                Execute → Success ✅ → Sanitize
                                          ↓
                                 Retry → Fallback → Human
                                          ↓
@@ -1962,7 +2185,7 @@ def landing_page():
                                          ↓
                                 Coordinate → Validate → Combine
                                          ↓
-                                Conflict? → Resolve → Final
+                                Conflict ⚠️ → Resolve → Final
                                 ```
                                 """)
                             
@@ -1996,7 +2219,7 @@ def landing_page():
                                          ↓
                                 Learning → Adapt → Evaluate
                                          ↓
-                                Improved? → Update Model
+                                Improved ✅ → Update Model
                                 ```
                                 """)
                             
@@ -2064,7 +2287,7 @@ def landing_page():
                                          ↓
                                 Validate → Execute → Monitor
                                          ↓
-                                Match? → Update Model
+                                Match ✅ → Update Model
                                 ```
                                 """)
                             
@@ -2096,9 +2319,9 @@ def landing_page():
                                          ↓
                                 Allocate → Distribute → Monitor
                                          ↓
-                                Complete? → Aggregate → Validate
+                                Complete ✅ → Aggregate → Validate
                                          ↓
-                                Quality? → Deliver Output
+                                Quality ✅ → Deliver Output
                                 ```
                                 """)
                             
@@ -2746,21 +2969,21 @@ def landing_page():
                         col1, col2, col3 = st.columns(3)
                         with col1:
                             st.download_button(
-                                label="? Download JSON",
+                                label="📥 Download JSON",
                                 data=json.dumps(config, indent=2),
                                 file_name=f"{pattern_name}_pattern_config.json",
                                 mime="application/json"
                             )
                         with col2:
                             st.download_button(
-                                label="? Download YAML",
+                                label="📥 Download YAML",
                                 data=yaml.dump(config, default_flow_style=False, indent=2),
                                 file_name=f"{pattern_name}_pattern_config.yaml",
                                 mime="text/yaml"
                             )
                         with col3:
                             st.download_button(
-                                label="? Download K8s Manifest",
+                                label="☸️ Download K8s Manifest",
                                 data=generate_k8s_manifest(config),
                                 file_name=f"{pattern_name}_pattern_k8s.yaml",
                                 mime="text/yaml"
@@ -2789,14 +3012,14 @@ def landing_page():
         # Create expandable sections for each tool category
         tool_categories = [
             {
-                "name": "? Large Language Models (LLMs)",
+                "name": "🧠 Large Language Models (LLMs)",
                 "role": "Core reasoning and generation engine",
                 "examples": ["GPT‑4/5", "Claude", "Gemini", "LLaMA", "Mistral"],
                 "agentic_use": "Planning, reflection, orchestration, dialogue management",
                 "enterprise_note": "Often wrapped with governance layers (guardrails, policy‑as‑code, audit logging)",
                 "pattern_scenarios": [
                     {
-                        "pattern": "Reflection ?",
+                        "pattern": "Reflection 🔄",
                         "scenario": "Financial Document Review Agent",
                         "description": "LLM + Reflection pattern for self-evaluating loan application reviews",
                         "implementation": "GPT-4 analyzes loan docs → Self-evaluates decision confidence → Iteratively refines reasoning → Final recommendation",
@@ -2804,7 +3027,7 @@ def landing_page():
                         "business_value": "Reduces loan approval errors by 40%, ensures regulatory compliance"
                     },
                     {
-                        "pattern": "Planning ?",
+                        "pattern": "Planning 📋",
                         "scenario": "Supply Chain Optimization Agent",
                         "description": "LLM + Planning pattern for complex logistics coordination",
                         "implementation": "Claude breaks down delivery optimization → Creates multi-step execution plan → Monitors progress → Adjusts dynamically",
@@ -2812,7 +3035,7 @@ def landing_page():
                         "business_value": "Optimizes delivery routes, reduces costs by 25%, improves customer satisfaction"
                     },
                     {
-                        "pattern": "Orchestration ?",
+                        "pattern": "Orchestration 🎯",
                         "scenario": "Customer Service Hub Agent",
                         "description": "LLM + Orchestration pattern for managing multi-channel customer interactions",
                         "implementation": "GPT-4 coordinates chat, email, phone agents → Routes complex queries → Manages escalation workflows",
@@ -2822,7 +3045,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "? Embeddings & Vector Databases",
+                "name": "🔍 Embeddings & Vector Databases",
                 "role": "Store and retrieve semantic representations of text, images, or structured data",
                 "examples": [
                     "**Embeddings APIs:** OpenAI, Azure OpenAI, Hugging Face, Cohere",
@@ -2833,7 +3056,7 @@ def landing_page():
                 "enterprise_note": "Integrated vector DBs are gaining traction because they combine structured + unstructured data in one governed environment",
                 "pattern_scenarios": [
                     {
-                        "pattern": "Memory & Learning ?",
+                        "pattern": "Memory & Learning 🧠",
                         "scenario": "Knowledge Management Agent",
                         "description": "Vector DB + Memory pattern for enterprise knowledge discovery",
                         "implementation": "Pinecone stores company docs → Agent learns from interactions → Builds knowledge graph → Improves search accuracy",
@@ -2841,7 +3064,7 @@ def landing_page():
                         "business_value": "90% faster knowledge discovery, reduces duplicate work by 50%"
                     },
                     {
-                        "pattern": "Tool Use ?",
+                        "pattern": "Tool Use 🛠️",
                         "scenario": "Legal Document Research Agent",
                         "description": "Vector DB + Tool Use pattern for legal precedent research",
                         "implementation": "Weaviate stores case law → Agent retrieves relevant precedents → Validates against current law → Generates legal briefs",
@@ -2849,7 +3072,7 @@ def landing_page():
                         "business_value": "Accelerates legal research by 70%, improves case preparation accuracy"
                     },
                     {
-                        "pattern": "Exploration ?",
+                        "pattern": "Exploration 🔬",
                         "scenario": "Market Research Agent",
                         "description": "Vector DB + Exploration pattern for competitive analysis",
                         "implementation": "Chroma stores market data → Agent explores multiple scenarios → Simulates competitor responses → Recommends strategies",
@@ -2859,7 +3082,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "? MCPs (Model Context Protocols) & Connectors",
+                "name": "🔌 MCPs (Model Context Protocols) & Connectors",
                 "role": "Standardize how agents talk to external systems (databases, APIs, SaaS apps)",
                 "examples": [
                     "**LangChain / LangGraph** connectors",
@@ -2870,7 +3093,7 @@ def landing_page():
                 "enterprise_note": "MCPs are critical for **auditability**—you can log every query and enforce RBAC",
                 "pattern_scenarios": [
                     {
-                        "pattern": "Tool Use ?",
+                        "pattern": "Tool Use 🛠️",
                         "scenario": "Financial Reporting Agent",
                         "description": "MCP + Tool Use pattern for automated financial data analysis",
                         "implementation": "Snowflake Cortex MCP → Agent queries financial data → Validates against regulations → Generates compliance reports",
@@ -2878,7 +3101,7 @@ def landing_page():
                         "business_value": "Automates 80% of financial reporting, ensures regulatory compliance"
                     },
                     {
-                        "pattern": "Collaboration ?",
+                        "pattern": "Collaboration 🤝",
                         "scenario": "Cross-Department Data Agent",
                         "description": "MCP + Collaboration pattern for inter-departmental data sharing",
                         "implementation": "LangGraph coordinates multiple MCPs → HR, Finance, Operations agents collaborate → Share insights securely",
@@ -2886,7 +3109,7 @@ def landing_page():
                         "business_value": "Breaks down data silos, enables cross-functional insights"
                     },
                     {
-                        "pattern": "Orchestration ?",
+                        "pattern": "Orchestration 🎯",
                         "scenario": "Enterprise Data Pipeline Agent",
                         "description": "MCP + Orchestration pattern for complex data workflows",
                         "implementation": "Agent orchestrates data extraction → Transformation via MCPs → Loading to multiple systems → Quality validation",
@@ -2896,7 +3119,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "? API Catalogs & Tool Registries",
+                "name": "📚 API Catalogs & Tool Registries",
                 "role": "Curated catalogs of APIs/tools that agents can call",
                 "examples": [
                     "**OpenAPI / Swagger specs** as machine‑readable contracts",
@@ -2907,7 +3130,7 @@ def landing_page():
                 "enterprise_note": "Policies can enforce **least‑privilege tool use** and **schema validation** before execution",
                 "pattern_scenarios": [
                     {
-                        "pattern": "Tool Use ?",
+                        "pattern": "Tool Use 🛠️",
                         "scenario": "Customer Onboarding Agent",
                         "description": "API Catalog + Tool Use pattern for automated customer setup",
                         "implementation": "Agent discovers onboarding APIs → Validates customer data → Calls CRM, billing, support APIs → Tracks progress",
@@ -2915,7 +3138,7 @@ def landing_page():
                         "business_value": "Reduces onboarding time by 75%, improves customer experience"
                     },
                     {
-                        "pattern": "Planning ?",
+                        "pattern": "Planning 📋",
                         "scenario": "IT Operations Agent",
                         "description": "API Catalog + Planning pattern for infrastructure management",
                         "implementation": "Agent plans infrastructure changes → Discovers relevant APIs → Executes deployment plan → Monitors results",
@@ -2923,7 +3146,7 @@ def landing_page():
                         "business_value": "Automates 60% of IT operations, reduces deployment errors"
                     },
                     {
-                        "pattern": "Reflection ?",
+                        "pattern": "Reflection 🔄",
                         "scenario": "API Performance Agent",
                         "description": "API Catalog + Reflection pattern for API optimization",
                         "implementation": "Agent monitors API performance → Self-evaluates optimization opportunities → Adjusts API calls → Measures improvements",
@@ -2933,14 +3156,14 @@ def landing_page():
                 ]
             },
             {
-                "name": "?️ Traditional Databases & Data Lakes",
+                "name": "🗄️ Traditional Databases & Data Lakes",
                 "role": "Source of truth for structured enterprise data",
                 "examples": ["Snowflake", "Databricks", "BigQuery", "Azure Synapse", "Postgres", "SQL Server"],
                 "agentic_use": "Agents query structured data directly (SQL generation + validation)",
                 "enterprise_note": "Often paired with embeddings for hybrid search (structured filters + semantic retrieval)",
                 "pattern_scenarios": [
                     {
-                        "pattern": "Memory & Learning ?",
+                        "pattern": "Memory & Learning 🧠",
                         "scenario": "Customer Analytics Agent",
                         "description": "Data Lake + Memory pattern for customer behavior analysis",
                         "implementation": "Databricks stores customer data → Agent learns patterns → Builds customer profiles → Predicts behavior",
@@ -2948,7 +3171,7 @@ def landing_page():
                         "business_value": "Increases customer retention by 35%, improves personalization"
                     },
                     {
-                        "pattern": "Exploration ?",
+                        "pattern": "Exploration 🔬",
                         "scenario": "Risk Assessment Agent",
                         "description": "Data Warehouse + Exploration pattern for financial risk analysis",
                         "implementation": "BigQuery stores financial data → Agent explores risk scenarios → Simulates market conditions → Recommends strategies",
@@ -2966,7 +3189,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "?️ Governance & Guardrail Layers",
+                "name": "🛡️ Governance & Guardrail Layers",
                 "role": "Ensure safe, compliant, and auditable agent behavior",
                 "examples": [
                     "**Guardrails.ai**, **Azure AI Content Safety**, **policy‑as‑code frameworks**",
@@ -2984,7 +3207,7 @@ def landing_page():
                         "business_value": "Ensures 100% regulatory compliance, reduces audit findings by 90%"
                     },
                     {
-                        "pattern": "Reflection ?",
+                        "pattern": "Reflection 🔄",
                         "scenario": "Content Moderation Agent",
                         "description": "Content Safety + Reflection pattern for social media moderation",
                         "implementation": "Agent reviews user content → Self-evaluates moderation decisions → Reflects on accuracy → Improves over time",
@@ -2992,7 +3215,7 @@ def landing_page():
                         "business_value": "Improves moderation accuracy by 60%, reduces false positives"
                     },
                     {
-                        "pattern": "Orchestration ?",
+                        "pattern": "Orchestration 🎯",
                         "scenario": "Enterprise Security Agent",
                         "description": "Policy Engine + Orchestration pattern for security monitoring",
                         "implementation": "Agent orchestrates security checks → Applies policy rules → Coordinates responses → Manages incident workflows",
@@ -3017,7 +3240,7 @@ def landing_page():
                 
                 # Pattern Scenarios Section
                 st.markdown("---")
-                st.markdown("### ? Pattern-Tool Scenarios")
+                st.markdown("### 🔄 Pattern-Tool Scenarios")
                 st.markdown("**Real-world scenarios where this tool category combines with agentic patterns to build effective agents:**")
                 
                 for scenario in category['pattern_scenarios']:
@@ -3048,7 +3271,7 @@ def landing_page():
         
         # Pattern-to-Tool Mapping
         st.markdown("---")
-        st.markdown("### ? Pattern-to-Tool Mapping")
+        st.markdown("### 🗺️ Pattern-to-Tool Mapping")
         st.markdown("""
         **How each agentic pattern maps to specific tools and real-world applications:**
         """)
@@ -3149,7 +3372,7 @@ def landing_page():
         
         # Implementation Considerations
         st.markdown("---")
-        st.markdown("### ? Implementation Considerations")
+        st.markdown("### ⚙️ Implementation Considerations")
         
         col1, col2 = st.columns(2)
         
@@ -3176,13 +3399,13 @@ def landing_page():
             with cols[i % 2]:
                 status_info = get_status_badge(agent['status'])
                 pattern_type_emoji = {
-                    'retrieval': '?',
-                    'orchestration': '?',
-                    'monitoring': '?',
-                    'reasoning': '?',
-                    'classification': '?',
-                    'supervision': '?'
-                }.get(agent['patternType'], '?')
+                    'retrieval': '🔍',
+                    'orchestration': '🎯',
+                    'monitoring': '📊',
+                    'reasoning': '🧠',
+                    'classification': '🏷️',
+                    'supervision': '👥'
+                }.get(agent['patternType'], '🤖')
                 
                 # Create expandable agent card
                 with st.expander(f"{pattern_type_emoji} {agent['name']} - {status_info['text']}", expanded=False):
@@ -3275,17 +3498,17 @@ def landing_page():
                     with tab2:
                         # Pattern Implementations
                         if 'patternImplementations' in agent:
-                            st.markdown("**? Agentic Pattern Implementations**")
+                            st.markdown("**🔄 Agentic Pattern Implementations**")
                             
                             # Primary Patterns
                             st.markdown("**Primary Patterns:**")
                             for pattern in agent['patternImplementations']['primary_patterns']:
-                                st.success(f"? {pattern}")
+                                st.success(f"✅ {pattern}")
                             
                             # Secondary Patterns
                             st.markdown("**Secondary Patterns:**")
                             for pattern in agent['patternImplementations']['secondary_patterns']:
-                                st.info(f"? {pattern}")
+                                st.info(f"ℹ️ {pattern}")
                             
                             # Pattern Details
                             st.markdown("**Pattern Implementation Details:**")
@@ -3351,17 +3574,89 @@ def landing_page():
                             st.write(" → ".join(agent['governanceHooks']['approvalHistory']))
                     
                     with tab3:
-                        # Runtime Tools
-                        if 'runtime_tools' in agent:
-                            st.markdown("**?️ Runtime Tools**")
+                        # Codified Policies & Runtime Tools
+                        st.markdown("**🔧 Codified Policies & Runtime Tools**")
+                        
+                        # Policy Codification Section
+                        st.markdown("#### 📋 Codified Policies (YAML/JSON)")
+                        
+                        # Generate codified policies
+                        codified_policies = generate_codified_policies(agent)
+                        
+                        # Display policy tabs
+                        policy_tabs = st.tabs(["YAML Format", "JSON Format", "Runtime Observation", "Policy Validation"])
+                        
+                        with policy_tabs[0]:
+                            st.markdown("**YAML Configuration:**")
+                            st.code(codified_policies['yaml'], language='yaml')
                             
+                            # Download button for YAML
+                            st.download_button(
+                                label="📥 Download YAML",
+                                data=codified_policies['yaml'],
+                                file_name=f"{agent['id']}_policies.yaml",
+                                mime="text/yaml"
+                            )
+                        
+                        with policy_tabs[1]:
+                            st.markdown("**JSON Configuration:**")
+                            st.code(codified_policies['json'], language='json')
+                            
+                            # Download button for JSON
+                            st.download_button(
+                                label="📥 Download JSON",
+                                data=codified_policies['json'],
+                                file_name=f"{agent['id']}_policies.json",
+                                mime="application/json"
+                            )
+                        
+                        with policy_tabs[2]:
+                            st.markdown("**🔍 Runtime Policy Observation**")
+                            
+                            # Policy compliance status
+                            col1, col2, col3 = st.columns(3)
+                            with col1:
+                                st.metric("Policy Compliance", f"{codified_policies['compliance_rate']}%", 
+                                         delta=f"{codified_policies['compliance_trend']}%")
+                            with col2:
+                                st.metric("Active Policies", codified_policies['active_policies'])
+                            with col3:
+                                st.metric("Violations (24h)", codified_policies['violations_24h'])
+                            
+                            # Policy execution log
+                            st.markdown("**Recent Policy Executions:**")
+                            for execution in codified_policies['execution_log']:
+                                status_icon = "✅" if execution['status'] == 'compliant' else "⚠️" if execution['status'] == 'warning' else "❌"
+                                st.markdown(f"{status_icon} **{execution['policy']}** - {execution['timestamp']} ({execution['status']})")
+                                if execution['details']:
+                                    st.markdown(f"   *{execution['details']}*")
+                        
+                        with policy_tabs[3]:
+                            st.markdown("**🔍 Policy Validation & Testing**")
+                            
+                            # Policy validation results
+                            st.markdown("**Validation Results:**")
+                            for validation in codified_policies['validation_results']:
+                                status_icon = "✅" if validation['valid'] else "❌"
+                                st.markdown(f"{status_icon} **{validation['policy_name']}**: {validation['message']}")
+                            
+                            # Test policy button
+                            if st.button("🧪 Test Policy Execution", key=f"test_policy_{agent['id']}"):
+                                st.success("Policy test executed successfully!")
+                                st.info("Check the Runtime Observation tab for results.")
+                        
+                        st.markdown("---")
+                        
+                        # Runtime Tools Section
+                        st.markdown("#### 🛠️ Runtime Tools")
+                        if 'runtime_tools' in agent:
                             # Display tools by category
                             for category, tools in agent['runtime_tools'].items():
                                 category_name = category.replace('_', ' ').title()
                                 st.markdown(f"**{category_name}:**")
                                 
                                 for tool in tools:
-                                    status_color = "?" if tool['status'] == 'active' else "?" if tool['status'] == 'inactive' else "?"
+                                    status_color = "🟢" if tool['status'] == 'active' else "🔴" if tool['status'] == 'inactive' else "🟡"
                                     st.markdown(f"• {status_color} **{tool['name']}** - {tool['purpose']}")
                                 
                                 st.markdown("")  # Add spacing between categories
@@ -3421,7 +3716,7 @@ def landing_page():
                     st.write(f"Template: {decision_journals['template']}")
                 
                 with tab5:
-                    st.markdown("### ? Escalation Analysis (100+ Iterations)")
+                    st.markdown("### 📈 Escalation Analysis (100+ Iterations)")
                     
                     # Generate comprehensive escalation data based on agent type
                     escalation_data = generate_escalation_data(agent)
@@ -3438,7 +3733,7 @@ def landing_page():
                         st.metric("Critical Issues", escalation_data['critical_issues'])
                     
                     # Escalation Trends Chart
-                    st.markdown("#### ? Escalation Trends (Last 30 Days)")
+                    st.markdown("#### 📊 Escalation Trends (Last 30 Days)")
                     
                     # Generate trend data
                     dates = pd.date_range('2025-01-01', periods=30, freq='D')
@@ -3456,7 +3751,7 @@ def landing_page():
                     st.plotly_chart(fig_trend, use_container_width=True)
                     
                     # Escalation Logs
-                    st.markdown("#### ? Recent Escalation Logs")
+                    st.markdown("#### 📋 Recent Escalation Logs")
                     
                     # Create expandable sections for different log types
                     log_tabs = st.tabs(["Recent Events", "Critical Issues", "Pattern Analysis", "Resolution Insights"])
@@ -3464,8 +3759,8 @@ def landing_page():
                     with log_tabs[0]:
                         st.markdown("**Last 20 Escalation Events:**")
                         for i, event in enumerate(escalation_data['recent_events']):
-                            severity_color = "?" if event['severity'] == 'Critical' else "?" if event['severity'] == 'High' else "?" if event['severity'] == 'Medium' else "?"
-                            status_icon = "✅" if event['status'] == 'Resolved' else "?" if event['status'] == 'Investigating' else "⏳" if event['status'] == 'Pending' else "❌"
+                            severity_color = "🔴" if event['severity'] == 'Critical' else "🟠" if event['severity'] == 'High' else "🟡" if event['severity'] == 'Medium' else "🟢"
+                            status_icon = "✅" if event['status'] == 'Resolved' else "🔍" if event['status'] == 'Investigating' else "⏳" if event['status'] == 'Pending' else "❌"
                             
                             with st.expander(f"{severity_color} {event['timestamp']} - {event['type']} {status_icon}", expanded=False):
                                 st.markdown(f"**Description:** {event['description']}")
@@ -3478,7 +3773,7 @@ def landing_page():
                     with log_tabs[1]:
                         st.markdown("**Critical Issues Requiring Attention:**")
                         for issue in escalation_data['critical_issues_list']:
-                            with st.expander(f"? {issue['title']}", expanded=False):
+                            with st.expander(f"⚠️ {issue['title']}", expanded=False):
                                 st.markdown(f"**Root Cause:** {issue['root_cause']}")
                                 st.markdown(f"**Business Impact:** {issue['business_impact']}")
                                 st.markdown(f"**Recommended Actions:**")
@@ -3534,13 +3829,13 @@ def landing_page():
                             st.markdown(f"• {rule}")
                     
                     # Action Items
-                    st.markdown("#### ? Action Items")
+                    st.markdown("#### ✅ Action Items")
                     for item in escalation_data['action_items']:
-                        priority_icon = "?" if item['priority'] == 'High' else "?" if item['priority'] == 'Medium' else "?"
+                        priority_icon = "🔴" if item['priority'] == 'High' else "🟡" if item['priority'] == 'Medium' else "🟢"
                         st.markdown(f"{priority_icon} **{item['title']}** (Due: {item['due_date']})")
                         st.markdown(f"   {item['description']}")
                         st.markdown("")
-                
+                    
     
     # Stats
     stats = {
@@ -3554,20 +3849,20 @@ def landing_page():
     
     # Payment workflow access
     st.markdown("---")
-    st.markdown("### ? High-Value Payment Processing Workflow")
+    st.markdown("### 💰 High-Value Payment Processing Workflow")
     st.markdown("Experience the complete end-to-end payment processing workflow with anomaly detection, governance, and human-in-the-loop review.")
     
     col1, col2, col3 = st.columns(3)
     with col1:
-        if st.button("? Start Payment Workflow", type="primary"):
+        if st.button("🚀 Start Payment Workflow", type="primary"):
             st.session_state['current_page'] = 'payment_instruction'
             st.rerun()
     with col2:
-        if st.button("? View Payment Audit"):
+        if st.button("📊 View Payment Audit"):
             st.session_state['current_page'] = 'payment_audit'
             st.rerun()
     with col3:
-        if st.button("? Payment Escalations"):
+        if st.button("⚠️ Payment Escalations"):
             st.session_state['current_page'] = 'payment_escalation'
             st.rerun()
 
@@ -3585,11 +3880,11 @@ def agent_detail_page():
     
     status_info = get_status_badge(agent['status'])
     pattern_type_emoji = {
-        'retrieval': '?',
-        'orchestration': '?',
-        'monitoring': '?',
-        'reasoning': '?'
-    }.get(agent['patternType'], '?')
+        'retrieval': '🔍',
+        'orchestration': '🎯',
+        'monitoring': '📊',
+        'reasoning': '🧠'
+    }.get(agent['patternType'], '🤖')
     
     st.markdown(f"<h1>{pattern_type_emoji} Agent: {agent['name']} <span class='status-badge {status_info['class']}'>{status_info['text']}</span></h1>", unsafe_allow_html=True)
     st.markdown(f"**Pattern:** {agent['patternName']} ({agent['patternType'].title()})")
@@ -3743,10 +4038,10 @@ def agent_detail_page():
         st.markdown("### Logs")
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("? Download CSV Logs"):
+            if st.button("📥 Download CSV Logs"):
                 st.success("CSV download initiated")
         with col2:
-            if st.button("? View Live Logs"):
+            if st.button("📺 View Live Logs"):
                 st.info("Live logs viewer opened")
         
         st.markdown("### Lineage")
@@ -3884,7 +4179,7 @@ def runtime_monitoring():
     agents = data['agents']
     
     # Overall metrics summary
-    st.markdown("### ? System Overview")
+    st.markdown("### 📊 System Overview")
     
     # Safe monitoring data extraction with error handling
     def get_monitoring_value(agent, key, default=0):
@@ -3918,7 +4213,7 @@ def runtime_monitoring():
     st.markdown("---")
     
     # Agent-specific monitoring cards
-    st.markdown("### ? Agent Performance Monitoring")
+    st.markdown("### 📈 Agent Performance Monitoring")
     
     # Filter options
     col1, col2, col3 = st.columns(3)
@@ -3940,7 +4235,7 @@ def runtime_monitoring():
     
     # Display agent monitoring cards
     for agent in filtered_agents:
-        with st.expander(f"? {agent['name']} - {agent['patternName']} ({agent['status'].title()})", expanded=False):
+        with st.expander(f"🤖 {agent['name']} - {agent['patternName']} ({agent['status'].title()})", expanded=False):
             
             # Agent header with status indicators
             col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
@@ -3951,7 +4246,7 @@ def runtime_monitoring():
                 # Health status based on metrics
                 uptime = get_uptime_value(agent)
                 if uptime >= 99.0:
-                    st.success("? Healthy")
+                    st.success("✅ Healthy")
                 elif uptime >= 95.0:
                     st.warning("? Warning")
                 else:
@@ -4112,18 +4407,18 @@ def runtime_monitoring():
                     if st.button(f"⏸️ Pause {agent['name']}", key=f"pause_{agent['id']}"):
                         st.warning(f"{agent['name']} paused")
                     
-                    if st.button(f"? Restart {agent['name']}", key=f"restart_{agent['id']}"):
+                    if st.button(f"🔄 Restart {agent['name']}", key=f"restart_{agent['id']}"):
                         st.info(f"{agent['name']} restarted")
                     
-                    if st.button(f"? Maintenance Mode", key=f"maintenance_{agent['id']}"):
+                    if st.button(f"🔧 Maintenance Mode", key=f"maintenance_{agent['id']}"):
                         st.warning(f"{agent['name']} in maintenance mode")
                 
                 with col2:
                     st.markdown("**Emergency Controls:**")
-                    if st.button(f"? Kill Switch", key=f"kill_{agent['id']}", type="secondary"):
+                    if st.button(f"🔴 Kill Switch", key=f"kill_{agent['id']}", type="secondary"):
                         st.error(f"Kill switch activated for {agent['name']}")
                     
-                    if st.button(f"?️ Force Guardrails", key=f"guardrails_{agent['id']}"):
+                    if st.button(f"🛡️ Force Guardrails", key=f"guardrails_{agent['id']}"):
                         st.warning(f"Guardrails enforced for {agent['name']}")
                 
                 # Configuration
@@ -4303,15 +4598,15 @@ def payment_instruction_entry():
         st.rerun()
     
     # Agentic Pattern Information
-    st.markdown("### ? Agentic Pattern Implementation")
+    st.markdown("### 🔄 Agentic Pattern Implementation")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("**Primary Pattern:**")
-        st.success("? Orchestration")
+        st.success("🎯 Orchestration")
         st.markdown("*Coordinates multiple agents and workflows*")
     with col2:
         st.markdown("**Secondary Patterns:**")
-        st.info("? Tool Use")
+        st.info("🛠️ Tool Use")
         st.info("\U0001F9D0 Critic/Reviewer")
     with col3:
         st.markdown("**Active Agents:**")
@@ -4339,7 +4634,7 @@ def payment_instruction_entry():
     cols = st.columns(2)
     for i, instruction in enumerate(sample_instructions):
         with cols[i % 2]:
-            if st.button(f"? {instruction}", key=f"sample_{i}"):
+            if st.button(f"📝 {instruction}", key=f"sample_{i}"):
                 st.session_state['sample_instruction'] = instruction
                 st.rerun()
     
@@ -4360,14 +4655,9 @@ def payment_instruction_entry():
     col1, col2 = st.columns([1, 3])
     with col1:
         if st.button("Extract Intent", type="primary"):
-            st.session_state['extracted_intent'] = {
-                'amount': '$2,000,000 CAD',
-                'beneficiary': 'Vendor X',
-                'date': 'Friday',
-                'urgency': 'High',
-                'confidence': 0.92
-            }
-            st.session_state['current_page'] = 'intent_verification'
+            # Parse the instruction text dynamically
+            parsed_intent = parse_payment_intent(instruction_text)
+            st.session_state['extracted_intent'] = parsed_intent
             st.rerun()
     
     # Show parsed intent if available
@@ -4401,6 +4691,7 @@ def payment_instruction_entry():
         with col2:
             if st.button("Retry Parsing"):
                 del st.session_state['extracted_intent']
+                st.session_state['sample_instruction'] = ""  # Clear the sample instruction
                 st.rerun()
 
 def intent_verification():
@@ -4411,10 +4702,10 @@ def intent_verification():
         st.rerun()
     
     # Agentic Pattern Analysis
-    st.markdown("### ? Pattern Analysis")
+    st.markdown("### 🔄 Pattern Analysis")
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown("**Reflection Pattern ?**")
+        st.markdown("**Reflection Pattern 🔄**")
         st.markdown("*Self-evaluating payment decision*")
         st.success("✅ Confidence: 87%")
     with col2:
@@ -4422,9 +4713,9 @@ def intent_verification():
         st.markdown("*Secondary validation layer*")
         st.warning("⚠️ Review Required")
     with col3:
-        st.markdown("**Memory & Learning ?**")
+        st.markdown("**Memory & Learning 🧠**")
         st.markdown("*Pattern recognition from history*")
-        st.info("? Learning: Active")
+        st.info("🧠 Learning: Active")
     
     st.markdown("---")
     
@@ -4754,32 +5045,32 @@ def process_flow_diagram():
     # Define nodes and their positions with better spacing and visual hierarchy
     nodes = [
         # Input Layer
-        {"id": "user_input", "label": "User Input<br/>? Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF", "size": 140, "category": "input"},
+        {"id": "user_input", "label": "User Input<br/>💬 Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF", "size": 140, "category": "input"},
         
         # Agent Processing Layer - Main Flow
-        {"id": "intent_agent", "label": "Intent Agent<br/>? Parse & Extract<br/>Payment Details", "x": 3, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
-        {"id": "verification_agent", "label": "Verification Agent<br/>? Account & Compliance<br/>Validation", "x": 6, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
-        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>? Pattern Analysis<br/>& Risk Assessment", "x": 9, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
+        {"id": "intent_agent", "label": "Intent Agent<br/>🔍 Parse & Extract<br/>Payment Details", "x": 3, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
+        {"id": "verification_agent", "label": "Verification Agent<br/>✅ Account & Compliance<br/>Validation", "x": 6, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
+        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>🔍 Pattern Analysis<br/>& Risk Assessment", "x": 9, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
         
         # Decision Points
         {"id": "decision_point", "label": "Decision Point<br/>⚖️ Risk Assessment<br/>& Routing Logic", "x": 12, "y": 8, "color": "#FF9500", "size": 140, "category": "decision"},
         
         # Human Interaction Points
-        {"id": "human_review", "label": "Human Review<br/>? Treasury Operations<br/>Manual Approval", "x": 15, "y": 6, "color": "#FF3B30", "size": 130, "category": "human"},
-        {"id": "escalation", "label": "Escalation<br/>? Senior Management<br/>High-Risk Cases", "x": 15, "y": 10, "color": "#FF3B30", "size": 130, "category": "human"},
+        {"id": "human_review", "label": "Human Review<br/>👥 Treasury Operations<br/>Manual Approval", "x": 15, "y": 6, "color": "#FF3B30", "size": 130, "category": "human"},
+        {"id": "escalation", "label": "Escalation<br/>⚠️ Senior Management<br/>High-Risk Cases", "x": 15, "y": 10, "color": "#FF3B30", "size": 130, "category": "human"},
         
         # Execution Layer
-        {"id": "payment_execution", "label": "Payment Execution<br/>? Core Banking API<br/>Transaction Processing", "x": 18, "y": 8, "color": "#007AFF", "size": 140, "category": "execution"},
+        {"id": "payment_execution", "label": "Payment Execution<br/>💳 Core Banking API<br/>Transaction Processing", "x": 18, "y": 8, "color": "#007AFF", "size": 140, "category": "execution"},
         
         # Output Layer
         {"id": "confirmation", "label": "Confirmation<br/>✅ Transaction Complete<br/>Audit Trail Generated", "x": 21, "y": 8, "color": "#34C759", "size": 140, "category": "output"},
         
         # Monitoring Layer
-        {"id": "monitoring", "label": "Monitoring<br/>? Real-time Tracking<br/>& Compliance Logging", "x": 12, "y": 4, "color": "#8E8E93", "size": 120, "category": "monitoring"},
+        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 12, "y": 4, "color": "#8E8E93", "size": 120, "category": "monitoring"},
         
         # Data Sources
-        {"id": "compliance_db", "label": "Compliance DB<br/>?️ Sanctions/KYC<br/>Data Sources", "x": 3, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
-        {"id": "payment_api", "label": "Payment API<br/>? Core Banking<br/>Gateway", "x": 18, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
+        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 3, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
+        {"id": "payment_api", "label": "Payment API<br/>🔌 Core Banking<br/>Gateway", "x": 18, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
     ]
     
     # Define edges (connections) - Enhanced with better visual flow
@@ -5223,19 +5514,19 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("? Agentic Catalog", key="nav_catalog"):
+        if st.button("🤖 Agentic Catalog", key="nav_catalog"):
             st.session_state['current_page'] = 'landing'
             st.rerun()
-        if st.button("? Governance Workflow", key="nav_governance"):
+        if st.button("🛡️ Governance Workflow", key="nav_governance"):
             st.session_state['current_page'] = 'governance'
             st.rerun()
-        if st.button("? Runtime Monitoring", key="nav_monitoring"):
+        if st.button("📊 Runtime Monitoring", key="nav_monitoring"):
             st.session_state['current_page'] = 'monitoring'
             st.rerun()
-        if st.button("? Escalation Console", key="nav_escalation"):
+        if st.button("⚠️ Escalation Console", key="nav_escalation"):
             st.session_state['current_page'] = 'escalation'
             st.rerun()
-        if st.button("? Audit & Reporting", key="nav_audit"):
+        if st.button("📋 Audit & Reporting", key="nav_audit"):
             st.session_state['current_page'] = 'audit'
             st.rerun()
         
@@ -5250,22 +5541,22 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("? Payment Instruction", key="nav_payment"):
+        if st.button("💰 Payment Instruction", key="nav_payment"):
             st.session_state['current_page'] = 'payment_instruction'
             st.rerun()
-        if st.button("? Intent Verification", key="nav_intent"):
+        if st.button("✅ Intent Verification", key="nav_intent"):
             st.session_state['current_page'] = 'intent_verification'
             st.rerun()
-        if st.button("? Scenario Summary", key="nav_scenario"):
+        if st.button("📄 Scenario Summary", key="nav_scenario"):
             st.session_state['current_page'] = 'scenario_summary'
             st.rerun()
-        if st.button("? Payment Escalation", key="nav_payment_escalation"):
+        if st.button("🚨 Payment Escalation", key="nav_payment_escalation"):
             st.session_state['current_page'] = 'payment_escalation'
             st.rerun()
-        if st.button("? Payment Audit", key="nav_payment_audit"):
+        if st.button("🔍 Payment Audit", key="nav_payment_audit"):
             st.session_state['current_page'] = 'payment_audit'
             st.rerun()
-        if st.button("? Process Flow", key="nav_process_flow"):
+        if st.button("🔄 Process Flow", key="nav_process_flow"):
             st.session_state['current_page'] = 'process_flow'
             st.rerun()
     
