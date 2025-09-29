@@ -813,6 +813,7 @@ monitoring:
         'validation_results': validation_results
     }
 
+@st.cache_data(ttl=300)  # Cache for 5 minutes
 def load_agent_data():
     return {
         'agents': [
@@ -1851,6 +1852,7 @@ def load_agent_data():
         ]
     }
 
+@st.cache_data(ttl=600)  # Cache for 10 minutes
 def get_status_badge(status):
     status_map = {
         'approved': {'text': 'Approved ✅', 'class': 'status-approved'},
@@ -1881,25 +1883,35 @@ def landing_page():
     with col4:
         lifecycle_filter = st.selectbox("Lifecycle", ["All"] + list(set([agent['status'] for agent in agents])))
     
-    # Filter agents
-    filtered_agents = agents
-    if search_term:
-        filtered_agents = [agent for agent in filtered_agents if 
-                          search_term.lower() in agent['name'].lower() or 
-                          search_term.lower() in agent['useCase'].lower() or 
-                          search_term.lower() in agent['patternName'].lower() or
-                          search_term.lower() in agent['patternType'].lower()]
+    # Filter agents with caching for better performance
+    @st.cache_data(ttl=60)  # Cache for 1 minute
+    def filter_agents(agents, search_term, pattern_filter, risk_filter, lifecycle_filter):
+        filtered_agents = agents
+        if search_term:
+            filtered_agents = [agent for agent in filtered_agents if 
+                              search_term.lower() in agent['name'].lower() or 
+                              search_term.lower() in agent['useCase'].lower() or 
+                              search_term.lower() in agent['patternName'].lower() or
+                              search_term.lower() in agent['patternType'].lower()]
+        
+        if pattern_filter != "All":
+            filtered_agents = [agent for agent in filtered_agents if agent['patternName'] == pattern_filter]
+        
+        if risk_filter != "All":
+            filtered_agents = [agent for agent in filtered_agents if agent['risk'] == risk_filter]
+        
+        if lifecycle_filter != "All":
+            filtered_agents = [agent for agent in filtered_agents if agent['status'] == lifecycle_filter]
+        
+        return filtered_agents
     
-    if pattern_filter != "All":
-        filtered_agents = [agent for agent in filtered_agents if agent['patternName'] == pattern_filter]
-    
-    if risk_filter != "All":
-        filtered_agents = [agent for agent in filtered_agents if agent['risk'] == risk_filter]
-    
-    if lifecycle_filter != "All":
-        filtered_agents = [agent for agent in filtered_agents if agent['status'] == lifecycle_filter]
+    filtered_agents = filter_agents(agents, search_term, pattern_filter, risk_filter, lifecycle_filter)
     
     # Main tabs for Pattern Cards, Tools Layer, and Agent Cards
+    # Use lazy loading for better performance
+    if len(filtered_agents) > 10:
+        st.info(f"Showing {len(filtered_agents)} agents. Consider using filters to narrow down results for better performance.")
+    
     main_tab1, main_tab2, main_tab3 = st.tabs(["🔄 Pattern Cards", "🛠️ Tools Layer", "🤖 Agent Cards"])
     
     with main_tab1:
@@ -3394,8 +3406,20 @@ def landing_page():
         # Display agent cards
         st.markdown("### Agent Cards")
         
+        # Add pagination for better performance
+        if len(filtered_agents) > 6:
+            page_size = 6
+            total_pages = (len(filtered_agents) + page_size - 1) // page_size
+            page = st.selectbox("Page", range(1, total_pages + 1), key="agent_page")
+            start_idx = (page - 1) * page_size
+            end_idx = min(start_idx + page_size, len(filtered_agents))
+            agents_to_show = filtered_agents[start_idx:end_idx]
+            st.info(f"Showing {len(agents_to_show)} of {len(filtered_agents)} agents (Page {page} of {total_pages})")
+        else:
+            agents_to_show = filtered_agents
+        
         cols = st.columns(2)
-        for i, agent in enumerate(filtered_agents):
+        for i, agent in enumerate(agents_to_show):
             with cols[i % 2]:
                 status_info = get_status_badge(agent['status'])
                 pattern_type_emoji = {
@@ -4182,11 +4206,13 @@ def runtime_monitoring():
     st.markdown("### 📊 System Overview")
     
     # Safe monitoring data extraction with error handling
+    @st.cache_data(ttl=60)  # Cache for 1 minute
     def get_monitoring_value(agent, key, default=0):
         if 'monitoring' in agent and isinstance(agent['monitoring'], dict):
             return agent['monitoring'].get(key, default)
         return default
     
+    @st.cache_data(ttl=60)  # Cache for 1 minute
     def get_uptime_value(agent):
         if 'monitoring' in agent and isinstance(agent['monitoring'], dict):
             uptime_str = agent['monitoring'].get('uptime', '0%')
@@ -4233,8 +4259,41 @@ def runtime_monitoring():
     if risk_filter != "All":
         filtered_agents = [a for a in filtered_agents if a['risk'] == risk_filter]
     
-    # Display agent monitoring cards
+    # Display agent monitoring cards with performance optimization
+    if not filtered_agents:
+        st.info("No agents match the current filters.")
+        return
+    
+    # Pre-compute expensive operations outside the loop
+    agent_data = []
     for agent in filtered_agents:
+        uptime = get_uptime_value(agent)
+        calls = get_monitoring_value(agent, 'callsThisWeek', 0)
+        escalations = get_monitoring_value(agent, 'escalations', 0)
+        guardrails = get_monitoring_value(agent, 'guardrailTriggers', 0)
+        
+        agent_data.append({
+            'agent': agent,
+            'uptime': uptime,
+            'calls': calls,
+            'escalations': escalations,
+            'guardrails': guardrails
+        })
+    
+    # Add pagination for monitoring page
+    if len(agent_data) > 8:
+        page_size = 8
+        total_pages = (len(agent_data) + page_size - 1) // page_size
+        page = st.selectbox("Page", range(1, total_pages + 1), key="monitoring_page")
+        start_idx = (page - 1) * page_size
+        end_idx = min(start_idx + page_size, len(agent_data))
+        agents_to_show = agent_data[start_idx:end_idx]
+        st.info(f"Showing {len(agents_to_show)} of {len(agent_data)} agents (Page {page} of {total_pages})")
+    else:
+        agents_to_show = agent_data
+    
+    for data in agents_to_show:
+        agent = data['agent']
         with st.expander(f"🤖 {agent['name']} - {agent['patternName']} ({agent['status'].title()})", expanded=False):
             
             # Agent header with status indicators
@@ -4376,27 +4435,34 @@ def runtime_monitoring():
                 # Generate sample trend data for the last 7 days
                 dates = pd.date_range('2025-01-15', periods=7, freq='D')
                 
-                # API calls trend
-                base_calls = get_monitoring_value(agent, 'callsThisWeek', 0)
-                calls_trend = [base_calls + i*10 for i in range(7)]
-                calls_df = pd.DataFrame({'Date': dates, 'API Calls': calls_trend})
+                # API calls trend with caching
+                @st.cache_data(ttl=300)  # Cache for 5 minutes
+                def create_monitoring_charts(agent_id, base_calls):
+                    dates = pd.date_range('2025-01-15', periods=7, freq='D').strftime('%Y-%m-%d')
+                    
+                    # API calls trend
+                    calls_trend = [base_calls + i*10 for i in range(7)]
+                    calls_df = pd.DataFrame({'Date': dates, 'API Calls': calls_trend})
+                    fig_calls = px.line(calls_df, x='Date', y='API Calls', title='API Calls Trend (7 days)')
+                    
+                    # Response time trend
+                    response_times = [245, 238, 252, 241, 248, 235, 242]
+                    response_df = pd.DataFrame({'Date': dates, 'Response Time (ms)': response_times})
+                    fig_response = px.line(response_df, x='Date', y='Response Time (ms)', title='Response Time Trend (7 days)')
+                    
+                    # Error rate trend
+                    error_rates = [0.8, 1.2, 0.6, 0.9, 1.1, 0.7, 0.8]
+                    error_df = pd.DataFrame({'Date': dates, 'Error Rate (%)': error_rates})
+                    fig_error = px.line(error_df, x='Date', y='Error Rate (%)', title='Error Rate Trend (7 days)')
+                    
+                    return fig_calls, fig_response, fig_error
                 
-                fig_calls = px.line(calls_df, x='Date', y='API Calls', title='API Calls Trend (7 days)')
-                st.plotly_chart(fig_calls, use_container_width=True, key="monitoring_calls_chart")
+                base_calls = data['calls']
+                fig_calls, fig_response, fig_error = create_monitoring_charts(agent['id'], base_calls)
                 
-                # Response time trend
-                response_times = [245, 238, 252, 241, 248, 235, 242]
-                response_df = pd.DataFrame({'Date': dates, 'Response Time (ms)': response_times})
-                
-                fig_response = px.line(response_df, x='Date', y='Response Time (ms)', title='Response Time Trend (7 days)')
-                st.plotly_chart(fig_response, use_container_width=True, key="monitoring_response_chart")
-                
-                # Error rate trend
-                error_rates = [0.8, 1.2, 0.6, 0.9, 1.1, 0.7, 0.8]
-                error_df = pd.DataFrame({'Date': dates, 'Error Rate (%)': error_rates})
-                
-                fig_error = px.line(error_df, x='Date', y='Error Rate (%)', title='Error Rate Trend (7 days)')
-                st.plotly_chart(fig_error, use_container_width=True, key="monitoring_error_chart")
+                st.plotly_chart(fig_calls, use_container_width=True, key=f"monitoring_calls_chart_{agent['id']}")
+                st.plotly_chart(fig_response, use_container_width=True, key=f"monitoring_response_chart_{agent['id']}")
+                st.plotly_chart(fig_error, use_container_width=True, key=f"monitoring_error_chart_{agent['id']}")
             
             with tab4:
                 st.markdown("#### Runtime Controls")
@@ -5026,6 +5092,240 @@ def payment_audit():
                   annotation_text="Threshold: 0.65")
     st.plotly_chart(fig, use_container_width=True, key="payment_audit_anomaly_trends")
 
+@st.cache_data(ttl=1800)  # Cache for 30 minutes
+def create_process_flow_chart():
+    """Create the process flow chart with caching for better performance"""
+    # iOS-Style Process Flow Diagram using Plotly
+    # Define nodes with iOS-inspired design and spacing
+    nodes = [
+        # Input Layer - iOS Blue
+        {"id": "user_input", "label": "User Input<br/>💬 Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF", "size": 160, "category": "input", "shadow": True},
+        
+        # Agent Processing Layer - iOS Green with gradient
+        {"id": "intent_agent", "label": "Intent Agent<br/>🔍 Parse & Extract<br/>Payment Details", "x": 3, "y": 8, "color": "#30D158", "size": 150, "category": "agent", "shadow": True},
+        {"id": "verification_agent", "label": "Verification Agent<br/>✅ Account & Compliance<br/>Validation", "x": 6, "y": 8, "color": "#30D158", "size": 150, "category": "agent", "shadow": True},
+        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>🔍 Pattern Analysis<br/>& Risk Assessment", "x": 9, "y": 8, "color": "#30D158", "size": 150, "category": "agent", "shadow": True},
+        
+        # Decision Points - iOS Orange
+        {"id": "decision_point", "label": "Decision Point<br/>⚖️ Risk Assessment<br/>& Routing Logic", "x": 12, "y": 8, "color": "#FF9F0A", "size": 160, "category": "decision", "shadow": True},
+        
+        # Human Interaction Points - iOS Red
+        {"id": "human_review", "label": "Human Review<br/>👥 Treasury Operations<br/>Manual Approval", "x": 15, "y": 6, "color": "#FF3B30", "size": 150, "category": "human", "shadow": True},
+        {"id": "escalation", "label": "Escalation<br/>⚠️ Senior Management<br/>High-Risk Cases", "x": 15, "y": 10, "color": "#FF3B30", "size": 150, "category": "human", "shadow": True},
+        
+        # Execution Layer - iOS Blue
+        {"id": "payment_execution", "label": "Payment Execution<br/>💳 Core Banking API<br/>Transaction Processing", "x": 18, "y": 8, "color": "#007AFF", "size": 160, "category": "execution", "shadow": True},
+        
+        # Output Layer - iOS Green
+        {"id": "confirmation", "label": "Confirmation<br/>✅ Transaction Complete<br/>Audit Trail Generated", "x": 21, "y": 8, "color": "#30D158", "size": 160, "category": "output", "shadow": True},
+        
+        # Monitoring Layer - iOS Gray
+        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 12, "y": 4, "color": "#8E8E93", "size": 140, "category": "monitoring", "shadow": False},
+        
+        # Data Sources - iOS Gray with subtle styling
+        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 3, "y": 6, "color": "#AEAEB2", "size": 130, "category": "data", "shadow": False},
+        {"id": "payment_api", "label": "Payment API<br/>🔌 Core Banking<br/>Gateway", "x": 18, "y": 6, "color": "#AEAEB2", "size": 130, "category": "data", "shadow": False},
+    ]
+    
+    # Define edges (connections) - iOS-style with smooth curves and modern styling
+    edges = [
+        # Main flow - Primary path with iOS blue
+        {"from": "user_input", "to": "intent_agent", "label": "Natural Language", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "intent_agent", "to": "verification_agent", "label": "Structured Data", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "verification_agent", "to": "anomaly_agent", "label": "Validated Data", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "anomaly_agent", "to": "decision_point", "label": "Risk Score", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "decision_point", "to": "payment_execution", "label": "Low Risk", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "payment_execution", "to": "confirmation", "label": "Success", "type": "main", "width": 4, "curve": 0.1},
+        
+        # Data connections - Supporting systems with subtle styling
+        {"from": "compliance_db", "to": "verification_agent", "label": "Compliance Check", "type": "data", "width": 2, "curve": 0.2},
+        {"from": "payment_api", "to": "payment_execution", "label": "API Call", "type": "data", "width": 2, "curve": 0.2},
+        
+        # Escalation paths - Human intervention with iOS red
+        {"from": "decision_point", "to": "human_review", "label": "Medium Risk", "type": "escalation", "width": 3, "curve": 0.3},
+        {"from": "decision_point", "to": "escalation", "label": "High Risk", "type": "escalation", "width": 3, "curve": 0.3},
+        {"from": "human_review", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 3, "curve": 0.2},
+        {"from": "escalation", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 3, "curve": 0.2},
+        
+        # Monitoring connections - Oversight with subtle gray
+        {"from": "monitoring", "to": "intent_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "verification_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "anomaly_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "payment_execution", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+    ]
+    
+    # Create the iOS-style diagram
+    fig = go.Figure()
+    
+    # Define iOS-style edge colors and styles
+    edge_styles = {
+        "main": {"color": "#007AFF", "dash": "solid", "opacity": 0.9},
+        "escalation": {"color": "#FF3B30", "dash": "solid", "opacity": 0.8},
+        "data": {"color": "#AEAEB2", "dash": "dot", "opacity": 0.6},
+        "monitoring": {"color": "#8E8E93", "dash": "dot", "opacity": 0.5}
+    }
+    
+    # Add edges with iOS-style curved connections
+    for edge in edges:
+        from_node = next(n for n in nodes if n["id"] == edge["from"])
+        to_node = next(n for n in nodes if n["id"] == edge["to"])
+        
+        style = edge_styles.get(edge["type"], {"color": "#8E8E93", "dash": "solid", "opacity": 0.8})
+        
+        # Create curved path for iOS-style connections
+        curve_factor = edge.get("curve", 0.1)
+        mid_x = (from_node["x"] + to_node["x"]) / 2
+        mid_y = (from_node["y"] + to_node["y"]) / 2
+        
+        # Calculate control points for smooth curves
+        if from_node["y"] == to_node["y"]:  # Horizontal connection
+            control_x = mid_x
+            control_y = mid_y + curve_factor
+        else:  # Diagonal connection
+            control_x = mid_x + curve_factor
+            control_y = mid_y
+        
+        # Create smooth curve using quadratic bezier
+        import numpy as np
+        t = np.linspace(0, 1, 50)
+        x_curve = (1-t)**2 * from_node["x"] + 2*(1-t)*t * control_x + t**2 * to_node["x"]
+        y_curve = (1-t)**2 * from_node["y"] + 2*(1-t)*t * control_y + t**2 * to_node["y"]
+        
+        fig.add_trace(go.Scatter(
+            x=x_curve,
+            y=y_curve,
+            mode='lines',
+            line=dict(
+                color=style["color"], 
+                width=edge["width"], 
+                dash=style["dash"],
+                shape='spline'
+            ),
+            showlegend=False,
+            hoverinfo='skip',
+            opacity=style["opacity"]
+        ))
+        
+        # Add iOS-style edge labels with modern typography
+        label_offset_x = 0.4 if edge["type"] == "escalation" else 0.2
+        label_offset_y = 0.3 if edge["type"] == "data" else 0.1
+        
+        fig.add_annotation(
+            x=mid_x + label_offset_x,
+            y=mid_y + label_offset_y,
+            text=f"<b>{edge['label']}</b>",
+            showarrow=False,
+            font=dict(
+                size=12, 
+                color="#1D1D1F", 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            ),
+            bgcolor="rgba(255,255,255,0.95)",
+            bordercolor=style["color"],
+            borderwidth=1.5,
+            borderpad=8,
+            opacity=0.95,
+            align="center"
+        )
+    
+    # Add nodes with iOS-style design and shadows
+    for node in nodes:
+        # iOS-style node styling with shadows and modern effects
+        node_style = {
+            "input": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "agent": {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True},
+            "decision": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "human": {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True},
+            "execution": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "output": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "monitoring": {"border_width": 0, "opacity": 0.8, "shadow": False, "gradient": False},
+            "data": {"border_width": 0, "opacity": 0.75, "shadow": False, "gradient": False}
+        }
+        
+        style = node_style.get(node["category"], {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True})
+        
+        # Add shadow effect for iOS-style depth
+        if style["shadow"] and node.get("shadow", False):
+            fig.add_trace(go.Scatter(
+                x=[node["x"] + 0.1],
+                y=[node["y"] - 0.1],
+                mode='markers',
+                marker=dict(
+                    size=node["size"],
+                    color='rgba(0,0,0,0.15)',
+                    opacity=0.3
+                ),
+                showlegend=False,
+                hoverinfo='skip'
+            ))
+        
+        # Main node with iOS-style rounded appearance
+        fig.add_trace(go.Scatter(
+            x=[node["x"]],
+            y=[node["y"]],
+            mode='markers+text',
+            marker=dict(
+                size=node["size"],
+                color=node["color"],
+                line=dict(width=0),
+                opacity=style["opacity"],
+                symbol='circle'
+            ),
+            text=node["label"],
+            textposition="middle center",
+            textfont=dict(
+                size=13, 
+                color="white", 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            ),
+            showlegend=False,
+            hovertemplate=f"<b>{node['label'].split('<br/>')[0]}</b><br>" +
+                         f"<br>".join(node['label'].split('<br/>')[1:]) +
+                         f"<br><br><b>Category:</b> {node['category'].title()}" +
+                         "<extra></extra>"
+        ))
+    
+    # Update layout with iOS-style design
+    fig.update_layout(
+        title=dict(
+            text="High-Value Payment Processing Workflow",
+            font=dict(
+                size=28, 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", 
+                color="#1D1D1F"
+            ),
+            x=0.5,
+            y=0.95
+        ),
+        xaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(0,0,0,0.05)',
+            showticklabels=False, 
+            zeroline=False,
+            range=[-2, 23],
+            gridwidth=1
+        ),
+        yaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(0,0,0,0.05)',
+            showticklabels=False, 
+            zeroline=False,
+            range=[2, 12],
+            gridwidth=1
+        ),
+        plot_bgcolor='rgba(242,242,247,0.8)',
+        paper_bgcolor='rgba(255,255,255,1.0)',
+        width=1600,
+        height=800,
+        margin=dict(l=100, r=100, t=140, b=100),
+        font=dict(
+            family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", 
+            size=12
+        )
+    )
+    
+    return fig
+
 def process_flow_diagram():
     st.markdown('<h1 class="main-header">🔄 End-to-End Process Flow</h1>', unsafe_allow_html=True)
     
@@ -5270,6 +5570,8 @@ def process_flow_diagram():
         )
     )
     
+    # Use cached chart for better performance
+    fig = create_process_flow_chart()
     st.plotly_chart(fig, use_container_width=True, key="process_flow_diagram")
     
     # Add iOS-style visual legend
@@ -5555,9 +5857,15 @@ scrape_configs:
     return yaml.dump(combined_manifest, default_flow_style=False, indent=2)
 
 def main():
-    # Initialize session state
+    # Initialize session state with performance optimizations
     if 'current_page' not in st.session_state:
         st.session_state['current_page'] = 'landing'
+
+    # Performance optimization: Cache expensive computations
+    if 'agent_data_cache' not in st.session_state:
+        st.session_state['agent_data_cache'] = None
+    if 'last_cache_time' not in st.session_state:
+        st.session_state['last_cache_time'] = 0
     
     # iOS-style Sidebar navigation
     with st.sidebar:
