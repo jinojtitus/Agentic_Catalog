@@ -3278,7 +3278,7 @@ def landing_page():
         
         pattern_tool_mapping = [
             {
-                "pattern": "Reflection ?",
+                "pattern": "Reflection 🔄",
                 "primary_tools": "LLM + Critic Agent + Logging DB",
                 "scenarios": [
                     "Financial Document Review (GPT-4 + Azure AI Content Safety)",
@@ -3288,7 +3288,7 @@ def landing_page():
                 "enterprise_benefits": "Self-improving systems, reduced human oversight, higher accuracy"
             },
             {
-                "pattern": "Planning ?",
+                "pattern": "Planning 📋",
                 "primary_tools": "LLM + Orchestration Layer + Workflow Engine",
                 "scenarios": [
                     "Supply Chain Optimization (Claude + Temporal + PostgreSQL)",
@@ -3298,7 +3298,7 @@ def landing_page():
                 "enterprise_benefits": "Complex task breakdown, dynamic adaptation, resource optimization"
             },
             {
-                "pattern": "Tool Use ?",
+                "pattern": "Tool Use 🛠️",
                 "primary_tools": "API Catalog + MCPs + Validation Layer",
                 "scenarios": [
                     "Customer Onboarding (API Gateway + CRM + Billing Systems)",
@@ -3308,7 +3308,7 @@ def landing_page():
                 "enterprise_benefits": "Seamless system integration, automated workflows, reduced manual work"
             },
             {
-                "pattern": "Memory & Learning ?",
+                "pattern": "Memory & Learning 🧠",
                 "primary_tools": "Vector DBs + Embeddings + Persistent Storage",
                 "scenarios": [
                     "Knowledge Management (Pinecone + OpenAI Embeddings + Redis)",
@@ -3318,7 +3318,7 @@ def landing_page():
                 "enterprise_benefits": "Continuous learning, personalized experiences, knowledge retention"
             },
             {
-                "pattern": "Collaboration ?",
+                "pattern": "Collaboration 🤝",
                 "primary_tools": "Message Queues + Coordination Protocols + Shared State",
                 "scenarios": [
                     "Cross-Department Coordination (LangGraph + MCPs + RBAC)",
@@ -3338,7 +3338,7 @@ def landing_page():
                 "enterprise_benefits": "Quality control, regulatory compliance, risk mitigation"
             },
             {
-                "pattern": "Exploration ?",
+                "pattern": "Exploration 🔬",
                 "primary_tools": "Simulation Engines + Scenario Generators + Analytics",
                 "scenarios": [
                     "Risk Assessment (BigQuery + Simulation Engine + Decision Support)",
@@ -3348,7 +3348,7 @@ def landing_page():
                 "enterprise_benefits": "Informed decision-making, risk mitigation, strategic planning"
             },
             {
-                "pattern": "Orchestration ?",
+                "pattern": "Orchestration 🎯",
                 "primary_tools": "Workflow Engines + Monitoring + Resource Management",
                 "scenarios": [
                     "Customer Service Hub (GPT-4 + LangGraph + Multi-channel APIs)",
@@ -4248,16 +4248,16 @@ def runtime_monitoring():
                 if uptime >= 99.0:
                     st.success("✅ Healthy")
                 elif uptime >= 95.0:
-                    st.warning("? Warning")
+                    st.warning("⚠️ Warning")
                 else:
-                    st.error("? Critical")
+                    st.error("❌ Critical")
             with col3:
                 st.markdown(f"**Risk:** {agent['risk']}")
             with col4:
                 st.markdown(f"**Owner:** {agent['owner']}")
             
             # Performance metrics in tabs
-            tab1, tab2, tab3, tab4 = st.tabs(["? Performance", "?️ Guardrails", "? Trends", "⚙️ Controls"])
+            tab1, tab2, tab3, tab4 = st.tabs(["📊 Performance", "🛡️ Guardrails", "📈 Trends", "⚙️ Controls"])
             
             with tab1:
                 st.markdown("#### Key Performance Indicators")
@@ -4353,7 +4353,7 @@ def runtime_monitoring():
                     
                     st.markdown("**Kill Switch:**")
                     kill_switch = guardrails['killSwitch']
-                    status = "? Active" if kill_switch['enabled'] else "? Disabled"
+                    status = "🟢 Active" if kill_switch['enabled'] else "🔴 Disabled"
                     st.write(f"• Status: {status}")
                     for trigger in kill_switch['triggers']:
                         st.write(f"  - {trigger}")
@@ -4367,7 +4367,7 @@ def runtime_monitoring():
                 ]
                 
                 for event in events:
-                    severity_icon = "⚠️" if event['severity'] == 'warning' else "ℹ️" if event['severity'] == 'info' else "?"
+                    severity_icon = "⚠️" if event['severity'] == 'warning' else "ℹ️" if event['severity'] == 'info' else "❌"
                     st.write(f"{severity_icon} **{event['time']}** - {event['type']}: {event['message']}")
             
             with tab3:
@@ -4433,7 +4433,7 @@ def runtime_monitoring():
     
     # System-wide charts
     st.markdown("---")
-    st.markdown("### ? System-Wide Trends")
+    st.markdown("### 📈 System-Wide Trends")
     
     col1, col2 = st.columns(2)
     
@@ -4552,7 +4552,7 @@ def audit_reporting():
     st.markdown("### Compliance Heatmap")
     compliance_data = pd.DataFrame({
         'Agent Name': ['Retriever v1', 'Orchestrator v2', 'Compliance v1', 'Payment Processor v1', 'Negotiator v1'],
-        'Pattern Type': ['? Retrieval', '? Orchestration', '? Monitoring', '? Orchestration', '? Reasoning'],
+        'Pattern Type': ['🔍 Retrieval', '🎯 Orchestration', '📊 Monitoring', '🎯 Orchestration', '🧠 Reasoning'],
         'Division': ['Operations', 'Operations', 'Risk Management', 'Treasury Operations', 'Legal Operations'],
         'Risk Level': ['Medium', 'High', 'Low', 'High', 'High'],
         'GDPR': ['✅', '✅', '✅', '✅', '✅'],
@@ -4780,15 +4780,15 @@ def scenario_summary():
         st.rerun()
     
     # Pattern Implementation Summary
-    st.markdown("### ? Pattern Implementation Summary")
+    st.markdown("### 🔄 Pattern Implementation Summary")
     col1, col2, col3 = st.columns(3)
     with col1:
         st.markdown("**Primary Pattern:**")
-        st.success("? Orchestration")
+        st.success("🎯 Orchestration")
         st.markdown("*Coordinated 3 agents successfully*")
     with col2:
         st.markdown("**Secondary Patterns:**")
-        st.info("? Tool Use - API calls")
+        st.info("🛠️ Tool Use - API calls")
         st.info("\U0001F9D0 Critic/Reviewer - Validation")
     with col3:
         st.markdown("**Pattern Performance:**")
@@ -4866,20 +4866,20 @@ def payment_escalation():
         st.rerun()
     
     # Agentic Pattern Escalation Analysis
-    st.markdown("### ? Pattern-Based Escalation Analysis")
+    st.markdown("### ⚠️ Pattern-Based Escalation Analysis")
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.markdown("**Orchestration Pattern ?**")
+        st.markdown("**Orchestration Pattern 🎯**")
         st.markdown("*Coordinating escalation workflow*")
         st.error("❌ Workflow Timeout")
     with col2:
-        st.markdown("**Reflection Pattern ?**")
+        st.markdown("**Reflection Pattern 🔄**")
         st.markdown("*Self-evaluating escalation decision*")
         st.warning("⚠️ Confidence: 65%")
     with col3:
         st.markdown("**Critic/Reviewer Pattern \U0001F9D0**")
         st.markdown("*Secondary validation required*")
-        st.info("? Review in Progress")
+        st.info("🔍 Review in Progress")
     
     st.markdown("---")
     
@@ -4897,7 +4897,7 @@ def payment_escalation():
         elif item["Status"] == "Pending":
             st.warning(f"⏳ **Level {item['Level']}:** {item['Action']} - {item['Status']} at {item['Time']}")
         else:
-            st.info(f"? **Level {item['Level']}:** {item['Action']} - {item['Status']} at {item['Time']}")
+            st.info(f"ℹ️ **Level {item['Level']}:** {item['Action']} - {item['Status']} at {item['Time']}")
     
     # Context panel
     st.markdown("### Context Panel")
@@ -4939,14 +4939,14 @@ def payment_audit():
         st.rerun()
     
     # Agentic Pattern Audit Analysis
-    st.markdown("### ? Pattern Performance Audit")
+    st.markdown("### 📊 Pattern Performance Audit")
     col1, col2, col3, col4 = st.columns(4)
     with col1:
-        st.markdown("**Orchestration ?**")
+        st.markdown("**Orchestration 🎯**")
         st.metric("Success Rate", "94%")
         st.metric("Avg Time", "2.3s")
     with col2:
-        st.markdown("**Reflection ?**")
+        st.markdown("**Reflection 🔄**")
         st.metric("Accuracy", "89%")
         st.metric("Confidence", "87%")
     with col3:
@@ -4954,7 +4954,7 @@ def payment_audit():
         st.metric("Catch Rate", "76%")
         st.metric("False Positives", "12%")
     with col4:
-        st.markdown("**Memory & Learning ?**")
+        st.markdown("**Memory & Learning 🧠**")
         st.metric("Learning Rate", "15%")
         st.metric("Pattern Updates", "23")
     
@@ -5027,7 +5027,7 @@ def payment_audit():
     st.plotly_chart(fig, use_container_width=True, key="payment_audit_anomaly_trends")
 
 def process_flow_diagram():
-    st.markdown('<h1 class="main-header">? End-to-End Process Flow</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">🔄 End-to-End Process Flow</h1>', unsafe_allow_html=True)
     
     if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
@@ -5035,140 +5035,177 @@ def process_flow_diagram():
     
     st.markdown("""
     <div style="text-align: center; margin-bottom: 2rem;">
-        <p style="font-size: 1.1rem; color: #6e6e73; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;">
+        <p style="font-size: 1.1rem; color: #6e6e73; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 400; letter-spacing: -0.01em;">
             Visual representation of the complete payment processing workflow with AI agents, human interactions, and escalation paths
         </p>
     </div>
     """, unsafe_allow_html=True)
     
-    # Process Flow Diagram using Plotly - Enhanced Design
-    # Define nodes and their positions with better spacing and visual hierarchy
+    # iOS-Style Process Flow Diagram using Plotly
+    # Define nodes with iOS-inspired design and spacing
     nodes = [
-        # Input Layer
-        {"id": "user_input", "label": "User Input<br/>💬 Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF", "size": 140, "category": "input"},
+        # Input Layer - iOS Blue
+        {"id": "user_input", "label": "User Input<br/>💬 Natural Language<br/>Payment Instruction", "x": 0, "y": 8, "color": "#007AFF", "size": 160, "category": "input", "shadow": True},
         
-        # Agent Processing Layer - Main Flow
-        {"id": "intent_agent", "label": "Intent Agent<br/>🔍 Parse & Extract<br/>Payment Details", "x": 3, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
-        {"id": "verification_agent", "label": "Verification Agent<br/>✅ Account & Compliance<br/>Validation", "x": 6, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
-        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>🔍 Pattern Analysis<br/>& Risk Assessment", "x": 9, "y": 8, "color": "#34C759", "size": 130, "category": "agent"},
+        # Agent Processing Layer - iOS Green with gradient
+        {"id": "intent_agent", "label": "Intent Agent<br/>🔍 Parse & Extract<br/>Payment Details", "x": 3, "y": 8, "color": "#30D158", "size": 150, "category": "agent", "shadow": True},
+        {"id": "verification_agent", "label": "Verification Agent<br/>✅ Account & Compliance<br/>Validation", "x": 6, "y": 8, "color": "#30D158", "size": 150, "category": "agent", "shadow": True},
+        {"id": "anomaly_agent", "label": "Anomaly Agent<br/>🔍 Pattern Analysis<br/>& Risk Assessment", "x": 9, "y": 8, "color": "#30D158", "size": 150, "category": "agent", "shadow": True},
         
-        # Decision Points
-        {"id": "decision_point", "label": "Decision Point<br/>⚖️ Risk Assessment<br/>& Routing Logic", "x": 12, "y": 8, "color": "#FF9500", "size": 140, "category": "decision"},
+        # Decision Points - iOS Orange
+        {"id": "decision_point", "label": "Decision Point<br/>⚖️ Risk Assessment<br/>& Routing Logic", "x": 12, "y": 8, "color": "#FF9F0A", "size": 160, "category": "decision", "shadow": True},
         
-        # Human Interaction Points
-        {"id": "human_review", "label": "Human Review<br/>👥 Treasury Operations<br/>Manual Approval", "x": 15, "y": 6, "color": "#FF3B30", "size": 130, "category": "human"},
-        {"id": "escalation", "label": "Escalation<br/>⚠️ Senior Management<br/>High-Risk Cases", "x": 15, "y": 10, "color": "#FF3B30", "size": 130, "category": "human"},
+        # Human Interaction Points - iOS Red
+        {"id": "human_review", "label": "Human Review<br/>👥 Treasury Operations<br/>Manual Approval", "x": 15, "y": 6, "color": "#FF3B30", "size": 150, "category": "human", "shadow": True},
+        {"id": "escalation", "label": "Escalation<br/>⚠️ Senior Management<br/>High-Risk Cases", "x": 15, "y": 10, "color": "#FF3B30", "size": 150, "category": "human", "shadow": True},
         
-        # Execution Layer
-        {"id": "payment_execution", "label": "Payment Execution<br/>💳 Core Banking API<br/>Transaction Processing", "x": 18, "y": 8, "color": "#007AFF", "size": 140, "category": "execution"},
+        # Execution Layer - iOS Blue
+        {"id": "payment_execution", "label": "Payment Execution<br/>💳 Core Banking API<br/>Transaction Processing", "x": 18, "y": 8, "color": "#007AFF", "size": 160, "category": "execution", "shadow": True},
         
-        # Output Layer
-        {"id": "confirmation", "label": "Confirmation<br/>✅ Transaction Complete<br/>Audit Trail Generated", "x": 21, "y": 8, "color": "#34C759", "size": 140, "category": "output"},
+        # Output Layer - iOS Green
+        {"id": "confirmation", "label": "Confirmation<br/>✅ Transaction Complete<br/>Audit Trail Generated", "x": 21, "y": 8, "color": "#30D158", "size": 160, "category": "output", "shadow": True},
         
-        # Monitoring Layer
-        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 12, "y": 4, "color": "#8E8E93", "size": 120, "category": "monitoring"},
+        # Monitoring Layer - iOS Gray
+        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 12, "y": 4, "color": "#8E8E93", "size": 140, "category": "monitoring", "shadow": False},
         
-        # Data Sources
-        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 3, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
-        {"id": "payment_api", "label": "Payment API<br/>🔌 Core Banking<br/>Gateway", "x": 18, "y": 6, "color": "#8E8E93", "size": 110, "category": "data"},
+        # Data Sources - iOS Gray with subtle styling
+        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 3, "y": 6, "color": "#AEAEB2", "size": 130, "category": "data", "shadow": False},
+        {"id": "payment_api", "label": "Payment API<br/>🔌 Core Banking<br/>Gateway", "x": 18, "y": 6, "color": "#AEAEB2", "size": 130, "category": "data", "shadow": False},
     ]
     
-    # Define edges (connections) - Enhanced with better visual flow
+    # Define edges (connections) - iOS-style with smooth curves and modern styling
     edges = [
-        # Main flow - Primary path
-        {"from": "user_input", "to": "intent_agent", "label": "Natural Language", "type": "main", "width": 3},
-        {"from": "intent_agent", "to": "verification_agent", "label": "Structured Data", "type": "main", "width": 3},
-        {"from": "verification_agent", "to": "anomaly_agent", "label": "Validated Data", "type": "main", "width": 3},
-        {"from": "anomaly_agent", "to": "decision_point", "label": "Risk Score", "type": "main", "width": 3},
-        {"from": "decision_point", "to": "payment_execution", "label": "Low Risk", "type": "main", "width": 3},
-        {"from": "payment_execution", "to": "confirmation", "label": "Success", "type": "main", "width": 3},
+        # Main flow - Primary path with iOS blue
+        {"from": "user_input", "to": "intent_agent", "label": "Natural Language", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "intent_agent", "to": "verification_agent", "label": "Structured Data", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "verification_agent", "to": "anomaly_agent", "label": "Validated Data", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "anomaly_agent", "to": "decision_point", "label": "Risk Score", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "decision_point", "to": "payment_execution", "label": "Low Risk", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "payment_execution", "to": "confirmation", "label": "Success", "type": "main", "width": 4, "curve": 0.1},
         
-        # Data connections - Supporting systems
-        {"from": "compliance_db", "to": "verification_agent", "label": "Compliance Check", "type": "data", "width": 2},
-        {"from": "payment_api", "to": "payment_execution", "label": "API Call", "type": "data", "width": 2},
+        # Data connections - Supporting systems with subtle styling
+        {"from": "compliance_db", "to": "verification_agent", "label": "Compliance Check", "type": "data", "width": 2, "curve": 0.2},
+        {"from": "payment_api", "to": "payment_execution", "label": "API Call", "type": "data", "width": 2, "curve": 0.2},
         
-        # Escalation paths - Human intervention
-        {"from": "decision_point", "to": "human_review", "label": "Medium Risk", "type": "escalation", "width": 2},
-        {"from": "decision_point", "to": "escalation", "label": "High Risk", "type": "escalation", "width": 2},
-        {"from": "human_review", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 2},
-        {"from": "escalation", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 2},
+        # Escalation paths - Human intervention with iOS red
+        {"from": "decision_point", "to": "human_review", "label": "Medium Risk", "type": "escalation", "width": 3, "curve": 0.3},
+        {"from": "decision_point", "to": "escalation", "label": "High Risk", "type": "escalation", "width": 3, "curve": 0.3},
+        {"from": "human_review", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 3, "curve": 0.2},
+        {"from": "escalation", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 3, "curve": 0.2},
         
-        # Monitoring connections - Oversight
-        {"from": "monitoring", "to": "intent_agent", "label": "Monitor", "type": "monitoring", "width": 1},
-        {"from": "monitoring", "to": "verification_agent", "label": "Monitor", "type": "monitoring", "width": 1},
-        {"from": "monitoring", "to": "anomaly_agent", "label": "Monitor", "type": "monitoring", "width": 1},
-        {"from": "monitoring", "to": "payment_execution", "label": "Monitor", "type": "monitoring", "width": 1},
+        # Monitoring connections - Oversight with subtle gray
+        {"from": "monitoring", "to": "intent_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "verification_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "anomaly_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "payment_execution", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
     ]
     
-    # Create the enhanced diagram
+    # Create the iOS-style diagram
     fig = go.Figure()
     
-    # Define edge colors and styles based on type
+    # Define iOS-style edge colors and styles
     edge_styles = {
-        "main": {"color": "#007AFF", "dash": "solid"},
-        "escalation": {"color": "#FF3B30", "dash": "dash"},
-        "data": {"color": "#8E8E93", "dash": "dot"},
-        "monitoring": {"color": "#8E8E93", "dash": "dot"}
+        "main": {"color": "#007AFF", "dash": "solid", "opacity": 0.9},
+        "escalation": {"color": "#FF3B30", "dash": "solid", "opacity": 0.8},
+        "data": {"color": "#AEAEB2", "dash": "dot", "opacity": 0.6},
+        "monitoring": {"color": "#8E8E93", "dash": "dot", "opacity": 0.5}
     }
     
-    # Add edges with enhanced styling
+    # Add edges with iOS-style curved connections
     for edge in edges:
         from_node = next(n for n in nodes if n["id"] == edge["from"])
         to_node = next(n for n in nodes if n["id"] == edge["to"])
         
-        style = edge_styles.get(edge["type"], {"color": "#8E8E93", "dash": "solid"})
+        style = edge_styles.get(edge["type"], {"color": "#8E8E93", "dash": "solid", "opacity": 0.8})
+        
+        # Create curved path for iOS-style connections
+        curve_factor = edge.get("curve", 0.1)
+        mid_x = (from_node["x"] + to_node["x"]) / 2
+        mid_y = (from_node["y"] + to_node["y"]) / 2
+        
+        # Calculate control points for smooth curves
+        if from_node["y"] == to_node["y"]:  # Horizontal connection
+            control_x = mid_x
+            control_y = mid_y + curve_factor
+        else:  # Diagonal connection
+            control_x = mid_x + curve_factor
+            control_y = mid_y
+        
+        # Create smooth curve using quadratic bezier
+        import numpy as np
+        t = np.linspace(0, 1, 50)
+        x_curve = (1-t)**2 * from_node["x"] + 2*(1-t)*t * control_x + t**2 * to_node["x"]
+        y_curve = (1-t)**2 * from_node["y"] + 2*(1-t)*t * control_y + t**2 * to_node["y"]
         
         fig.add_trace(go.Scatter(
-            x=[from_node["x"], to_node["x"]],
-            y=[from_node["y"], to_node["y"]],
+            x=x_curve,
+            y=y_curve,
             mode='lines',
             line=dict(
                 color=style["color"], 
                 width=edge["width"], 
-                dash=style["dash"]
+                dash=style["dash"],
+                shape='spline'
             ),
             showlegend=False,
             hoverinfo='skip',
-            opacity=0.8
+            opacity=style["opacity"]
         ))
         
-        # Add edge labels with better positioning
-        mid_x = (from_node["x"] + to_node["x"]) / 2
-        mid_y = (from_node["y"] + to_node["y"]) / 2
-        
-        # Offset labels to avoid overlap
-        offset_x = 0.3 if edge["type"] == "escalation" else 0
-        offset_y = 0.2 if edge["type"] == "data" else 0
+        # Add iOS-style edge labels with modern typography
+        label_offset_x = 0.4 if edge["type"] == "escalation" else 0.2
+        label_offset_y = 0.3 if edge["type"] == "data" else 0.1
         
         fig.add_annotation(
-            x=mid_x + offset_x,
-            y=mid_y + offset_y,
-            text=edge["label"],
+            x=mid_x + label_offset_x,
+            y=mid_y + label_offset_y,
+            text=f"<b>{edge['label']}</b>",
             showarrow=False,
-            font=dict(size=11, color="#1D1D1F", family="Inter"),
+            font=dict(
+                size=12, 
+                color="#1D1D1F", 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            ),
             bgcolor="rgba(255,255,255,0.95)",
             bordercolor=style["color"],
-            borderwidth=2,
-            borderpad=6,
-            opacity=0.9
+            borderwidth=1.5,
+            borderpad=8,
+            opacity=0.95,
+            align="center"
         )
     
-    # Add nodes with enhanced styling
+    # Add nodes with iOS-style design and shadows
     for node in nodes:
-        # Determine node styling based on category
+        # iOS-style node styling with shadows and modern effects
         node_style = {
-            "input": {"border_width": 4, "opacity": 0.95},
-            "agent": {"border_width": 3, "opacity": 0.9},
-            "decision": {"border_width": 4, "opacity": 0.95},
-            "human": {"border_width": 3, "opacity": 0.9},
-            "execution": {"border_width": 4, "opacity": 0.95},
-            "output": {"border_width": 4, "opacity": 0.95},
-            "monitoring": {"border_width": 2, "opacity": 0.8},
-            "data": {"border_width": 2, "opacity": 0.8}
+            "input": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "agent": {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True},
+            "decision": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "human": {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True},
+            "execution": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "output": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "monitoring": {"border_width": 0, "opacity": 0.8, "shadow": False, "gradient": False},
+            "data": {"border_width": 0, "opacity": 0.75, "shadow": False, "gradient": False}
         }
         
-        style = node_style.get(node["category"], {"border_width": 3, "opacity": 0.9})
+        style = node_style.get(node["category"], {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True})
         
+        # Add shadow effect for iOS-style depth
+        if style["shadow"] and node.get("shadow", False):
+            fig.add_trace(go.Scatter(
+                x=[node["x"] + 0.1],
+                y=[node["y"] - 0.1],
+                mode='markers',
+                marker=dict(
+                    size=node["size"],
+                    color='rgba(0,0,0,0.15)',
+                    opacity=0.3
+                ),
+                showlegend=False,
+                hoverinfo='skip'
+            ))
+        
+        # Main node with iOS-style rounded appearance
         fig.add_trace(go.Scatter(
             x=[node["x"]],
             y=[node["y"]],
@@ -5176,12 +5213,17 @@ def process_flow_diagram():
             marker=dict(
                 size=node["size"],
                 color=node["color"],
-                line=dict(width=style["border_width"], color='white'),
-                opacity=style["opacity"]
+                line=dict(width=0),
+                opacity=style["opacity"],
+                symbol='circle'
             ),
             text=node["label"],
             textposition="middle center",
-            textfont=dict(size=12, color="white", family="Inter", weight="bold"),
+            textfont=dict(
+                size=13, 
+                color="white", 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            ),
             showlegend=False,
             hovertemplate=f"<b>{node['label'].split('<br/>')[0]}</b><br>" +
                          f"<br>".join(node['label'].split('<br/>')[1:]) +
@@ -5189,58 +5231,71 @@ def process_flow_diagram():
                          "<extra></extra>"
         ))
     
-    # Update layout with enhanced styling
+    # Update layout with iOS-style design
     fig.update_layout(
         title=dict(
             text="High-Value Payment Processing Workflow",
-            font=dict(size=24, family="Inter", color="#1D1D1F", weight="bold"),
+            font=dict(
+                size=28, 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", 
+                color="#1D1D1F"
+            ),
             x=0.5,
             y=0.95
         ),
         xaxis=dict(
             showgrid=True, 
-            gridcolor='rgba(0,0,0,0.1)',
+            gridcolor='rgba(0,0,0,0.05)',
             showticklabels=False, 
             zeroline=False,
-            range=[-2, 23]
+            range=[-2, 23],
+            gridwidth=1
         ),
         yaxis=dict(
             showgrid=True, 
-            gridcolor='rgba(0,0,0,0.1)',
+            gridcolor='rgba(0,0,0,0.05)',
             showticklabels=False, 
             zeroline=False,
-            range=[2, 12]
+            range=[2, 12],
+            gridwidth=1
         ),
-        plot_bgcolor='rgba(248,248,248,0.8)',
-        paper_bgcolor='rgba(255,255,255,0.9)',
-        width=1400,
-        height=700,
-        margin=dict(l=80, r=80, t=120, b=80),
-        font=dict(family="Inter", size=12)
+        plot_bgcolor='rgba(242,242,247,0.8)',
+        paper_bgcolor='rgba(255,255,255,1.0)',
+        width=1600,
+        height=800,
+        margin=dict(l=100, r=100, t=140, b=100),
+        font=dict(
+            family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", 
+            size=12
+        )
     )
     
     st.plotly_chart(fig, use_container_width=True, key="process_flow_diagram")
     
-    # Add a visual legend
+    # Add iOS-style visual legend
     st.markdown("""
-    <div style="background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%); padding: 1.5rem; border-radius: 12px; margin: 1rem 0; border: 1px solid #dee2e6;">
-        <h4 style="color: #1D1D1F; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0 0 1rem 0; font-weight: 600;">? Process Flow Legend</h4>
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem;">
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <div style="width: 20px; height: 20px; background: #007AFF; border-radius: 50%; border: 3px solid white;"></div>
-                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>Main Flow</strong> - Primary processing path</span>
+    <div style="background: linear-gradient(135deg, #f2f2f7 0%, #ffffff 100%); padding: 2rem; border-radius: 16px; margin: 2rem 0; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <h4 style="color: #1D1D1F; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0 0 1.5rem 0; font-weight: 700; font-size: 1.2rem; letter-spacing: -0.01em;">🔄 Process Flow Legend</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(0,122,255,0.05); border-radius: 12px; border: 1px solid rgba(0,122,255,0.1);">
+                <div style="width: 24px; height: 24px; background: #007AFF; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,122,255,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">Main Flow</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">Primary processing path</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <div style="width: 20px; height: 20px; background: #FF3B30; border-radius: 50%; border: 3px solid white;"></div>
-                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>Escalation</strong> - Human intervention required</span>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(255,59,48,0.05); border-radius: 12px; border: 1px solid rgba(255,59,48,0.1);">
+                <div style="width: 24px; height: 24px; background: #FF3B30; border-radius: 50%; box-shadow: 0 2px 8px rgba(255,59,48,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">Escalation</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">Human intervention</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <div style="width: 20px; height: 20px; background: #34C759; border-radius: 50%; border: 3px solid white;"></div>
-                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>AI Agents</strong> - Automated processing</span>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(48,209,88,0.05); border-radius: 12px; border: 1px solid rgba(48,209,88,0.1);">
+                <div style="width: 24px; height: 24px; background: #30D158; border-radius: 50%; box-shadow: 0 2px 8px rgba(48,209,88,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">AI Agents</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">Automated processing</span>
             </div>
-            <div style="display: flex; align-items: center; gap: 0.5rem;">
-                <div style="width: 20px; height: 20px; background: #8E8E93; border-radius: 50%; border: 3px solid white;"></div>
-                <span style="font-family: 'Inter', sans-serif; color: #1D1D1F;"><strong>Data Sources</strong> - External systems</span>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(142,142,147,0.05); border-radius: 12px; border: 1px solid rgba(142,142,147,0.1);">
+                <div style="width: 24px; height: 24px; background: #8E8E93; border-radius: 50%; box-shadow: 0 2px 8px rgba(142,142,147,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">Data Sources</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">External systems</span>
             </div>
         </div>
     </div>
@@ -5248,10 +5303,10 @@ def process_flow_diagram():
     
     # Process Flow Details
     st.markdown("---")
-    st.markdown("### ? Process Flow Details")
+    st.markdown("### 🔄 Process Flow Details")
     
-    # Create tabs for different aspects
-    tab1, tab2, tab3, tab4 = st.tabs(["? Workflow Steps", "? AI Agents", "? Human Interactions", "? Data Flow"])
+    # Create tabs for different aspects with iOS styling
+    tab1, tab2, tab3, tab4 = st.tabs(["📋 Workflow Steps", "🤖 AI Agents", "👥 Human Interactions", "📊 Data Flow"])
     
     with tab1:
         st.markdown("""
@@ -5284,19 +5339,19 @@ def process_flow_diagram():
     
     with tab2:
         st.markdown("""
-        #### **? Intent Agent (Retriever-Augmented)**
+        #### **🔍 Intent Agent (Retriever-Augmented)**
         - **Purpose**: Parse natural language payment instructions
         - **Capabilities**: NLP processing, entity extraction, intent classification
         - **Input**: Free-form text instructions
         - **Output**: Structured payment data (amount, accounts, purpose, urgency)
         
-        #### **? Verification Agent (Document Classifier)**
+        #### **✅ Verification Agent (Document Classifier)**
         - **Purpose**: Validate accounts and compliance status
         - **Capabilities**: Account validation, compliance checking, data enrichment
         - **Input**: Account details, payment amount
         - **Output**: Validation status, compliance flags, risk indicators
         
-        #### **? Anomaly Agent (AI Supervisor)**
+        #### **🔍 Anomaly Agent (AI Supervisor)**
         - **Purpose**: Detect unusual patterns and assess risk
         - **Capabilities**: Pattern analysis, anomaly detection, risk scoring
         - **Input**: Payment data, historical patterns, user behavior
@@ -5311,21 +5366,21 @@ def process_flow_diagram():
     
     with tab3:
         st.markdown("""
-        #### **? Treasury Operations (Human Review)**
+        #### **👥 Treasury Operations (Human Review)**
         - **Trigger**: Medium-risk payments (>$100K, <$1M)
         - **Process**: Manual review of payment details and risk factors
         - **Tools**: Scenario summary dashboard, decision journal
         - **Decision**: Approve, reject, or escalate further
         - **SLA**: 15-minute response time
         
-        #### **? Senior Management (Escalation)**
+        #### **⚠️ Senior Management (Escalation)**
         - **Trigger**: High-risk payments (>$1M) or complex scenarios
         - **Process**: Executive review with full context and analysis
         - **Tools**: Comprehensive audit trail, risk analysis reports
         - **Decision**: Final approval authority
         - **SLA**: 30-minute response time
         
-        #### **? Compliance Team (Oversight)**
+        #### **🛡️ Compliance Team (Oversight)**
         - **Role**: Monitor overall compliance and audit processes
         - **Access**: Real-time monitoring dashboard, audit reports
         - **Responsibilities**: Policy updates, compliance training, audit reviews
@@ -5333,25 +5388,25 @@ def process_flow_diagram():
     
     with tab4:
         st.markdown("""
-        #### **? Input Data Sources**
+        #### **📥 Input Data Sources**
         - **User Instructions**: Natural language payment requests
         - **Account Data**: Customer account information and balances
         - **Compliance Data**: Sanctions lists, KYC status, AML flags
         - **Historical Data**: Previous transactions, user patterns, risk indicators
         
-        #### **? Processing Data**
+        #### **⚙️ Processing Data**
         - **Structured Payment Data**: Parsed and validated payment details
         - **Risk Scores**: Anomaly detection and risk assessment results
         - **Compliance Status**: Real-time compliance check results
         - **Decision Context**: All relevant data for human review
         
-        #### **? Output Data**
+        #### **📤 Output Data**
         - **Transaction Records**: Complete payment transaction details
         - **Audit Trails**: Comprehensive logging of all decisions and actions
         - **Compliance Reports**: Regulatory reporting and audit documentation
         - **Monitoring Data**: Real-time performance and compliance metrics
         
-        #### **? Data Flow Patterns**
+        #### **🔄 Data Flow Patterns**
         - **Real-time Processing**: Immediate data validation and risk assessment
         - **Asynchronous Review**: Human review processes with SLA tracking
         - **Batch Reporting**: Daily compliance and audit reports
@@ -5360,7 +5415,7 @@ def process_flow_diagram():
     
     # Process Metrics
     st.markdown("---")
-    st.markdown("### ? Process Performance Metrics")
+    st.markdown("### 📊 Process Performance Metrics")
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -5514,19 +5569,19 @@ def main():
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("🤖 Agentic Catalog", key="nav_catalog"):
+        if st.button("Agentic Catalog", key="nav_catalog"):
             st.session_state['current_page'] = 'landing'
             st.rerun()
-        if st.button("🛡️ Governance Workflow", key="nav_governance"):
+        if st.button("Governance Workflow", key="nav_governance"):
             st.session_state['current_page'] = 'governance'
             st.rerun()
-        if st.button("📊 Runtime Monitoring", key="nav_monitoring"):
+        if st.button("Runtime Monitoring", key="nav_monitoring"):
             st.session_state['current_page'] = 'monitoring'
             st.rerun()
-        if st.button("⚠️ Escalation Console", key="nav_escalation"):
+        if st.button("Escalation Console", key="nav_escalation"):
             st.session_state['current_page'] = 'escalation'
             st.rerun()
-        if st.button("📋 Audit & Reporting", key="nav_audit"):
+        if st.button("Audit & Reporting", key="nav_audit"):
             st.session_state['current_page'] = 'audit'
             st.rerun()
         
@@ -5534,29 +5589,29 @@ def main():
         st.markdown("""
         <div style="margin: 2rem 0 1.5rem 0; padding: 1.2rem; background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%); border-radius: 16px; border: 1px solid rgba(0, 122, 255, 0.2); box-shadow: 0 2px 12px rgba(0, 122, 255, 0.1);">
             <div style="display: flex; align-items: center; margin-bottom: 1rem;">
-                <span style="font-size: 1.2rem; margin-right: 0.5rem;">?</span>
+                <span style="font-size: 1.2rem; margin-right: 0.5rem;">💰</span>
                 <h3 style="color: #007AFF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 700; margin: 0; font-size: 1rem;">Payment Workflow</h3>
             </div>
             <p style="color: #6e6e73; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 0.8rem; margin: 0; line-height: 1.4;">High-value payment processing with anomaly detection and governance</p>
         </div>
         """, unsafe_allow_html=True)
         
-        if st.button("💰 Payment Instruction", key="nav_payment"):
+        if st.button("Payment Instruction", key="nav_payment"):
             st.session_state['current_page'] = 'payment_instruction'
             st.rerun()
-        if st.button("✅ Intent Verification", key="nav_intent"):
+        if st.button("Intent Verification", key="nav_intent"):
             st.session_state['current_page'] = 'intent_verification'
             st.rerun()
-        if st.button("📄 Scenario Summary", key="nav_scenario"):
+        if st.button("Scenario Summary", key="nav_scenario"):
             st.session_state['current_page'] = 'scenario_summary'
             st.rerun()
-        if st.button("🚨 Payment Escalation", key="nav_payment_escalation"):
+        if st.button("Payment Escalation", key="nav_payment_escalation"):
             st.session_state['current_page'] = 'payment_escalation'
             st.rerun()
-        if st.button("🔍 Payment Audit", key="nav_payment_audit"):
+        if st.button("Payment Audit", key="nav_payment_audit"):
             st.session_state['current_page'] = 'payment_audit'
             st.rerun()
-        if st.button("🔄 Process Flow", key="nav_process_flow"):
+        if st.button("Process Flow", key="nav_process_flow"):
             st.session_state['current_page'] = 'process_flow'
             st.rerun()
     
