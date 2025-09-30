@@ -2076,14 +2076,14 @@ def landing_page():
                 "example": "'Red team' agent checking for bias, gaps, or regulatory misalignment",
                 "rules": [
                     "Critic must use explicit evaluation rubrics (accuracy, bias, compliance).",
-                    "Critic cannot modify outputs directlyâ€”only suggest changes.",
+                    "Critic cannot modify outputs directly-only suggest changes.",
                     "Final decision authority must be defined (critic vs. primary agent vs. orchestrator).",
                     "Maintain traceability: log critiques alongside outputs."
                 ],
                 "explicit_policies": [
                     "Rule: Critic must use a rubric (e.g., factual accuracy, bias, compliance).",
                     "Rule: Critic outputs must be tagged as approve, revise, or reject.",
-                    "Rule: Critic cannot directly editâ€”only recommend changes.",
+                    "Rule: Critic cannot directly edit-only recommend changes.",
                     "Rule: Final decision authority is explicitly assigned (critic vs. orchestrator)."
                 ]
             },
@@ -2166,11 +2166,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Self-Evaluation**: Quality assessment")
-                                st.markdown("â€¢ **Iterative Improvement**: Refinement cycles")
-                                st.markdown("â€¢ **Quality Gates**: Pass/fail criteria")
-                                st.markdown("â€¢ **Escalation**: Human intervention")
-                                st.markdown("â€¢ **Audit Trail**: Complete logging")
+                                st.markdown("• **Self-Evaluation**: Quality assessment")
+                                st.markdown("• **Iterative Improvement**: Refinement cycles")
+                                st.markdown("• **Quality Gates**: Pass/fail criteria")
+                                st.markdown("• **Escalation**: Human intervention")
+                                st.markdown("• **Audit Trail**: Complete logging")
                             
                         elif pattern_name == "planning":
                             st.markdown("**Core Concept:** Hierarchical goal decomposition and task sequencing for complex workflows.")
@@ -2197,11 +2197,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Hierarchical Decomposition**: Goal breakdown")
-                                st.markdown("â€¢ **Dependency Mapping**: Task sequencing")
-                                st.markdown("â€¢ **Plan Validation**: Feasibility check")
-                                st.markdown("â€¢ **Progress Monitoring**: Status tracking")
-                                st.markdown("â€¢ **Adaptive Execution**: Real-time adjustment")
+                                st.markdown("• **Hierarchical Decomposition**: Goal breakdown")
+                                st.markdown("• **Dependency Mapping**: Task sequencing")
+                                st.markdown("• **Plan Validation**: Feasibility check")
+                                st.markdown("• **Progress Monitoring**: Status tracking")
+                                st.markdown("• **Adaptive Execution**: Real-time adjustment")
                             
                         elif pattern_name == "tool":
                             st.markdown("**Core Concept:** External tool integration with validation, error handling, and fallback mechanisms.")
@@ -2231,11 +2231,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Tool Selection**: Appropriate tool choice")
-                                st.markdown("â€¢ **Input Validation**: Parameter verification")
-                                st.markdown("â€¢ **Error Handling**: Retry & fallback")
-                                st.markdown("â€¢ **Output Sanitization**: Result cleaning")
-                                st.markdown("â€¢ **Escalation Path**: Human intervention")
+                                st.markdown("• **Tool Selection**: Appropriate tool choice")
+                                st.markdown("• **Input Validation**: Parameter verification")
+                                st.markdown("• **Error Handling**: Retry & fallback")
+                                st.markdown("• **Output Sanitization**: Result cleaning")
+                                st.markdown("• **Escalation Path**: Human intervention")
                             
                         elif pattern_name == "collaboration":
                             st.markdown("**Core Concept:** Multi-agent coordination with role-based delegation and conflict resolution.")
@@ -2265,11 +2265,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Role-Based Delegation**: Specialized agents")
-                                st.markdown("â€¢ **Parallel Processing**: Simultaneous work")
-                                st.markdown("â€¢ **Coordination Hub**: Result aggregation")
-                                st.markdown("â€¢ **Conflict Resolution**: Disagreement handling")
-                                st.markdown("â€¢ **Consensus Building**: Agreement negotiation")
+                                st.markdown("• **Role-Based Delegation**: Specialized agents")
+                                st.markdown("• **Parallel Processing**: Simultaneous work")
+                                st.markdown("• **Coordination Hub**: Result aggregation")
+                                st.markdown("• **Conflict Resolution**: Disagreement handling")
+                                st.markdown("• **Consensus Building**: Agreement negotiation")
                             
                         elif pattern_name == "memory":
                             st.markdown("**Core Concept:** Context retention and adaptive learning with memory management and knowledge evolution.")
@@ -2299,11 +2299,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Memory Classification**: Short/long-term storage")
-                                st.markdown("â€¢ **Context Analysis**: Experience significance")
-                                st.markdown("â€¢ **Learning Process**: Behavior adaptation")
-                                st.markdown("â€¢ **Performance Evaluation**: Learning effectiveness")
-                                st.markdown("â€¢ **Knowledge Consolidation**: Integration")
+                                st.markdown("• **Memory Classification**: Short/long-term storage")
+                                st.markdown("• **Context Analysis**: Experience significance")
+                                st.markdown("• **Learning Process**: Behavior adaptation")
+                                st.markdown("• **Performance Evaluation**: Learning effectiveness")
+                                st.markdown("• **Knowledge Consolidation**: Integration")
                             
                         elif pattern_name == "critic":
                             st.markdown("**Core Concept:** Secondary validation and quality assurance through independent critique and review.")
@@ -2333,11 +2333,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Independent Review**: Unbiased evaluation")
-                                st.markdown("â€¢ **Quality Rubrics**: Structured criteria")
-                                st.markdown("â€¢ **Revision Process**: Iterative improvement")
-                                st.markdown("â€¢ **Escalation Path**: Human expert review")
-                                st.markdown("â€¢ **Audit Trail**: Complete traceability")
+                                st.markdown("• **Independent Review**: Unbiased evaluation")
+                                st.markdown("• **Quality Rubrics**: Structured criteria")
+                                st.markdown("• **Revision Process**: Iterative improvement")
+                                st.markdown("• **Escalation Path**: Human expert review")
+                                st.markdown("• **Audit Trail**: Complete traceability")
                             
                         elif pattern_name == "exploration":
                             st.markdown("**Core Concept:** Multi-scenario testing and exploration for optimal decision-making.")
@@ -2367,11 +2367,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Multi-Scenario Generation**: Multiple situations")
-                                st.markdown("â€¢ **Parallel Simulation**: Simultaneous testing")
-                                st.markdown("â€¢ **Outcome Measurement**: Result quantification")
-                                st.markdown("â€¢ **Assumption Validation**: Scenario verification")
-                                st.markdown("â€¢ **Learning Integration**: Model updates")
+                                st.markdown("• **Multi-Scenario Generation**: Multiple situations")
+                                st.markdown("• **Parallel Simulation**: Simultaneous testing")
+                                st.markdown("• **Outcome Measurement**: Result quantification")
+                                st.markdown("• **Assumption Validation**: Scenario verification")
+                                st.markdown("• **Learning Integration**: Model updates")
                             
                         else:  # orchestration
                             st.markdown("**Core Concept:** Meta-agent coordination managing multiple agents, tools, and workflows in a unified pipeline.")
@@ -2401,11 +2401,11 @@ def landing_page():
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Pipeline Management**: End-to-end orchestration")
-                                st.markdown("â€¢ **Resource Allocation**: Agent/tool optimization")
-                                st.markdown("â€¢ **Progress Monitoring**: Execution tracking")
-                                st.markdown("â€¢ **Failure Recovery**: Error handling")
-                                st.markdown("â€¢ **Quality Validation**: Output standards")
+                                st.markdown("• **Pipeline Management**: End-to-end orchestration")
+                                st.markdown("• **Resource Allocation**: Agent/tool optimization")
+                                st.markdown("• **Progress Monitoring**: Execution tracking")
+                                st.markdown("• **Failure Recovery**: Error handling")
+                                st.markdown("• **Quality Validation**: Output standards")
                         
                         # Pattern Benefits and Use Cases
                         st.markdown("### Pattern Benefits")
@@ -2461,7 +2461,7 @@ def landing_page():
                         }
                         
                         for benefit in benefits.get(pattern_name, []):
-                            st.markdown(f"â€¢ {benefit}")
+                            st.markdown(f"• {benefit}")
                         
                         # Implementation Considerations
                         st.markdown("### Implementation Considerations")
@@ -2517,16 +2517,16 @@ def landing_page():
                         }
                         
                         for consideration in considerations.get(pattern_name, []):
-                            st.markdown(f"â€¢ {consideration}")
+                            st.markdown(f"• {consideration}")
                     
                     with tab2:
                         st.markdown("**Rules/Policies:**")
                         for rule in pattern['rules']:
-                            st.write(f"â€¢ {rule}")
+                            st.write(f"• {rule}")
                         
                         st.markdown("**Explicit Policies:**")
                         for policy in pattern['explicit_policies']:
-                            st.write(f"â€¢ {policy}")
+                            st.write(f"• {policy}")
                     
                     with tab3:
                         st.markdown("**Codified/Executable Configuration**")
@@ -3074,13 +3074,13 @@ def landing_page():
         ]
         
         for policy in meta_policies:
-            st.markdown(f"â€¢ {policy}")
+            st.markdown(f"• {policy}")
     
     with main_tab2:
         # Tools Layer Tab
         st.markdown("### Tools Layer")
         st.markdown("""
-        **The tooling ecosystem that enables agentic AI**â€”the "muscles and nervous system" that let agents reason, act, and integrate with enterprise environments.
+        **The tooling ecosystem that enables agentic AI**-the "muscles and nervous system" that let agents reason, act, and integrate with enterprise environments.
         """)
         
         # Create expandable sections for each tool category
@@ -3164,7 +3164,7 @@ def landing_page():
                     "**Snowflake Cortex MCPs:** allow direct querying of Snowflake with embeddings + SQL"
                 ],
                 "agentic_use": "Agents can query enterprise data warehouses (Snowflake, BigQuery, Databricks) without brittle prompt hacks",
-                "enterprise_note": "MCPs are critical for **auditability**â€”you can log every query and enforce RBAC",
+                "enterprise_note": "MCPs are critical for **auditability**-you can log every query and enforce RBAC",
                 "pattern_scenarios": [
                     {
                         "pattern": "Tool Use",
@@ -3307,7 +3307,7 @@ def landing_page():
                 
                 st.markdown("**Examples:**")
                 for example in category['examples']:
-                    st.markdown(f"â€¢ {example}")
+                    st.markdown(f"• {example}")
                 
                 st.markdown(f"**Agentic Use:** {category['agentic_use']}")
                 st.markdown(f"**Enterprise Note:** {category['enterprise_note']}")
@@ -3440,7 +3440,7 @@ def landing_page():
                 
                 st.markdown("**Real-World Scenarios:**")
                 for scenario in mapping['scenarios']:
-                    st.markdown(f"â€¢ {scenario}")
+                    st.markdown(f"• {scenario}")
                 
                 st.markdown(f"**Enterprise Benefits:** {mapping['enterprise_benefits']}")
         
@@ -3452,17 +3452,17 @@ def landing_page():
         
         with col1:
             st.markdown("**Key Integration Points:**")
-            st.markdown("â€¢ **Governance Integration**: Pattern rules map to guardrail policies")
-            st.markdown("â€¢ **Audit Trail**: Every tool call logged with pattern context")
-            st.markdown("â€¢ **Policy Enforcement**: Pattern-specific validation rules")
-            st.markdown("â€¢ **Resource Management**: Pattern-based resource allocation")
+            st.markdown("• **Governance Integration**: Pattern rules map to guardrail policies")
+            st.markdown("• **Audit Trail**: Every tool call logged with pattern context")
+            st.markdown("• **Policy Enforcement**: Pattern-specific validation rules")
+            st.markdown("• **Resource Management**: Pattern-based resource allocation")
         
         with col2:
             st.markdown("**Enterprise Requirements:**")
-            st.markdown("â€¢ **RBAC Integration**: Role-based access to tools")
-            st.markdown("â€¢ **Compliance Monitoring**: Pattern adherence tracking")
-            st.markdown("â€¢ **Performance Metrics**: Tool usage and pattern effectiveness")
-            st.markdown("â€¢ **Scalability**: Pattern-based horizontal scaling")
+            st.markdown("• **RBAC Integration**: Role-based access to tools")
+            st.markdown("• **Compliance Monitoring**: Pattern adherence tracking")
+            st.markdown("• **Performance Metrics**: Tool usage and pattern effectiveness")
+            st.markdown("• **Scalability**: Pattern-based horizontal scaling")
     
     with main_tab3:
         # Display agent cards
@@ -3507,7 +3507,7 @@ def landing_page():
                         # Capabilities
                         st.markdown("### Capabilities")
                         for capability in agent['capabilities']:
-                            st.write(f"â€¢ {capability}")
+                            st.write(f"• {capability}")
                         
                         # Dependencies
                         st.markdown("### Dependencies")
@@ -3570,7 +3570,7 @@ def landing_page():
                             'supervisor-v1': ['Payment Processor v1', 'Retriever Agent v1', 'Document Classifier v1']
                         }
                         for related in related_agents.get(agent['id'], []):
-                            st.write(f"â€¢ {related}")
+                            st.write(f"• {related}")
                     
                     with tab2:
                         # Pattern Implementations
@@ -3596,7 +3596,7 @@ def landing_page():
                                     if 'tools_used' in details:
                                         st.markdown("**Tools Used:**")
                                         for tool in details['tools_used']:
-                                            st.write(f"â€¢ {tool}")
+                                            st.write(f"• {tool}")
                                     
                                     if 'memory_type' in details:
                                         st.markdown(f"**Memory Type:** {details['memory_type']}")
@@ -3622,7 +3622,7 @@ def landing_page():
                                     if 'reflection_criteria' in details:
                                         st.markdown("**Reflection Criteria:**")
                                         for criteria in details['reflection_criteria']:
-                                            st.write(f"â€¢ {criteria}")
+                                            st.write(f"• {criteria}")
                                     
                                     if 'delegation_protocol' in details:
                                         st.markdown(f"**Delegation Protocol:** {details['delegation_protocol']}")
@@ -3734,7 +3734,7 @@ def landing_page():
                                 
                                 for tool in tools:
                                     status_color = "" if tool['status'] == 'active' else "" if tool['status'] == 'inactive' else ""
-                                    st.markdown(f"â€¢ {status_color} **{tool['name']}** - {tool['purpose']}")
+                                    st.markdown(f"• {status_color} **{tool['name']}** - {tool['purpose']}")
                                 
                                 st.markdown("")  # Add spacing between categories
                         else:
@@ -3743,22 +3743,22 @@ def landing_page():
                     with tab4:
                         st.markdown("**Input Filters:**")
                         for filter_type in agent['runtimeGuardrails']['inputFilters']:
-                            st.write(f"â€¢ {filter_type}")
+                            st.write(f"• {filter_type}")
                         
                         st.markdown("**Output Validators:**")
                         for validator in agent['runtimeGuardrails']['outputValidators']:
-                            st.write(f"â€¢ {validator}")
+                            st.write(f"• {validator}")
                         
                         st.markdown("**Rate Controls:**")
                         rate_controls = agent['runtimeGuardrails']['rateControls']
                         for control, value in rate_controls.items():
-                            st.write(f"â€¢ {control.replace('_', ' ').title()}: {value}")
+                            st.write(f"• {control.replace('_', ' ').title()}: {value}")
                         
                         st.markdown("**Kill Switch:**")
                         kill_switch = agent['runtimeGuardrails']['killSwitch']
                         st.write(f"Enabled: {'Yes' if kill_switch['enabled'] else 'No'}")
                         for trigger in kill_switch['triggers']:
-                            st.write(f"â€¢ {trigger}")
+                            st.write(f"• {trigger}")
                         
                         st.markdown("**Monitoring:**")
                         monitoring = agent['monitoring']
@@ -3784,7 +3784,7 @@ def landing_page():
                     
                     st.markdown("**Notification Channels:**")
                     for channel in agent['escalationMechanisms']['notificationChannels']:
-                        st.write(f"â€¢ {channel}")
+                        st.write(f"• {channel}")
                     
                     st.markdown("**Decision Journals:**")
                     decision_journals = agent['escalationMechanisms']['decisionJournals']
@@ -3855,7 +3855,7 @@ def landing_page():
                                 st.markdown(f"**Business Impact:** {issue['business_impact']}")
                                 st.markdown(f"**Recommended Actions:**")
                                 for action in issue['recommended_actions']:
-                                    st.markdown(f"â€¢ {action}")
+                                    st.markdown(f"• {action}")
                                 st.markdown(f"**Priority:** {issue['priority']}")
                     
                     with log_tabs[2]:
@@ -3871,7 +3871,7 @@ def landing_page():
                     
                     st.markdown("**Key Patterns Identified:**")
                     for pattern in escalation_data['patterns_identified']:
-                        st.markdown(f"â€¢ **{pattern['pattern']}**: {pattern['description']} (Frequency: {pattern['frequency']}%)")
+                        st.markdown(f"• **{pattern['pattern']}**: {pattern['description']} (Frequency: {pattern['frequency']}%)")
                     
                     with log_tabs[3]:
                         st.markdown("**Resolution Insights & Recommendations:**")
@@ -3880,16 +3880,16 @@ def landing_page():
                         with col1:
                             st.markdown("**Top Resolution Strategies:**")
                             for strategy in escalation_data['resolution_strategies']:
-                                st.markdown(f"â€¢ **{strategy['strategy']}**: {strategy['effectiveness']}% success rate")
+                                st.markdown(f"• **{strategy['strategy']}**: {strategy['effectiveness']}% success rate")
                         
                         with col2:
                             st.markdown("**Prevention Measures:**")
                             for measure in escalation_data['prevention_measures']:
-                                st.markdown(f"â€¢ {measure}")
+                                st.markdown(f"• {measure}")
                         
                         st.markdown("**Performance Improvements:**")
                         for improvement in escalation_data['performance_improvements']:
-                            st.markdown(f"â€¢ **{improvement['area']}**: {improvement['improvement']} ({improvement['impact']})")
+                            st.markdown(f"• **{improvement['area']}**: {improvement['improvement']} ({improvement['impact']})")
                     
                     # Escalation Configuration
                     st.markdown("#### Escalation Configuration")
@@ -3898,12 +3898,12 @@ def landing_page():
                     with col1:
                         st.markdown("**Current Thresholds:**")
                         for threshold in escalation_data['thresholds']:
-                            st.markdown(f"â€¢ **{threshold['metric']}**: {threshold['value']} ({threshold['status']})")
+                            st.markdown(f"• **{threshold['metric']}**: {threshold['value']} ({threshold['status']})")
                     
                     with col2:
                         st.markdown("**Escalation Rules:**")
                         for rule in escalation_data['escalation_rules']:
-                            st.markdown(f"â€¢ {rule}")
+                            st.markdown(f"• {rule}")
                     
                     # Action Items
                     st.markdown("#### Action Items")
@@ -4002,11 +4002,11 @@ def agent_detail_page():
         
         st.markdown("### Capabilities")
         for capability in agent['capabilities']:
-            st.write(f"â€¢ {capability}")
+            st.write(f"• {capability}")
         
         st.markdown("### Boundaries")
         for boundary in agent['boundaries']:
-            st.write(f"â€¢ {boundary}")
+            st.write(f"• {boundary}")
     
     with tab2:
         st.markdown("### Policies")
@@ -4044,32 +4044,32 @@ def agent_detail_page():
         with col1:
             st.markdown("**Input Filters**")
             for filter_type in agent['runtimeGuardrails']['inputFilters']:
-                st.write(f"â€¢ {filter_type}")
+                st.write(f"• {filter_type}")
             
             st.markdown("**Output Validators**")
             for validator in agent['runtimeGuardrails']['outputValidators']:
-                st.write(f"â€¢ {validator}")
+                st.write(f"• {validator}")
         
         with col2:
             st.markdown("**Rate Controls**")
             rate_controls = agent['runtimeGuardrails']['rateControls']
             for control, value in rate_controls.items():
-                st.write(f"â€¢ {control.replace('_', ' ').title()}: {value}")
+                st.write(f"• {control.replace('_', ' ').title()}: {value}")
             
             st.markdown("**Scope Controls**")
             scope_controls = agent['runtimeGuardrails']['scopeControls']
             for control, value in scope_controls.items():
                 if isinstance(value, list):
-                    st.write(f"â€¢ {control.replace('_', ' ').title()}: {', '.join(value)}")
+                    st.write(f"• {control.replace('_', ' ').title()}: {', '.join(value)}")
                 else:
-                    st.write(f"â€¢ {control.replace('_', ' ').title()}: {value}")
+                    st.write(f"• {control.replace('_', ' ').title()}: {value}")
         
         st.markdown("### Thresholds")
         kill_switch = agent['runtimeGuardrails']['killSwitch']
         st.write(f"**Kill Switch Enabled:** {'Yes' if kill_switch['enabled'] else 'No'}")
         st.write("**Trigger Conditions:**")
         for trigger in kill_switch['triggers']:
-            st.write(f"â€¢ {trigger}")
+            st.write(f"• {trigger}")
         
         st.markdown("### Monitoring Hooks")
         monitoring = agent['monitoring']
@@ -4099,7 +4099,7 @@ def agent_detail_page():
         st.markdown("### Notification Channels")
         channels = agent['escalationMechanisms']['notificationChannels']
         for channel in channels:
-            st.write(f"â€¢ {channel}")
+            st.write(f"• {channel}")
         
         st.markdown("### Decision Journal Configuration")
         decision_journals = agent['escalationMechanisms']['decisionJournals']
@@ -4123,9 +4123,9 @@ def agent_detail_page():
         
         st.markdown("### Lineage")
         st.write("**Data Lineage:**")
-        st.write("â€¢ Input â†’ Processing â†’ Output")
-        st.write("â€¢ Dependencies â†’ Agent â†’ Downstream Systems")
-        st.write("â€¢ Audit Trail â†’ Decision Journal â†’ Compliance Report")
+        st.write("• Input â†’ Processing â†’ Output")
+        st.write("• Dependencies â†’ Agent â†’ Downstream Systems")
+        st.write("• Audit Trail â†’ Decision Journal â†’ Compliance Report")
         
         st.markdown("### Decision Journals")
         audit_logs = agent['governanceHooks']['auditLogs']
@@ -4142,7 +4142,7 @@ def agent_detail_page():
         ]
         
         for entry in sample_entries:
-            st.write(f"â€¢ {entry}")
+            st.write(f"• {entry}")
         
         st.markdown("### Compliance Status")
         compliance_tags = agent['governanceHooks']['complianceTags']
@@ -4153,7 +4153,7 @@ def agent_detail_page():
                 st.error(f"{tag} - Non-compliant")
 
 def governance_workflow():
-    st.markdown('<h1 class="main-header">Governance Workflow â€“ New Agent Card</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Governance Workflow - New Agent Card</h1>', unsafe_allow_html=True)
     
     if st.button("â† Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
@@ -4431,9 +4431,9 @@ def payment_instruction_entry():
         st.info("\U0001F9D0 Critic/Reviewer")
     with col3:
         st.markdown("**Active Agents:**")
-        st.markdown("â€¢ **Payment Orchestrator Agent**")
-        st.markdown("â€¢ **Anomaly Detection Agent**")
-        st.markdown("â€¢ **Compliance Review Agent**")
+        st.markdown("• **Payment Orchestrator Agent**")
+        st.markdown("• **Anomaly Detection Agent**")
+        st.markdown("• **Compliance Review Agent**")
     
     st.markdown("---")
     st.markdown("### Sample Instructions")
@@ -4592,7 +4592,7 @@ def intent_verification():
         st.rerun()
 
 def scenario_summary():
-    st.markdown('<h1 class="main-header">Payment Review â€“ Scenario Summary</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Payment Review - Scenario Summary</h1>', unsafe_allow_html=True)
     
     if st.button("â† Back to Verification"):
         st.session_state['current_page'] = 'intent_verification'
@@ -4678,7 +4678,7 @@ def scenario_summary():
             st.error("Please enter a decision journal entry")
 
 def payment_escalation():
-    st.markdown('<h1 class="main-header">Escalation Console â€“ Payment Processor Agent</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Escalation Console - Payment Processor Agent</h1>', unsafe_allow_html=True)
     
     if st.button("â† Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
