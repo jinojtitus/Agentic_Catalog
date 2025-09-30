@@ -2116,7 +2116,7 @@ def landing_page():
                 ],
                 "explicit_policies": [
                     "Rule: Orchestrator must maintain a global task registry with status updates.",
-                    "Rule: Failures trigger escalation policy: retry â†’ fallback â†’ human-in-loop.",
+                    "Rule: Failures trigger escalation policy: retry → fallback → human-in-loop.",
                     "Rule: All agents/tools must be modular (swappable without breaking pipeline).",
                     "Rule: Orchestrator must log resource usage (time, tokens, API calls)."
                 ]
@@ -2154,12 +2154,12 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Input â†’ Generate â†’ Evaluate
-                                         â†‘         â†“
+                                Input → Generate → Evaluate
+                                         →         ↓
                                     Apply Fixes â† Quality
-                                         â†“
-                                    Max Loops â†’ Human
-                                         â†“
+                                         ↓
+                                    Max Loops → Human
+                                         ↓
                                     Final Output
                                 ```
                                 """)
@@ -2187,11 +2187,11 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Goal â†’ Analyze â†’ Break Down
-                                         â†“
-                                Dependencies â†’ Plan â†’ Validate
-                                         â†“
-                                Execute â†’ Monitor â†’ Complete
+                                Goal → Analyze → Break Down
+                                         ↓
+                                Dependencies → Plan → Validate
+                                         ↓
+                                Execute → Monitor → Complete
                                 ```
                                 """)
                             
@@ -2219,12 +2219,12 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Request â†’ Select â†’ Validate
-                                         â†“
-                                Execute â†’ Success â†’ Sanitize
-                                         â†“
-                                Retry â†’ Fallback â†’ Human
-                                         â†“
+                                Request → Select → Validate
+                                         ↓
+                                Execute → Success → Sanitize
+                                         ↓
+                                Retry → Fallback → Human
+                                         ↓
                                 Return Result
                                 ```
                                 """)
@@ -2253,13 +2253,13 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Task â†’ Roles â†’ Agents
-                                         â†“
-                                Delegate â†’ Process â†’ Results
-                                         â†“
-                                Coordinate â†’ Validate â†’ Combine
-                                         â†“
-                                Conflict â†’ Resolve â†’ Final
+                                Task → Roles → Agents
+                                         ↓
+                                Delegate → Process → Results
+                                         ↓
+                                Coordinate → Validate → Combine
+                                         ↓
+                                Conflict → Resolve → Final
                                 ```
                                 """)
                             
@@ -2287,13 +2287,13 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Experience â†’ Analyze â†’ Classify
-                                         â†“
+                                Experience → Analyze → Classify
+                                         ↓
                                 Short-term / Long-term Storage
-                                         â†“
-                                Learning â†’ Adapt â†’ Evaluate
-                                         â†“
-                                Improved â†’ Update Model
+                                         ↓
+                                Learning → Adapt → Evaluate
+                                         ↓
+                                Improved → Update Model
                                 ```
                                 """)
                             
@@ -2321,12 +2321,12 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Output â†’ Assign â†’ Rubric
-                                         â†“
-                                Assess â†’ Review â†’ Decision
-                                         â†“
+                                Output → Assign → Rubric
+                                         ↓
+                                Assess → Review → Decision
+                                         ↓
                                 Approve / Revise / Reject
-                                         â†“
+                                         ↓
                                 Deliver / Fix / Human
                                 ```
                                 """)
@@ -2355,13 +2355,13 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Decision â†’ Generate â†’ Simulate
-                                         â†“
-                                Measure â†’ Score â†’ Select Best
-                                         â†“
-                                Validate â†’ Execute â†’ Monitor
-                                         â†“
-                                Match â†’ Update Model
+                                Decision → Generate → Simulate
+                                         ↓
+                                Measure → Score → Select Best
+                                         ↓
+                                Validate → Execute → Monitor
+                                         ↓
+                                Match → Update Model
                                 ```
                                 """)
                             
@@ -2389,13 +2389,13 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Request â†’ Analyze â†’ Plan
-                                         â†“
-                                Allocate â†’ Distribute â†’ Monitor
-                                         â†“
-                                Complete â†’ Aggregate â†’ Validate
-                                         â†“
-                                Quality â†’ Deliver Output
+                                Request → Analyze → Plan
+                                         ↓
+                                Allocate → Distribute → Monitor
+                                         ↓
+                                Complete → Aggregate → Validate
+                                         ↓
+                                Quality → Deliver Output
                                 ```
                                 """)
                             
@@ -3096,7 +3096,7 @@ def landing_page():
                         "pattern": "Reflection",
                         "scenario": "Financial Document Review Agent",
                         "description": "LLM + Reflection pattern for self-evaluating loan application reviews",
-                        "implementation": "GPT-4 analyzes loan docs â†’ Self-evaluates decision confidence â†’ Iteratively refines reasoning â†’ Final recommendation",
+                        "implementation": "GPT-4 analyzes loan docs → Self-evaluates decision confidence → Iteratively refines reasoning → Final recommendation",
                         "tools_combination": "GPT-4 + Azure AI Content Safety + Audit Logger",
                         "business_value": "Reduces loan approval errors by 40%, ensures regulatory compliance"
                     },
@@ -3104,7 +3104,7 @@ def landing_page():
                         "pattern": "Planning",
                         "scenario": "Supply Chain Optimization Agent",
                         "description": "LLM + Planning pattern for complex logistics coordination",
-                        "implementation": "Claude breaks down delivery optimization â†’ Creates multi-step execution plan â†’ Monitors progress â†’ Adjusts dynamically",
+                        "implementation": "Claude breaks down delivery optimization → Creates multi-step execution plan → Monitors progress → Adjusts dynamically",
                         "tools_combination": "Claude-3-Sonnet + Temporal Workflow + PostgreSQL",
                         "business_value": "Optimizes delivery routes, reduces costs by 25%, improves customer satisfaction"
                     },
@@ -3112,7 +3112,7 @@ def landing_page():
                         "pattern": "Orchestration",
                         "scenario": "Customer Service Hub Agent",
                         "description": "LLM + Orchestration pattern for managing multi-channel customer interactions",
-                        "implementation": "GPT-4 coordinates chat, email, phone agents â†’ Routes complex queries â†’ Manages escalation workflows",
+                        "implementation": "GPT-4 coordinates chat, email, phone agents → Routes complex queries → Manages escalation workflows",
                         "tools_combination": "GPT-4 + LangGraph + RabbitMQ + Prometheus",
                         "business_value": "Unified customer experience, 60% faster resolution times"
                     }
@@ -3133,7 +3133,7 @@ def landing_page():
                         "pattern": "Memory & Learning",
                         "scenario": "Knowledge Management Agent",
                         "description": "Vector DB + Memory pattern for enterprise knowledge discovery",
-                        "implementation": "Pinecone stores company docs â†’ Agent learns from interactions â†’ Builds knowledge graph â†’ Improves search accuracy",
+                        "implementation": "Pinecone stores company docs → Agent learns from interactions → Builds knowledge graph → Improves search accuracy",
                         "tools_combination": "Pinecone + text-embedding-ada-002 + Azure Cognitive Search + Redis",
                         "business_value": "90% faster knowledge discovery, reduces duplicate work by 50%"
                     },
@@ -3141,7 +3141,7 @@ def landing_page():
                         "pattern": "Tool Use",
                         "scenario": "Legal Document Research Agent",
                         "description": "Vector DB + Tool Use pattern for legal precedent research",
-                        "implementation": "Weaviate stores case law â†’ Agent retrieves relevant precedents â†’ Validates against current law â†’ Generates legal briefs",
+                        "implementation": "Weaviate stores case law → Agent retrieves relevant precedents → Validates against current law → Generates legal briefs",
                         "tools_combination": "Weaviate + Cohere Embeddings + Legal API + Document Generator",
                         "business_value": "Accelerates legal research by 70%, improves case preparation accuracy"
                     },
@@ -3149,7 +3149,7 @@ def landing_page():
                         "pattern": "Exploration",
                         "scenario": "Market Research Agent",
                         "description": "Vector DB + Exploration pattern for competitive analysis",
-                        "implementation": "Chroma stores market data â†’ Agent explores multiple scenarios â†’ Simulates competitor responses â†’ Recommends strategies",
+                        "implementation": "Chroma stores market data → Agent explores multiple scenarios → Simulates competitor responses → Recommends strategies",
                         "tools_combination": "Chroma + Hugging Face Embeddings + Simulation Engine + Analytics API",
                         "business_value": "Identifies market opportunities 3x faster, improves strategic decision making"
                     }
@@ -3170,7 +3170,7 @@ def landing_page():
                         "pattern": "Tool Use",
                         "scenario": "Financial Reporting Agent",
                         "description": "MCP + Tool Use pattern for automated financial data analysis",
-                        "implementation": "Snowflake Cortex MCP â†’ Agent queries financial data â†’ Validates against regulations â†’ Generates compliance reports",
+                        "implementation": "Snowflake Cortex MCP → Agent queries financial data → Validates against regulations → Generates compliance reports",
                         "tools_combination": "Snowflake Cortex MCP + LangChain + Audit Logger + Report Generator",
                         "business_value": "Automates 80% of financial reporting, ensures regulatory compliance"
                     },
@@ -3178,7 +3178,7 @@ def landing_page():
                         "pattern": "Collaboration",
                         "scenario": "Cross-Department Data Agent",
                         "description": "MCP + Collaboration pattern for inter-departmental data sharing",
-                        "implementation": "LangGraph coordinates multiple MCPs â†’ HR, Finance, Operations agents collaborate â†’ Share insights securely",
+                        "implementation": "LangGraph coordinates multiple MCPs → HR, Finance, Operations agents collaborate → Share insights securely",
                         "tools_combination": "LangGraph + Multiple MCPs + RBAC System + Data Lineage Tracker",
                         "business_value": "Breaks down data silos, enables cross-functional insights"
                     },
@@ -3186,7 +3186,7 @@ def landing_page():
                         "pattern": "Orchestration",
                         "scenario": "Enterprise Data Pipeline Agent",
                         "description": "MCP + Orchestration pattern for complex data workflows",
-                        "implementation": "Agent orchestrates data extraction â†’ Transformation via MCPs â†’ Loading to multiple systems â†’ Quality validation",
+                        "implementation": "Agent orchestrates data extraction → Transformation via MCPs → Loading to multiple systems → Quality validation",
                         "tools_combination": "Temporal + Multiple MCPs + Data Quality Validator + Monitoring Dashboard",
                         "business_value": "Reduces data pipeline failures by 90%, improves data quality"
                     }
@@ -3207,7 +3207,7 @@ def landing_page():
                         "pattern": "Tool Use",
                         "scenario": "Customer Onboarding Agent",
                         "description": "API Catalog + Tool Use pattern for automated customer setup",
-                        "implementation": "Agent discovers onboarding APIs â†’ Validates customer data â†’ Calls CRM, billing, support APIs â†’ Tracks progress",
+                        "implementation": "Agent discovers onboarding APIs → Validates customer data → Calls CRM, billing, support APIs → Tracks progress",
                         "tools_combination": "API Gateway + OpenAPI Registry + Validation Service + Progress Tracker",
                         "business_value": "Reduces onboarding time by 75%, improves customer experience"
                     },
@@ -3215,7 +3215,7 @@ def landing_page():
                         "pattern": "Planning",
                         "scenario": "IT Operations Agent",
                         "description": "API Catalog + Planning pattern for infrastructure management",
-                        "implementation": "Agent plans infrastructure changes â†’ Discovers relevant APIs â†’ Executes deployment plan â†’ Monitors results",
+                        "implementation": "Agent plans infrastructure changes → Discovers relevant APIs → Executes deployment plan → Monitors results",
                         "tools_combination": "Kong API Gateway + Kubernetes API + Monitoring APIs + Rollback Service",
                         "business_value": "Automates 60% of IT operations, reduces deployment errors"
                     },
@@ -3223,7 +3223,7 @@ def landing_page():
                         "pattern": "Reflection",
                         "scenario": "API Performance Agent",
                         "description": "API Catalog + Reflection pattern for API optimization",
-                        "implementation": "Agent monitors API performance â†’ Self-evaluates optimization opportunities â†’ Adjusts API calls â†’ Measures improvements",
+                        "implementation": "Agent monitors API performance → Self-evaluates optimization opportunities → Adjusts API calls → Measures improvements",
                         "tools_combination": "API Gateway + Performance Monitoring + A/B Testing Framework + Analytics",
                         "business_value": "Improves API response times by 40%, reduces costs by 30%"
                     }
@@ -3240,7 +3240,7 @@ def landing_page():
                         "pattern": "Memory & Learning",
                         "scenario": "Customer Analytics Agent",
                         "description": "Data Lake + Memory pattern for customer behavior analysis",
-                        "implementation": "Databricks stores customer data â†’ Agent learns patterns â†’ Builds customer profiles â†’ Predicts behavior",
+                        "implementation": "Databricks stores customer data → Agent learns patterns → Builds customer profiles → Predicts behavior",
                         "tools_combination": "Databricks + MLflow + Customer Profile DB + Prediction API",
                         "business_value": "Increases customer retention by 35%, improves personalization"
                     },
@@ -3248,7 +3248,7 @@ def landing_page():
                         "pattern": "Exploration",
                         "scenario": "Risk Assessment Agent",
                         "description": "Data Warehouse + Exploration pattern for financial risk analysis",
-                        "implementation": "BigQuery stores financial data â†’ Agent explores risk scenarios â†’ Simulates market conditions â†’ Recommends strategies",
+                        "implementation": "BigQuery stores financial data → Agent explores risk scenarios → Simulates market conditions → Recommends strategies",
                         "tools_combination": "BigQuery + Risk Simulation Engine + Scenario Generator + Decision Support",
                         "business_value": "Reduces financial risk exposure by 50%, improves decision accuracy"
                     },
@@ -3256,7 +3256,7 @@ def landing_page():
                         "pattern": "Critic/Reviewer \U0001F9D0",
                         "scenario": "Data Quality Agent",
                         "description": "Database + Critic pattern for data validation and quality assurance",
-                        "implementation": "PostgreSQL stores business data â†’ Agent validates data quality â†’ Reviews anomalies â†’ Recommends corrections",
+                        "implementation": "PostgreSQL stores business data → Agent validates data quality → Reviews anomalies → Recommends corrections",
                         "tools_combination": "PostgreSQL + Data Quality Rules + Anomaly Detection + Correction Workflow",
                         "business_value": "Improves data quality by 85%, reduces downstream errors"
                     }
@@ -3276,7 +3276,7 @@ def landing_page():
                         "pattern": "Critic/Reviewer \U0001F9D0",
                         "scenario": "Compliance Monitoring Agent",
                         "description": "Guardrails + Critic pattern for regulatory compliance checking",
-                        "implementation": "Agent processes business decisions â†’ Guardrails validate compliance â†’ Critic reviews for violations â†’ Escalates issues",
+                        "implementation": "Agent processes business decisions → Guardrails validate compliance → Critic reviews for violations → Escalates issues",
                         "tools_combination": "Guardrails.ai + Compliance Rules Engine + Audit Logger + Escalation System",
                         "business_value": "Ensures 100% regulatory compliance, reduces audit findings by 90%"
                     },
@@ -3284,7 +3284,7 @@ def landing_page():
                         "pattern": "Reflection",
                         "scenario": "Content Moderation Agent",
                         "description": "Content Safety + Reflection pattern for social media moderation",
-                        "implementation": "Agent reviews user content â†’ Self-evaluates moderation decisions â†’ Reflects on accuracy â†’ Improves over time",
+                        "implementation": "Agent reviews user content → Self-evaluates moderation decisions → Reflects on accuracy → Improves over time",
                         "tools_combination": "Azure AI Content Safety + Reflection Engine + Feedback Loop + Learning System",
                         "business_value": "Improves moderation accuracy by 60%, reduces false positives"
                     },
@@ -3292,7 +3292,7 @@ def landing_page():
                         "pattern": "Orchestration",
                         "scenario": "Enterprise Security Agent",
                         "description": "Policy Engine + Orchestration pattern for security monitoring",
-                        "implementation": "Agent orchestrates security checks â†’ Applies policy rules â†’ Coordinates responses â†’ Manages incident workflows",
+                        "implementation": "Agent orchestrates security checks → Applies policy rules → Coordinates responses → Manages incident workflows",
                         "tools_combination": "Policy-as-Code + Security APIs + Incident Management + Response Automation",
                         "business_value": "Reduces security incidents by 70%, improves response times"
                     }
@@ -3648,7 +3648,7 @@ def landing_page():
                                     st.error(f"{tag}")
                             
                             st.markdown("**Approval History:**")
-                            st.write(" â†’ ".join(agent['governanceHooks']['approvalHistory']))
+                            st.write(" → ".join(agent['governanceHooks']['approvalHistory']))
                     
                     with tab3:
                         # Codified Policies & Runtime Tools
@@ -4026,7 +4026,7 @@ def agent_detail_page():
         approval_history = agent['governanceHooks']['approvalHistory']
         for i, status in enumerate(approval_history):
             if i < len(approval_history) - 1:
-                st.write(f"**{status}** â†’")
+                st.write(f"**{status}** →")
             else:
                 st.write(f"**{status}**")
         
@@ -4123,9 +4123,9 @@ def agent_detail_page():
         
         st.markdown("### Lineage")
         st.write("**Data Lineage:**")
-        st.write("• Input â†’ Processing â†’ Output")
-        st.write("• Dependencies â†’ Agent â†’ Downstream Systems")
-        st.write("• Audit Trail â†’ Decision Journal â†’ Compliance Report")
+        st.write("• Input → Processing → Output")
+        st.write("• Dependencies → Agent → Downstream Systems")
+        st.write("• Audit Trail → Decision Journal → Compliance Report")
         
         st.markdown("### Decision Journals")
         audit_logs = agent['governanceHooks']['auditLogs']
