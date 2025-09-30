@@ -2,6 +2,57 @@
 
 A comprehensive Streamlit application for managing and monitoring AI agents in an enterprise environment. This application provides a complete governance, monitoring, and audit system for AI agents.
 
+## Application Summary
+
+The Agentic AI Catalog is a sophisticated enterprise-grade platform designed to manage, monitor, and govern AI agents at scale. Built with Streamlit, it provides a complete lifecycle management system for AI agents, from initial registration through production deployment and ongoing monitoring.
+
+### Key Capabilities
+
+**Agent Lifecycle Management**
+- Complete agent registration and metadata management
+- Pattern-based agent classification and organization
+- Lifecycle stage tracking (Draft, Pilot, Approved)
+- Risk assessment and compliance monitoring
+
+**Governance & Compliance**
+- Policy-as-Code implementation with YAML/JSON support
+- Real-time policy validation and enforcement
+- Multi-framework compliance tracking (GDPR, OSFI, FINTRAC)
+- Audit trail generation and compliance reporting
+
+**Runtime Monitoring & Control**
+- Real-time agent performance monitoring
+- Escalation management and incident handling
+- Guardrail enforcement and safety controls
+- Resource usage tracking and optimization
+
+**Payment Processing Workflow**
+- End-to-end payment instruction processing
+- Natural language intent extraction and parsing
+- AI-powered anomaly detection and risk assessment
+- Multi-level approval workflows with human oversight
+
+**Enterprise Integration**
+- Tool ecosystem management and cataloging
+- API integration and connector frameworks
+- Role-based access control (RBAC)
+- Scalable architecture for enterprise deployment
+
+### Target Users
+
+- **AI/ML Engineers**: Agent development and deployment
+- **Compliance Officers**: Policy management and audit oversight
+- **Operations Teams**: Runtime monitoring and incident management
+- **Business Stakeholders**: Performance dashboards and reporting
+- **Financial Controllers**: Payment processing and risk management
+
+### Technology Stack
+
+- **Frontend**: Streamlit with custom iOS-style UI components
+- **Data Visualization**: Plotly for interactive charts and diagrams
+- **Data Processing**: Pandas for data manipulation and analysis
+- **Architecture**: Modular design with caching and performance optimization
+- **Integration**: Support for various AI/ML frameworks and enterprise systems
 
 ## Features
 
