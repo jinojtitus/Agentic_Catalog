@@ -1,4 +1,4 @@
-﻿import streamlit as st
+import streamlit as st
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -1077,7 +1077,7 @@ def load_agent_data():
                                 'modular_components': True
                             }
                         },
-                        'Planning': {
+                        'Planning 📋': {
                             'implementation': 'Breaks down complex workflows into executable sub-tasks',
                             'planning_depth': 'Multi-level task decomposition',
                             'plan_format': 'JSON workflow definitions',
@@ -1538,7 +1538,7 @@ def load_agent_data():
                                 'circular_delegation_check': True
                             }
                         },
-                        'Planning': {
+                        'Planning 📋': {
                             'implementation': 'Develops multi-step negotiation strategies and fallback plans',
                             'planning_depth': 'Strategic negotiation planning with contingency planning',
                             'plan_format': 'JSON negotiation strategies',
@@ -1674,7 +1674,7 @@ def load_agent_data():
                 },
                 'patternImplementations': {
                     'primary_patterns': ['Tool Use', 'Memory & Learning', 'Reflection'],
-                    'secondary_patterns': ['Critic/Reviewer', 'Planning'],
+                    'secondary_patterns': ['Critic/Reviewer \U0001F9D0', 'Planning 📋'],
                     'pattern_details': {
                         'Tool Use': {
                             'implementation': 'Integrates with classification models, vector databases, and document storage systems',
@@ -1716,7 +1716,7 @@ def load_agent_data():
                                 'critique_traceability': True
                             }
                         },
-                        'Planning': {
+                        'Planning 📋': {
                             'implementation': 'Plans classification strategies for complex multi-document scenarios',
                             'planning_depth': 'Document classification workflow planning',
                             'plan_format': 'JSON classification strategies',
@@ -1876,7 +1876,7 @@ def load_agent_data():
                                 'timeout_seconds': 60
                             }
                         },
-                        'Planning': {
+                        'Planning 📋': {
                             'implementation': 'Plans multi-agent coordination strategies and escalation responses',
                             'planning_depth': 'Multi-agent coordination and supervision planning',
                             'plan_format': 'JSON supervision strategies',
@@ -2003,7 +2003,7 @@ def landing_page():
                 ]
             },
             {
-                "name": "Planning",
+                "name": "Planning 📋",
                 "description": "The agent breaks down a high-level goal into sub-tasks, sequencing them logically.",
                 "example": "Multi-step property rebate application workflow - Enterprise AI orchestrating data retrieval, validation, and reporting",
                 "rules": [
@@ -2076,14 +2076,14 @@ def landing_page():
                 "example": "'Red team' agent checking for bias, gaps, or regulatory misalignment",
                 "rules": [
                     "Critic must use explicit evaluation rubrics (accuracy, bias, compliance).",
-                    "Critic cannot modify outputs directlyâ€”only suggest changes.",
+                    "Critic cannot modify outputs directly—only suggest changes.",
                     "Final decision authority must be defined (critic vs. primary agent vs. orchestrator).",
                     "Maintain traceability: log critiques alongside outputs."
                 ],
                 "explicit_policies": [
                     "Rule: Critic must use a rubric (e.g., factual accuracy, bias, compliance).",
                     "Rule: Critic outputs must be tagged as approve, revise, or reject.",
-                    "Rule: Critic cannot directly editâ€”only recommend changes.",
+                    "Rule: Critic cannot directly edit—only recommend changes.",
                     "Rule: Final decision authority is explicitly assigned (critic vs. orchestrator)."
                 ]
             },
@@ -2116,7 +2116,7 @@ def landing_page():
                 ],
                 "explicit_policies": [
                     "Rule: Orchestrator must maintain a global task registry with status updates.",
-                    "Rule: Failures trigger escalation policy: retry â†’ fallback â†’ human-in-loop.",
+                    "Rule: Failures trigger escalation policy: retry → fallback → human-in-loop.",
                     "Rule: All agents/tools must be modular (swappable without breaking pipeline).",
                     "Rule: Orchestrator must log resource usage (time, tokens, API calls)."
                 ]
@@ -2154,23 +2154,23 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Input â†’ Generate â†’ Evaluate
-                                         â†‘         â†“
-                                    Apply Fixes â† Quality
-                                         â†“
-                                    Max Loops â†’ Human
-                                         â†“
+                                Input → Generate → Evaluate
+                                         ↑         ↓
+                                    Apply Fixes ← Quality
+                                         ↓
+                                    Max Loops → Human
+                                         ↓
                                     Final Output
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Self-Evaluation**: Quality assessment")
-                                st.markdown("â€¢ **Iterative Improvement**: Refinement cycles")
-                                st.markdown("â€¢ **Quality Gates**: Pass/fail criteria")
-                                st.markdown("â€¢ **Escalation**: Human intervention")
-                                st.markdown("â€¢ **Audit Trail**: Complete logging")
+                                st.markdown("• **Self-Evaluation**: Quality assessment")
+                                st.markdown("• **Iterative Improvement**: Refinement cycles")
+                                st.markdown("• **Quality Gates**: Pass/fail criteria")
+                                st.markdown("• **Escalation**: Human intervention")
+                                st.markdown("• **Audit Trail**: Complete logging")
                             
                         elif pattern_name == "planning":
                             st.markdown("**Core Concept:** Hierarchical goal decomposition and task sequencing for complex workflows.")
@@ -2187,21 +2187,21 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Goal â†’ Analyze â†’ Break Down
-                                         â†“
-                                Dependencies â†’ Plan â†’ Validate
-                                         â†“
-                                Execute â†’ Monitor â†’ Complete
+                                Goal → Analyze → Break Down
+                                         ↓
+                                Dependencies → Plan → Validate
+                                         ↓
+                                Execute → Monitor → Complete
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Hierarchical Decomposition**: Goal breakdown")
-                                st.markdown("â€¢ **Dependency Mapping**: Task sequencing")
-                                st.markdown("â€¢ **Plan Validation**: Feasibility check")
-                                st.markdown("â€¢ **Progress Monitoring**: Status tracking")
-                                st.markdown("â€¢ **Adaptive Execution**: Real-time adjustment")
+                                st.markdown("• **Hierarchical Decomposition**: Goal breakdown")
+                                st.markdown("• **Dependency Mapping**: Task sequencing")
+                                st.markdown("• **Plan Validation**: Feasibility check")
+                                st.markdown("• **Progress Monitoring**: Status tracking")
+                                st.markdown("• **Adaptive Execution**: Real-time adjustment")
                             
                         elif pattern_name == "tool":
                             st.markdown("**Core Concept:** External tool integration with validation, error handling, and fallback mechanisms.")
@@ -2219,23 +2219,23 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Request â†’ Select â†’ Validate
-                                         â†“
-                                Execute â†’ Success â†’ Sanitize
-                                         â†“
-                                Retry â†’ Fallback â†’ Human
-                                         â†“
+                                Request → Select → Validate
+                                         ↓
+                                Execute → Success → Sanitize
+                                         ↓
+                                Retry → Fallback → Human
+                                         ↓
                                 Return Result
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Tool Selection**: Appropriate tool choice")
-                                st.markdown("â€¢ **Input Validation**: Parameter verification")
-                                st.markdown("â€¢ **Error Handling**: Retry & fallback")
-                                st.markdown("â€¢ **Output Sanitization**: Result cleaning")
-                                st.markdown("â€¢ **Escalation Path**: Human intervention")
+                                st.markdown("• **Tool Selection**: Appropriate tool choice")
+                                st.markdown("• **Input Validation**: Parameter verification")
+                                st.markdown("• **Error Handling**: Retry & fallback")
+                                st.markdown("• **Output Sanitization**: Result cleaning")
+                                st.markdown("• **Escalation Path**: Human intervention")
                             
                         elif pattern_name == "collaboration":
                             st.markdown("**Core Concept:** Multi-agent coordination with role-based delegation and conflict resolution.")
@@ -2253,23 +2253,23 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Task â†’ Roles â†’ Agents
-                                         â†“
-                                Delegate â†’ Process â†’ Results
-                                         â†“
-                                Coordinate â†’ Validate â†’ Combine
-                                         â†“
-                                Conflict â†’ Resolve â†’ Final
+                                Task → Roles → Agents
+                                         ↓
+                                Delegate → Process → Results
+                                         ↓
+                                Coordinate → Validate → Combine
+                                         ↓
+                                Conflict → Resolve → Final
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Role-Based Delegation**: Specialized agents")
-                                st.markdown("â€¢ **Parallel Processing**: Simultaneous work")
-                                st.markdown("â€¢ **Coordination Hub**: Result aggregation")
-                                st.markdown("â€¢ **Conflict Resolution**: Disagreement handling")
-                                st.markdown("â€¢ **Consensus Building**: Agreement negotiation")
+                                st.markdown("• **Role-Based Delegation**: Specialized agents")
+                                st.markdown("• **Parallel Processing**: Simultaneous work")
+                                st.markdown("• **Coordination Hub**: Result aggregation")
+                                st.markdown("• **Conflict Resolution**: Disagreement handling")
+                                st.markdown("• **Consensus Building**: Agreement negotiation")
                             
                         elif pattern_name == "memory":
                             st.markdown("**Core Concept:** Context retention and adaptive learning with memory management and knowledge evolution.")
@@ -2287,23 +2287,23 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Experience â†’ Analyze â†’ Classify
-                                         â†“
+                                Experience → Analyze → Classify
+                                         ↓
                                 Short-term / Long-term Storage
-                                         â†“
-                                Learning â†’ Adapt â†’ Evaluate
-                                         â†“
-                                Improved â†’ Update Model
+                                         ↓
+                                Learning → Adapt → Evaluate
+                                         ↓
+                                Improved → Update Model
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Memory Classification**: Short/long-term storage")
-                                st.markdown("â€¢ **Context Analysis**: Experience significance")
-                                st.markdown("â€¢ **Learning Process**: Behavior adaptation")
-                                st.markdown("â€¢ **Performance Evaluation**: Learning effectiveness")
-                                st.markdown("â€¢ **Knowledge Consolidation**: Integration")
+                                st.markdown("• **Memory Classification**: Short/long-term storage")
+                                st.markdown("• **Context Analysis**: Experience significance")
+                                st.markdown("• **Learning Process**: Behavior adaptation")
+                                st.markdown("• **Performance Evaluation**: Learning effectiveness")
+                                st.markdown("• **Knowledge Consolidation**: Integration")
                             
                         elif pattern_name == "critic":
                             st.markdown("**Core Concept:** Secondary validation and quality assurance through independent critique and review.")
@@ -2321,23 +2321,23 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Output â†’ Assign â†’ Rubric
-                                         â†“
-                                Assess â†’ Review â†’ Decision
-                                         â†“
+                                Output → Assign → Rubric
+                                         ↓
+                                Assess → Review → Decision
+                                         ↓
                                 Approve / Revise / Reject
-                                         â†“
+                                         ↓
                                 Deliver / Fix / Human
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Independent Review**: Unbiased evaluation")
-                                st.markdown("â€¢ **Quality Rubrics**: Structured criteria")
-                                st.markdown("â€¢ **Revision Process**: Iterative improvement")
-                                st.markdown("â€¢ **Escalation Path**: Human expert review")
-                                st.markdown("â€¢ **Audit Trail**: Complete traceability")
+                                st.markdown("• **Independent Review**: Unbiased evaluation")
+                                st.markdown("• **Quality Rubrics**: Structured criteria")
+                                st.markdown("• **Revision Process**: Iterative improvement")
+                                st.markdown("• **Escalation Path**: Human expert review")
+                                st.markdown("• **Audit Trail**: Complete traceability")
                             
                         elif pattern_name == "exploration":
                             st.markdown("**Core Concept:** Multi-scenario testing and exploration for optimal decision-making.")
@@ -2355,23 +2355,23 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Decision â†’ Generate â†’ Simulate
-                                         â†“
-                                Measure â†’ Score â†’ Select Best
-                                         â†“
-                                Validate â†’ Execute â†’ Monitor
-                                         â†“
-                                Match â†’ Update Model
+                                Decision → Generate → Simulate
+                                         ↓
+                                Measure → Score → Select Best
+                                         ↓
+                                Validate → Execute → Monitor
+                                         ↓
+                                Match → Update Model
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Multi-Scenario Generation**: Multiple situations")
-                                st.markdown("â€¢ **Parallel Simulation**: Simultaneous testing")
-                                st.markdown("â€¢ **Outcome Measurement**: Result quantification")
-                                st.markdown("â€¢ **Assumption Validation**: Scenario verification")
-                                st.markdown("â€¢ **Learning Integration**: Model updates")
+                                st.markdown("• **Multi-Scenario Generation**: Multiple situations")
+                                st.markdown("• **Parallel Simulation**: Simultaneous testing")
+                                st.markdown("• **Outcome Measurement**: Result quantification")
+                                st.markdown("• **Assumption Validation**: Scenario verification")
+                                st.markdown("• **Learning Integration**: Model updates")
                             
                         else:  # orchestration
                             st.markdown("**Core Concept:** Meta-agent coordination managing multiple agents, tools, and workflows in a unified pipeline.")
@@ -2389,23 +2389,23 @@ def landing_page():
                             with col1:
                                 st.markdown("""
                                 ```
-                                Request â†’ Analyze â†’ Plan
-                                         â†“
-                                Allocate â†’ Distribute â†’ Monitor
-                                         â†“
-                                Complete â†’ Aggregate â†’ Validate
-                                         â†“
-                                Quality â†’ Deliver Output
+                                Request → Analyze → Plan
+                                         ↓
+                                Allocate → Distribute → Monitor
+                                         ↓
+                                Complete → Aggregate → Validate
+                                         ↓
+                                Quality → Deliver Output
                                 ```
                                 """)
                             
                             with col2:
                                 st.markdown("**Key Features:**")
-                                st.markdown("â€¢ **Pipeline Management**: End-to-end orchestration")
-                                st.markdown("â€¢ **Resource Allocation**: Agent/tool optimization")
-                                st.markdown("â€¢ **Progress Monitoring**: Execution tracking")
-                                st.markdown("â€¢ **Failure Recovery**: Error handling")
-                                st.markdown("â€¢ **Quality Validation**: Output standards")
+                                st.markdown("• **Pipeline Management**: End-to-end orchestration")
+                                st.markdown("• **Resource Allocation**: Agent/tool optimization")
+                                st.markdown("• **Progress Monitoring**: Execution tracking")
+                                st.markdown("• **Failure Recovery**: Error handling")
+                                st.markdown("• **Quality Validation**: Output standards")
                         
                         # Pattern Benefits and Use Cases
                         st.markdown("### Pattern Benefits")
@@ -2461,7 +2461,7 @@ def landing_page():
                         }
                         
                         for benefit in benefits.get(pattern_name, []):
-                            st.markdown(f"â€¢ {benefit}")
+                            st.markdown(f"• {benefit}")
                         
                         # Implementation Considerations
                         st.markdown("### Implementation Considerations")
@@ -2517,16 +2517,16 @@ def landing_page():
                         }
                         
                         for consideration in considerations.get(pattern_name, []):
-                            st.markdown(f"â€¢ {consideration}")
+                            st.markdown(f"• {consideration}")
                     
                     with tab2:
                         st.markdown("**Rules/Policies:**")
                         for rule in pattern['rules']:
-                            st.write(f"â€¢ {rule}")
+                            st.write(f"• {rule}")
                         
                         st.markdown("**Explicit Policies:**")
                         for policy in pattern['explicit_policies']:
-                            st.write(f"â€¢ {policy}")
+                            st.write(f"• {policy}")
                     
                     with tab3:
                         st.markdown("**Codified/Executable Configuration**")
@@ -3043,14 +3043,14 @@ def landing_page():
                         col1, col2, col3 = st.columns(3)
                         with col1:
                             st.download_button(
-                                label="Download JSON",
+                                label="📥 Download JSON",
                                 data=json.dumps(config, indent=2),
                                 file_name=f"{pattern_name}_pattern_config.json",
                                 mime="application/json"
                             )
                         with col2:
                             st.download_button(
-                                label="Download YAML",
+                                label="📥 Download YAML",
                                 data=yaml.dump(config, default_flow_style=False, indent=2),
                                 file_name=f"{pattern_name}_pattern_config.yaml",
                                 mime="text/yaml"
@@ -3074,13 +3074,13 @@ def landing_page():
         ]
         
         for policy in meta_policies:
-            st.markdown(f"â€¢ {policy}")
+            st.markdown(f"• {policy}")
     
     with main_tab2:
         # Tools Layer Tab
         st.markdown("### Tools Layer")
         st.markdown("""
-        **The tooling ecosystem that enables agentic AI**â€”the "muscles and nervous system" that let agents reason, act, and integrate with enterprise environments.
+        **The tooling ecosystem that enables agentic AI**—the "muscles and nervous system" that let agents reason, act, and integrate with enterprise environments.
         """)
         
         # Create expandable sections for each tool category
@@ -3088,23 +3088,23 @@ def landing_page():
             {
                 "name": "Large Language Models (LLMs)",
                 "role": "Core reasoning and generation engine",
-                "examples": ["GPTâ€‘4/5", "Claude", "Gemini", "LLaMA", "Mistral"],
+                "examples": ["GPT‑4/5", "Claude", "Gemini", "LLaMA", "Mistral"],
                 "agentic_use": "Planning, reflection, orchestration, dialogue management",
-                "enterprise_note": "Often wrapped with governance layers (guardrails, policyâ€‘asâ€‘code, audit logging)",
+                "enterprise_note": "Often wrapped with governance layers (guardrails, policy‑as‑code, audit logging)",
                 "pattern_scenarios": [
                     {
                         "pattern": "Reflection",
                         "scenario": "Financial Document Review Agent",
                         "description": "LLM + Reflection pattern for self-evaluating loan application reviews",
-                        "implementation": "GPT-4 analyzes loan docs â†’ Self-evaluates decision confidence â†’ Iteratively refines reasoning â†’ Final recommendation",
+                        "implementation": "GPT-4 analyzes loan docs → Self-evaluates decision confidence → Iteratively refines reasoning → Final recommendation",
                         "tools_combination": "GPT-4 + Azure AI Content Safety + Audit Logger",
                         "business_value": "Reduces loan approval errors by 40%, ensures regulatory compliance"
                     },
                     {
-                        "pattern": "Planning",
+                        "pattern": "Planning 📋",
                         "scenario": "Supply Chain Optimization Agent",
                         "description": "LLM + Planning pattern for complex logistics coordination",
-                        "implementation": "Claude breaks down delivery optimization â†’ Creates multi-step execution plan â†’ Monitors progress â†’ Adjusts dynamically",
+                        "implementation": "Claude breaks down delivery optimization → Creates multi-step execution plan → Monitors progress → Adjusts dynamically",
                         "tools_combination": "Claude-3-Sonnet + Temporal Workflow + PostgreSQL",
                         "business_value": "Optimizes delivery routes, reduces costs by 25%, improves customer satisfaction"
                     },
@@ -3112,7 +3112,7 @@ def landing_page():
                         "pattern": "Orchestration",
                         "scenario": "Customer Service Hub Agent",
                         "description": "LLM + Orchestration pattern for managing multi-channel customer interactions",
-                        "implementation": "GPT-4 coordinates chat, email, phone agents â†’ Routes complex queries â†’ Manages escalation workflows",
+                        "implementation": "GPT-4 coordinates chat, email, phone agents → Routes complex queries → Manages escalation workflows",
                         "tools_combination": "GPT-4 + LangGraph + RabbitMQ + Prometheus",
                         "business_value": "Unified customer experience, 60% faster resolution times"
                     }
@@ -3126,14 +3126,14 @@ def landing_page():
                     "**Vector DBs:** Pinecone, Weaviate, Qdrant, Milvus, Chroma",
                     "**Integrated Vector DBs:** Azure SQL, PostgreSQL with pgvector, Snowflake Cortex"
                 ],
-                "agentic_use": "Retrievalâ€‘Augmented Generation (RAG), semantic search, contextual grounding",
+                "agentic_use": "Retrieval‑Augmented Generation (RAG), semantic search, contextual grounding",
                 "enterprise_note": "Integrated vector DBs are gaining traction because they combine structured + unstructured data in one governed environment",
                 "pattern_scenarios": [
                     {
                         "pattern": "Memory & Learning",
                         "scenario": "Knowledge Management Agent",
                         "description": "Vector DB + Memory pattern for enterprise knowledge discovery",
-                        "implementation": "Pinecone stores company docs â†’ Agent learns from interactions â†’ Builds knowledge graph â†’ Improves search accuracy",
+                        "implementation": "Pinecone stores company docs → Agent learns from interactions → Builds knowledge graph → Improves search accuracy",
                         "tools_combination": "Pinecone + text-embedding-ada-002 + Azure Cognitive Search + Redis",
                         "business_value": "90% faster knowledge discovery, reduces duplicate work by 50%"
                     },
@@ -3141,7 +3141,7 @@ def landing_page():
                         "pattern": "Tool Use",
                         "scenario": "Legal Document Research Agent",
                         "description": "Vector DB + Tool Use pattern for legal precedent research",
-                        "implementation": "Weaviate stores case law â†’ Agent retrieves relevant precedents â†’ Validates against current law â†’ Generates legal briefs",
+                        "implementation": "Weaviate stores case law → Agent retrieves relevant precedents → Validates against current law → Generates legal briefs",
                         "tools_combination": "Weaviate + Cohere Embeddings + Legal API + Document Generator",
                         "business_value": "Accelerates legal research by 70%, improves case preparation accuracy"
                     },
@@ -3149,14 +3149,14 @@ def landing_page():
                         "pattern": "Exploration",
                         "scenario": "Market Research Agent",
                         "description": "Vector DB + Exploration pattern for competitive analysis",
-                        "implementation": "Chroma stores market data â†’ Agent explores multiple scenarios â†’ Simulates competitor responses â†’ Recommends strategies",
+                        "implementation": "Chroma stores market data → Agent explores multiple scenarios → Simulates competitor responses → Recommends strategies",
                         "tools_combination": "Chroma + Hugging Face Embeddings + Simulation Engine + Analytics API",
                         "business_value": "Identifies market opportunities 3x faster, improves strategic decision making"
                     }
                 ]
             },
             {
-                "name": "MCPs (Model Context Protocols) & Connectors",
+                "name": "🔌 MCPs (Model Context Protocols) & Connectors",
                 "role": "Standardize how agents talk to external systems (databases, APIs, SaaS apps)",
                 "examples": [
                     "**LangChain / LangGraph** connectors",
@@ -3164,13 +3164,13 @@ def landing_page():
                     "**Snowflake Cortex MCPs:** allow direct querying of Snowflake with embeddings + SQL"
                 ],
                 "agentic_use": "Agents can query enterprise data warehouses (Snowflake, BigQuery, Databricks) without brittle prompt hacks",
-                "enterprise_note": "MCPs are critical for **auditability**â€”you can log every query and enforce RBAC",
+                "enterprise_note": "MCPs are critical for **auditability**—you can log every query and enforce RBAC",
                 "pattern_scenarios": [
                     {
                         "pattern": "Tool Use",
                         "scenario": "Financial Reporting Agent",
                         "description": "MCP + Tool Use pattern for automated financial data analysis",
-                        "implementation": "Snowflake Cortex MCP â†’ Agent queries financial data â†’ Validates against regulations â†’ Generates compliance reports",
+                        "implementation": "Snowflake Cortex MCP → Agent queries financial data → Validates against regulations → Generates compliance reports",
                         "tools_combination": "Snowflake Cortex MCP + LangChain + Audit Logger + Report Generator",
                         "business_value": "Automates 80% of financial reporting, ensures regulatory compliance"
                     },
@@ -3178,7 +3178,7 @@ def landing_page():
                         "pattern": "Collaboration",
                         "scenario": "Cross-Department Data Agent",
                         "description": "MCP + Collaboration pattern for inter-departmental data sharing",
-                        "implementation": "LangGraph coordinates multiple MCPs â†’ HR, Finance, Operations agents collaborate â†’ Share insights securely",
+                        "implementation": "LangGraph coordinates multiple MCPs → HR, Finance, Operations agents collaborate → Share insights securely",
                         "tools_combination": "LangGraph + Multiple MCPs + RBAC System + Data Lineage Tracker",
                         "business_value": "Breaks down data silos, enables cross-functional insights"
                     },
@@ -3186,36 +3186,36 @@ def landing_page():
                         "pattern": "Orchestration",
                         "scenario": "Enterprise Data Pipeline Agent",
                         "description": "MCP + Orchestration pattern for complex data workflows",
-                        "implementation": "Agent orchestrates data extraction â†’ Transformation via MCPs â†’ Loading to multiple systems â†’ Quality validation",
+                        "implementation": "Agent orchestrates data extraction → Transformation via MCPs → Loading to multiple systems → Quality validation",
                         "tools_combination": "Temporal + Multiple MCPs + Data Quality Validator + Monitoring Dashboard",
                         "business_value": "Reduces data pipeline failures by 90%, improves data quality"
                     }
                 ]
             },
             {
-                "name": "API Catalogs & Tool Registries",
+                "name": "📚 API Catalogs & Tool Registries",
                 "role": "Curated catalogs of APIs/tools that agents can call",
                 "examples": [
-                    "**OpenAPI / Swagger specs** as machineâ€‘readable contracts",
+                    "**OpenAPI / Swagger specs** as machine‑readable contracts",
                     "**Enterprise API gateways** (Apigee, Kong, Azure API Management)",
                     "**LangChain toolkits** or **AI Gateway catalogs**"
                 ],
                 "agentic_use": "Agents discover and invoke APIs dynamically (e.g., \"fetch customer profile,\" \"submit compliance form\")",
-                "enterprise_note": "Policies can enforce **leastâ€‘privilege tool use** and **schema validation** before execution",
+                "enterprise_note": "Policies can enforce **least‑privilege tool use** and **schema validation** before execution",
                 "pattern_scenarios": [
                     {
                         "pattern": "Tool Use",
                         "scenario": "Customer Onboarding Agent",
                         "description": "API Catalog + Tool Use pattern for automated customer setup",
-                        "implementation": "Agent discovers onboarding APIs â†’ Validates customer data â†’ Calls CRM, billing, support APIs â†’ Tracks progress",
+                        "implementation": "Agent discovers onboarding APIs → Validates customer data → Calls CRM, billing, support APIs → Tracks progress",
                         "tools_combination": "API Gateway + OpenAPI Registry + Validation Service + Progress Tracker",
                         "business_value": "Reduces onboarding time by 75%, improves customer experience"
                     },
                     {
-                        "pattern": "Planning",
+                        "pattern": "Planning 📋",
                         "scenario": "IT Operations Agent",
                         "description": "API Catalog + Planning pattern for infrastructure management",
-                        "implementation": "Agent plans infrastructure changes â†’ Discovers relevant APIs â†’ Executes deployment plan â†’ Monitors results",
+                        "implementation": "Agent plans infrastructure changes → Discovers relevant APIs → Executes deployment plan → Monitors results",
                         "tools_combination": "Kong API Gateway + Kubernetes API + Monitoring APIs + Rollback Service",
                         "business_value": "Automates 60% of IT operations, reduces deployment errors"
                     },
@@ -3223,7 +3223,7 @@ def landing_page():
                         "pattern": "Reflection",
                         "scenario": "API Performance Agent",
                         "description": "API Catalog + Reflection pattern for API optimization",
-                        "implementation": "Agent monitors API performance â†’ Self-evaluates optimization opportunities â†’ Adjusts API calls â†’ Measures improvements",
+                        "implementation": "Agent monitors API performance → Self-evaluates optimization opportunities → Adjusts API calls → Measures improvements",
                         "tools_combination": "API Gateway + Performance Monitoring + A/B Testing Framework + Analytics",
                         "business_value": "Improves API response times by 40%, reduces costs by 30%"
                     }
@@ -3240,7 +3240,7 @@ def landing_page():
                         "pattern": "Memory & Learning",
                         "scenario": "Customer Analytics Agent",
                         "description": "Data Lake + Memory pattern for customer behavior analysis",
-                        "implementation": "Databricks stores customer data â†’ Agent learns patterns â†’ Builds customer profiles â†’ Predicts behavior",
+                        "implementation": "Databricks stores customer data → Agent learns patterns → Builds customer profiles → Predicts behavior",
                         "tools_combination": "Databricks + MLflow + Customer Profile DB + Prediction API",
                         "business_value": "Increases customer retention by 35%, improves personalization"
                     },
@@ -3248,7 +3248,7 @@ def landing_page():
                         "pattern": "Exploration",
                         "scenario": "Risk Assessment Agent",
                         "description": "Data Warehouse + Exploration pattern for financial risk analysis",
-                        "implementation": "BigQuery stores financial data â†’ Agent explores risk scenarios â†’ Simulates market conditions â†’ Recommends strategies",
+                        "implementation": "BigQuery stores financial data → Agent explores risk scenarios → Simulates market conditions → Recommends strategies",
                         "tools_combination": "BigQuery + Risk Simulation Engine + Scenario Generator + Decision Support",
                         "business_value": "Reduces financial risk exposure by 50%, improves decision accuracy"
                     },
@@ -3256,7 +3256,7 @@ def landing_page():
                         "pattern": "Critic/Reviewer \U0001F9D0",
                         "scenario": "Data Quality Agent",
                         "description": "Database + Critic pattern for data validation and quality assurance",
-                        "implementation": "PostgreSQL stores business data â†’ Agent validates data quality â†’ Reviews anomalies â†’ Recommends corrections",
+                        "implementation": "PostgreSQL stores business data → Agent validates data quality → Reviews anomalies → Recommends corrections",
                         "tools_combination": "PostgreSQL + Data Quality Rules + Anomaly Detection + Correction Workflow",
                         "business_value": "Improves data quality by 85%, reduces downstream errors"
                     }
@@ -3266,7 +3266,7 @@ def landing_page():
                 "name": "Governance & Guardrail Layers",
                 "role": "Ensure safe, compliant, and auditable agent behavior",
                 "examples": [
-                    "**Guardrails.ai**, **Azure AI Content Safety**, **policyâ€‘asâ€‘code frameworks**",
+                    "**Guardrails.ai**, **Azure AI Content Safety**, **policy‑as‑code frameworks**",
                     "**Prompt injection filters**, **output validators**, **critics/reviewers**"
                 ],
                 "agentic_use": "Wraps every tool call and LLM output with validation",
@@ -3276,7 +3276,7 @@ def landing_page():
                         "pattern": "Critic/Reviewer \U0001F9D0",
                         "scenario": "Compliance Monitoring Agent",
                         "description": "Guardrails + Critic pattern for regulatory compliance checking",
-                        "implementation": "Agent processes business decisions â†’ Guardrails validate compliance â†’ Critic reviews for violations â†’ Escalates issues",
+                        "implementation": "Agent processes business decisions → Guardrails validate compliance → Critic reviews for violations → Escalates issues",
                         "tools_combination": "Guardrails.ai + Compliance Rules Engine + Audit Logger + Escalation System",
                         "business_value": "Ensures 100% regulatory compliance, reduces audit findings by 90%"
                     },
@@ -3284,7 +3284,7 @@ def landing_page():
                         "pattern": "Reflection",
                         "scenario": "Content Moderation Agent",
                         "description": "Content Safety + Reflection pattern for social media moderation",
-                        "implementation": "Agent reviews user content â†’ Self-evaluates moderation decisions â†’ Reflects on accuracy â†’ Improves over time",
+                        "implementation": "Agent reviews user content → Self-evaluates moderation decisions → Reflects on accuracy → Improves over time",
                         "tools_combination": "Azure AI Content Safety + Reflection Engine + Feedback Loop + Learning System",
                         "business_value": "Improves moderation accuracy by 60%, reduces false positives"
                     },
@@ -3292,7 +3292,7 @@ def landing_page():
                         "pattern": "Orchestration",
                         "scenario": "Enterprise Security Agent",
                         "description": "Policy Engine + Orchestration pattern for security monitoring",
-                        "implementation": "Agent orchestrates security checks â†’ Applies policy rules â†’ Coordinates responses â†’ Manages incident workflows",
+                        "implementation": "Agent orchestrates security checks → Applies policy rules → Coordinates responses → Manages incident workflows",
                         "tools_combination": "Policy-as-Code + Security APIs + Incident Management + Response Automation",
                         "business_value": "Reduces security incidents by 70%, improves response times"
                     }
@@ -3307,7 +3307,7 @@ def landing_page():
                 
                 st.markdown("**Examples:**")
                 for example in category['examples']:
-                    st.markdown(f"â€¢ {example}")
+                    st.markdown(f"• {example}")
                 
                 st.markdown(f"**Agentic Use:** {category['agentic_use']}")
                 st.markdown(f"**Enterprise Note:** {category['enterprise_note']}")
@@ -3326,7 +3326,7 @@ def landing_page():
         
         # Agentic AI Stack Overview
         st.markdown("---")
-        st.markdown("### âš¡ Agentic AI Stack Overview")
+        st.markdown("### ⚡ Agentic AI Stack Overview")
         st.markdown("""
         An **agentic AI stack** typically looks like this:
         """)
@@ -3362,7 +3362,7 @@ def landing_page():
                 "enterprise_benefits": "Self-improving systems, reduced human oversight, higher accuracy"
             },
             {
-                "pattern": "Planning",
+                "pattern": "Planning 📋",
                 "primary_tools": "LLM + Orchestration Layer + Workflow Engine",
                 "scenarios": [
                     "Supply Chain Optimization (Claude + Temporal + PostgreSQL)",
@@ -3440,7 +3440,7 @@ def landing_page():
                 
                 st.markdown("**Real-World Scenarios:**")
                 for scenario in mapping['scenarios']:
-                    st.markdown(f"â€¢ {scenario}")
+                    st.markdown(f"• {scenario}")
                 
                 st.markdown(f"**Enterprise Benefits:** {mapping['enterprise_benefits']}")
         
@@ -3452,17 +3452,17 @@ def landing_page():
         
         with col1:
             st.markdown("**Key Integration Points:**")
-            st.markdown("â€¢ **Governance Integration**: Pattern rules map to guardrail policies")
-            st.markdown("â€¢ **Audit Trail**: Every tool call logged with pattern context")
-            st.markdown("â€¢ **Policy Enforcement**: Pattern-specific validation rules")
-            st.markdown("â€¢ **Resource Management**: Pattern-based resource allocation")
+            st.markdown("• **Governance Integration**: Pattern rules map to guardrail policies")
+            st.markdown("• **Audit Trail**: Every tool call logged with pattern context")
+            st.markdown("• **Policy Enforcement**: Pattern-specific validation rules")
+            st.markdown("• **Resource Management**: Pattern-based resource allocation")
         
         with col2:
             st.markdown("**Enterprise Requirements:**")
-            st.markdown("â€¢ **RBAC Integration**: Role-based access to tools")
-            st.markdown("â€¢ **Compliance Monitoring**: Pattern adherence tracking")
-            st.markdown("â€¢ **Performance Metrics**: Tool usage and pattern effectiveness")
-            st.markdown("â€¢ **Scalability**: Pattern-based horizontal scaling")
+            st.markdown("• **RBAC Integration**: Role-based access to tools")
+            st.markdown("• **Compliance Monitoring**: Pattern adherence tracking")
+            st.markdown("• **Performance Metrics**: Tool usage and pattern effectiveness")
+            st.markdown("• **Scalability**: Pattern-based horizontal scaling")
     
     with main_tab3:
         # Display agent cards
@@ -3507,7 +3507,7 @@ def landing_page():
                         # Capabilities
                         st.markdown("### Capabilities")
                         for capability in agent['capabilities']:
-                            st.write(f"â€¢ {capability}")
+                            st.write(f"• {capability}")
                         
                         # Dependencies
                         st.markdown("### Dependencies")
@@ -3570,7 +3570,7 @@ def landing_page():
                             'supervisor-v1': ['Payment Processor v1', 'Retriever Agent v1', 'Document Classifier v1']
                         }
                         for related in related_agents.get(agent['id'], []):
-                            st.write(f"â€¢ {related}")
+                            st.write(f"• {related}")
                     
                     with tab2:
                         # Pattern Implementations
@@ -3596,7 +3596,7 @@ def landing_page():
                                     if 'tools_used' in details:
                                         st.markdown("**Tools Used:**")
                                         for tool in details['tools_used']:
-                                            st.write(f"â€¢ {tool}")
+                                            st.write(f"• {tool}")
                                     
                                     if 'memory_type' in details:
                                         st.markdown(f"**Memory Type:** {details['memory_type']}")
@@ -3622,7 +3622,7 @@ def landing_page():
                                     if 'reflection_criteria' in details:
                                         st.markdown("**Reflection Criteria:**")
                                         for criteria in details['reflection_criteria']:
-                                            st.write(f"â€¢ {criteria}")
+                                            st.write(f"• {criteria}")
                                     
                                     if 'delegation_protocol' in details:
                                         st.markdown(f"**Delegation Protocol:** {details['delegation_protocol']}")
@@ -3648,14 +3648,14 @@ def landing_page():
                                     st.error(f"{tag}")
                             
                             st.markdown("**Approval History:**")
-                            st.write(" â†’ ".join(agent['governanceHooks']['approvalHistory']))
+                            st.write(" → ".join(agent['governanceHooks']['approvalHistory']))
                     
                     with tab3:
                         # Codified Policies & Runtime Tools
-                        st.markdown("**Codified Policies & Runtime Tools**")
+                        st.markdown("**🔧 Codified Policies & Runtime Tools**")
                         
                         # Policy Codification Section
-                        st.markdown("#### Codified Policies (YAML/JSON)")
+                        st.markdown("#### 📋 Codified Policies (YAML/JSON)")
                         
                         # Generate codified policies
                         codified_policies = generate_codified_policies(agent)
@@ -3669,7 +3669,7 @@ def landing_page():
                             
                             # Download button for YAML
                             st.download_button(
-                                label="Download YAML",
+                                label="📥 Download YAML",
                                 data=codified_policies['yaml'],
                                 file_name=f"{agent['id']}_policies.yaml",
                                 mime="text/yaml"
@@ -3681,7 +3681,7 @@ def landing_page():
                             
                             # Download button for JSON
                             st.download_button(
-                                label="Download JSON",
+                                label="📥 Download JSON",
                                 data=codified_policies['json'],
                                 file_name=f"{agent['id']}_policies.json",
                                 mime="application/json"
@@ -3718,7 +3718,7 @@ def landing_page():
                                 st.markdown(f"{status_icon} **{validation['policy_name']}**: {validation['message']}")
                             
                             # Test policy button
-                            if st.button("Test Policy Execution", key=f"test_policy_{agent['id']}"):
+                            if st.button("🧪 Test Policy Execution", key=f"test_policy_{agent['id']}"):
                                 st.success("Policy test executed successfully!")
                                 st.info("Check the Runtime Observation tab for results.")
                         
@@ -3734,7 +3734,7 @@ def landing_page():
                                 
                                 for tool in tools:
                                     status_color = "" if tool['status'] == 'active' else "" if tool['status'] == 'inactive' else ""
-                                    st.markdown(f"â€¢ {status_color} **{tool['name']}** - {tool['purpose']}")
+                                    st.markdown(f"• {status_color} **{tool['name']}** - {tool['purpose']}")
                                 
                                 st.markdown("")  # Add spacing between categories
                         else:
@@ -3743,22 +3743,22 @@ def landing_page():
                     with tab4:
                         st.markdown("**Input Filters:**")
                         for filter_type in agent['runtimeGuardrails']['inputFilters']:
-                            st.write(f"â€¢ {filter_type}")
+                            st.write(f"• {filter_type}")
                         
                         st.markdown("**Output Validators:**")
                         for validator in agent['runtimeGuardrails']['outputValidators']:
-                            st.write(f"â€¢ {validator}")
+                            st.write(f"• {validator}")
                         
                         st.markdown("**Rate Controls:**")
                         rate_controls = agent['runtimeGuardrails']['rateControls']
                         for control, value in rate_controls.items():
-                            st.write(f"â€¢ {control.replace('_', ' ').title()}: {value}")
+                            st.write(f"• {control.replace('_', ' ').title()}: {value}")
                         
                         st.markdown("**Kill Switch:**")
                         kill_switch = agent['runtimeGuardrails']['killSwitch']
                         st.write(f"Enabled: {'Yes' if kill_switch['enabled'] else 'No'}")
                         for trigger in kill_switch['triggers']:
-                            st.write(f"â€¢ {trigger}")
+                            st.write(f"• {trigger}")
                         
                         st.markdown("**Monitoring:**")
                         monitoring = agent['monitoring']
@@ -3776,7 +3776,7 @@ def landing_page():
                         if level['status'] == 'success':
                             st.success(f"Level {level['level']}: {level['action']}")
                         elif level['status'] == 'pending':
-                            st.warning(f"Level {level['level']}: {level['action']} â³")
+                            st.warning(f"Level {level['level']}: {level['action']} ⏳")
                         else:
                             st.info(f"Level {level['level']}: {level['action']}")
                         st.write(f"*Timeout: {level['timeout']}*")
@@ -3784,7 +3784,7 @@ def landing_page():
                     
                     st.markdown("**Notification Channels:**")
                     for channel in agent['escalationMechanisms']['notificationChannels']:
-                        st.write(f"â€¢ {channel}")
+                        st.write(f"• {channel}")
                     
                     st.markdown("**Decision Journals:**")
                     decision_journals = agent['escalationMechanisms']['decisionJournals']
@@ -3793,7 +3793,7 @@ def landing_page():
                     st.write(f"Template: {decision_journals['template']}")
                 
                 with tab5:
-                    st.markdown("### Escalation Analysis (100+ Iterations)")
+                    st.markdown("### 📈 Escalation Analysis (100+ Iterations)")
                     
                     # Generate comprehensive escalation data based on agent type
                     escalation_data = generate_escalation_data(agent)
@@ -3828,7 +3828,7 @@ def landing_page():
                     st.plotly_chart(fig_trend, use_container_width=True)
                     
                     # Escalation Logs
-                    st.markdown("#### Recent Escalation Logs")
+                    st.markdown("#### 📋 Recent Escalation Logs")
                     
                     # Create expandable sections for different log types
                     log_tabs = st.tabs(["Recent Events", "Critical Issues", "Pattern Analysis", "Resolution Insights"])
@@ -3855,7 +3855,7 @@ def landing_page():
                                 st.markdown(f"**Business Impact:** {issue['business_impact']}")
                                 st.markdown(f"**Recommended Actions:**")
                                 for action in issue['recommended_actions']:
-                                    st.markdown(f"â€¢ {action}")
+                                    st.markdown(f"• {action}")
                                 st.markdown(f"**Priority:** {issue['priority']}")
                     
                     with log_tabs[2]:
@@ -3871,7 +3871,7 @@ def landing_page():
                     
                     st.markdown("**Key Patterns Identified:**")
                     for pattern in escalation_data['patterns_identified']:
-                        st.markdown(f"â€¢ **{pattern['pattern']}**: {pattern['description']} (Frequency: {pattern['frequency']}%)")
+                        st.markdown(f"• **{pattern['pattern']}**: {pattern['description']} (Frequency: {pattern['frequency']}%)")
                     
                     with log_tabs[3]:
                         st.markdown("**Resolution Insights & Recommendations:**")
@@ -3880,16 +3880,16 @@ def landing_page():
                         with col1:
                             st.markdown("**Top Resolution Strategies:**")
                             for strategy in escalation_data['resolution_strategies']:
-                                st.markdown(f"â€¢ **{strategy['strategy']}**: {strategy['effectiveness']}% success rate")
+                                st.markdown(f"• **{strategy['strategy']}**: {strategy['effectiveness']}% success rate")
                         
                         with col2:
                             st.markdown("**Prevention Measures:**")
                             for measure in escalation_data['prevention_measures']:
-                                st.markdown(f"â€¢ {measure}")
+                                st.markdown(f"• {measure}")
                         
                         st.markdown("**Performance Improvements:**")
                         for improvement in escalation_data['performance_improvements']:
-                            st.markdown(f"â€¢ **{improvement['area']}**: {improvement['improvement']} ({improvement['impact']})")
+                            st.markdown(f"• **{improvement['area']}**: {improvement['improvement']} ({improvement['impact']})")
                     
                     # Escalation Configuration
                     st.markdown("#### Escalation Configuration")
@@ -3898,12 +3898,12 @@ def landing_page():
                     with col1:
                         st.markdown("**Current Thresholds:**")
                         for threshold in escalation_data['thresholds']:
-                            st.markdown(f"â€¢ **{threshold['metric']}**: {threshold['value']} ({threshold['status']})")
+                            st.markdown(f"• **{threshold['metric']}**: {threshold['value']} ({threshold['status']})")
                     
                     with col2:
                         st.markdown("**Escalation Rules:**")
                         for rule in escalation_data['escalation_rules']:
-                            st.markdown(f"â€¢ {rule}")
+                            st.markdown(f"• {rule}")
                     
                     # Action Items
                     st.markdown("#### Action Items")
@@ -3966,7 +3966,7 @@ def agent_detail_page():
     st.markdown(f"<h1>{pattern_type_emoji} Agent: {agent['name']} <span class='status-badge {status_info['class']}'>{status_info['text']}</span></h1>", unsafe_allow_html=True)
     st.markdown(f"**Pattern:** {agent['patternName']} ({agent['patternType'].title()})")
     
-    if st.button("â† Back to Agentic Catalog"):
+    if st.button("← Back to Agentic Catalog"):
         del st.session_state['selected_agent']
         st.rerun()
     
@@ -4002,11 +4002,11 @@ def agent_detail_page():
         
         st.markdown("### Capabilities")
         for capability in agent['capabilities']:
-            st.write(f"â€¢ {capability}")
+            st.write(f"• {capability}")
         
         st.markdown("### Boundaries")
         for boundary in agent['boundaries']:
-            st.write(f"â€¢ {boundary}")
+            st.write(f"• {boundary}")
     
     with tab2:
         st.markdown("### Policies")
@@ -4026,7 +4026,7 @@ def agent_detail_page():
         approval_history = agent['governanceHooks']['approvalHistory']
         for i, status in enumerate(approval_history):
             if i < len(approval_history) - 1:
-                st.write(f"**{status}** â†’")
+                st.write(f"**{status}** →")
             else:
                 st.write(f"**{status}**")
         
@@ -4044,32 +4044,32 @@ def agent_detail_page():
         with col1:
             st.markdown("**Input Filters**")
             for filter_type in agent['runtimeGuardrails']['inputFilters']:
-                st.write(f"â€¢ {filter_type}")
+                st.write(f"• {filter_type}")
             
             st.markdown("**Output Validators**")
             for validator in agent['runtimeGuardrails']['outputValidators']:
-                st.write(f"â€¢ {validator}")
+                st.write(f"• {validator}")
         
         with col2:
             st.markdown("**Rate Controls**")
             rate_controls = agent['runtimeGuardrails']['rateControls']
             for control, value in rate_controls.items():
-                st.write(f"â€¢ {control.replace('_', ' ').title()}: {value}")
+                st.write(f"• {control.replace('_', ' ').title()}: {value}")
             
             st.markdown("**Scope Controls**")
             scope_controls = agent['runtimeGuardrails']['scopeControls']
             for control, value in scope_controls.items():
                 if isinstance(value, list):
-                    st.write(f"â€¢ {control.replace('_', ' ').title()}: {', '.join(value)}")
+                    st.write(f"• {control.replace('_', ' ').title()}: {', '.join(value)}")
                 else:
-                    st.write(f"â€¢ {control.replace('_', ' ').title()}: {value}")
+                    st.write(f"• {control.replace('_', ' ').title()}: {value}")
         
         st.markdown("### Thresholds")
         kill_switch = agent['runtimeGuardrails']['killSwitch']
         st.write(f"**Kill Switch Enabled:** {'Yes' if kill_switch['enabled'] else 'No'}")
         st.write("**Trigger Conditions:**")
         for trigger in kill_switch['triggers']:
-            st.write(f"â€¢ {trigger}")
+            st.write(f"• {trigger}")
         
         st.markdown("### Monitoring Hooks")
         monitoring = agent['monitoring']
@@ -4089,7 +4089,7 @@ def agent_detail_page():
             if level['status'] == 'success':
                 st.success(f"**Level {level['level']}:** {level['action']}")
             elif level['status'] == 'pending':
-                st.warning(f"**Level {level['level']}:** {level['action']} â³")
+                st.warning(f"**Level {level['level']}:** {level['action']} ⏳")
             else:
                 st.info(f"**Level {level['level']}:** {level['action']}")
             
@@ -4099,7 +4099,7 @@ def agent_detail_page():
         st.markdown("### Notification Channels")
         channels = agent['escalationMechanisms']['notificationChannels']
         for channel in channels:
-            st.write(f"â€¢ {channel}")
+            st.write(f"• {channel}")
         
         st.markdown("### Decision Journal Configuration")
         decision_journals = agent['escalationMechanisms']['decisionJournals']
@@ -4115,17 +4115,17 @@ def agent_detail_page():
         st.markdown("### Logs")
         col1, col2 = st.columns(2)
         with col1:
-            if st.button("Download CSV Logs"):
+            if st.button("📥 Download CSV Logs"):
                 st.success("CSV download initiated")
         with col2:
-            if st.button("View Live Logs"):
+            if st.button("📺 View Live Logs"):
                 st.info("Live logs viewer opened")
         
         st.markdown("### Lineage")
         st.write("**Data Lineage:**")
-        st.write("â€¢ Input â†’ Processing â†’ Output")
-        st.write("â€¢ Dependencies â†’ Agent â†’ Downstream Systems")
-        st.write("â€¢ Audit Trail â†’ Decision Journal â†’ Compliance Report")
+        st.write("• Input → Processing → Output")
+        st.write("• Dependencies → Agent → Downstream Systems")
+        st.write("• Audit Trail → Decision Journal → Compliance Report")
         
         st.markdown("### Decision Journals")
         audit_logs = agent['governanceHooks']['auditLogs']
@@ -4142,7 +4142,7 @@ def agent_detail_page():
         ]
         
         for entry in sample_entries:
-            st.write(f"â€¢ {entry}")
+            st.write(f"• {entry}")
         
         st.markdown("### Compliance Status")
         compliance_tags = agent['governanceHooks']['complianceTags']
@@ -4153,9 +4153,9 @@ def agent_detail_page():
                 st.error(f"{tag} - Non-compliant")
 
 def governance_workflow():
-    st.markdown('<h1 class="main-header">Governance Workflow â€“ New Agent Card</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Governance Workflow – New Agent Card</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Agentic Operating System"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -4244,30 +4244,337 @@ def governance_workflow():
             if st.form_submit_button("Save Draft"):
                 st.info("Draft saved!")
 
-# Helper functions for monitoring (kept for compatibility)
-def get_monitoring_value(agent, key, default):
-    """Safely extract monitoring values from agent data"""
-    value = agent.get('monitoring', {}).get(key, default)
-    if value == 'N/A' or value == 'NA':
-        return default
-    return value
+# Move this function definition to before get_monitoring_page_data
 
-def get_uptime_value(agent):
-    """Extract and convert agent uptime percentage"""
-    uptime_str = get_monitoring_value(agent, 'uptime', '0%')
-    if isinstance(uptime_str, str) and uptime_str.endswith('%'):
-        try:
-            return float(uptime_str.replace('%', ''))
-        except ValueError:
-            return 0.0
-    return float(uptime_str) if isinstance(uptime_str, (int, float)) else 0.0
-
-# Runtime monitoring function removed
+def runtime_monitoring():
+    st.markdown('<h1 class="main-header">Runtime Monitoring Dashboard</h1>', unsafe_allow_html=True)
+    
+    if st.button("← Back to Agentic Operating System"):
+        st.session_state['current_page'] = 'landing'
+        st.rerun()
+    
+    # Load agent data
+    data = load_agent_data()
+    agents = data['agents']
+    
+    # Overall metrics summary
+    st.markdown("### System Overview")
+    
+    # Use cached monitoring data for better performance
+    cached_data = get_monitoring_page_data()
+    total_calls = cached_data['total_calls']
+    total_escalations = cached_data['total_escalations']
+    total_guardrail_triggers = cached_data['total_guardrail_triggers']
+    
+    # Calculate uptime separately as it needs different handling
+    uptime_values = [get_uptime_value(agent) for agent in agents if get_uptime_value(agent) > 0]
+    avg_uptime = sum(uptime_values) / len(uptime_values) if uptime_values else 0.0
+    
+    col1, col2, col3, col4 = st.columns(4)
+    with col1:
+        st.metric("Total API Calls", f"{total_calls:,}")
+    with col2:
+        st.metric("Total Escalations", total_escalations)
+    with col3:
+        st.metric("Guardrail Triggers", total_guardrail_triggers)
+    with col4:
+        st.metric("Avg Uptime", f"{avg_uptime:.1f}%")
+    
+    st.markdown("---")
+    
+    # Agent-specific monitoring cards
+    st.markdown("### 📈 Agent Performance Monitoring")
+    
+    # Filter options
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        status_filter = st.selectbox("Filter by Status", ["All"] + list(set(agent['status'] for agent in agents)))
+    with col2:
+        pattern_filter = st.selectbox("Filter by Pattern", ["All"] + list(set(agent['patternType'] for agent in agents)))
+    with col3:
+        risk_filter = st.selectbox("Filter by Risk Level", ["All"] + list(set(agent['risk'] for agent in agents)))
+    
+    # Filter agents
+    filtered_agents = agents
+    if status_filter != "All":
+        filtered_agents = [a for a in filtered_agents if a['status'] == status_filter]
+    if pattern_filter != "All":
+        filtered_agents = [a for a in filtered_agents if a['patternType'] == pattern_filter]
+    if risk_filter != "All":
+        filtered_agents = [a for a in filtered_agents if a['risk'] == risk_filter]
+    
+    # Display agent monitoring cards with performance optimization
+    if not filtered_agents:
+        st.info("No agents match the current filters.")
+        return
+    
+    # Pre-compute expensive operations outside the loop
+    agent_data = []
+    for agent in filtered_agents:
+        uptime = get_uptime_value(agent)
+        calls = get_monitoring_value(agent, 'callsThisWeek', 0)
+        escalations = get_monitoring_value(agent, 'escalations', 0)
+        guardrails = get_monitoring_value(agent, 'guardrailTriggers', 0)
+        
+        agent_data.append({
+            'agent': agent,
+            'uptime': uptime,
+            'calls': calls,
+            'escalations': escalations,
+            'guardrails': guardrails
+        })
+    
+    # Use cached agent data
+    agents_to_show = cached_data['agent_data']
+    
+    for data in agents_to_show:
+        agent = data['agent']
+        with st.expander(f"{agent['name']} - {agent['patternName']} ({agent['status'].title()})", expanded=False):
+            
+            # Agent header with status indicators
+            col1, col2, col3, col4 = st.columns([2, 1, 1, 1])
+            with col1:
+                st.markdown(f"**{agent['name']}** ({agent['patternType'].title()})")
+                st.markdown(f"*{agent['businessUseCase']}*")
+            with col2:
+                # Health status based on metrics
+                uptime = get_uptime_value(agent)
+                if uptime >= 99.0:
+                    st.success("Healthy")
+                elif uptime >= 95.0:
+                    st.warning("Warning")
+                else:
+                    st.error("Critical")
+            with col3:
+                st.markdown(f"**Risk:** {agent['risk']}")
+            with col4:
+                st.markdown(f"**Owner:** {agent['owner']}")
+            
+            # Performance metrics in tabs
+            tab1, tab2, tab3, tab4 = st.tabs(["Performance", "Guardrails", "Trends", "Controls"])
+            
+            with tab1:
+                st.markdown("#### Key Performance Indicators")
+                
+                # Main metrics
+                col1, col2, col3, col4 = st.columns(4)
+                with col1:
+                    calls = get_monitoring_value(agent, 'callsThisWeek', 0)
+                    st.metric(
+                        "API Calls (7d)", 
+                        calls,
+                        delta=f"+{calls - 100}" if calls > 100 else None
+                    )
+                with col2:
+                    response_time = get_monitoring_value(agent, 'avgResponseTime', '245ms')
+                    if isinstance(response_time, str):
+                        # Handle N/A values
+                        if response_time.upper() == 'N/A' or response_time.upper() == 'NA':
+                            response_time_val = 0
+                        else:
+                            try:
+                                response_time_val = float(response_time.replace('ms', '').replace('s', '')) * (1000 if 's' in response_time else 1)
+                            except ValueError:
+                                response_time_val = 0
+                    else:
+                        response_time_val = response_time
+                    st.metric(
+                        "Avg Response Time", 
+                        f"{response_time}",
+                        delta="-15ms" if response_time_val < 250 else "+5ms"
+                    )
+                with col3:
+                    uptime = get_uptime_value(agent)
+                    uptime_str = get_monitoring_value(agent, 'uptime', '0%')
+                    st.metric(
+                        "Uptime", 
+                        f"{uptime:.1f}%" if uptime > 0 else uptime_str,
+                        delta="+0.2%" if uptime > 99.0 else "-0.5%"
+                    )
+                with col4:
+                    success_rate = get_monitoring_value(agent, 'successRate', 98.5)
+                    st.metric(
+                        "Success Rate", 
+                        f"{success_rate}%",
+                        delta="+1.2%" if success_rate > 97.0 else "-0.8%"
+                    )
+                
+                # Additional metrics
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Processing Stats:**")
+                    st.write(f"• Total Transactions: {agent['monitoring'].get('totalTransactions', 1240):,}")
+                    st.write(f"• Peak Load: {agent['monitoring'].get('peakLoad', '2.3K')} req/min")
+                    st.write(f"• Error Rate: {agent['monitoring'].get('errorRate', '0.8')}%")
+                
+                with col2:
+                    st.markdown("**Resource Usage:**")
+                    st.write(f"• CPU Usage: {agent['monitoring'].get('cpuUsage', '45')}%")
+                    st.write(f"• Memory: {agent['monitoring'].get('memoryUsage', '2.1')}GB")
+                    st.write(f"• Queue Depth: {agent['monitoring'].get('queueDepth', '12')}")
+            
+            with tab2:
+                st.markdown("#### Guardrail Status")
+                
+                # Guardrail triggers
+                col1, col2 = st.columns(2)
+                with col1:
+                    triggers = get_monitoring_value(agent, 'guardrailTriggers', 0)
+                    st.metric(
+                        "Guardrail Triggers", 
+                        triggers,
+                        delta=f"+{triggers - 2}" if triggers > 2 else None
+                    )
+                with col2:
+                    escalations = get_monitoring_value(agent, 'escalations', 0)
+                    st.metric(
+                        "Escalations", 
+                        escalations,
+                        delta=f"+{escalations - 1}" if escalations > 1 else None
+                    )
+                
+                # Guardrail details
+                st.markdown("**Active Guardrails:**")
+                guardrails = agent['runtimeGuardrails']
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Input Filters:**")
+                    for filter_type in guardrails['inputFilters']:
+                        st.write(f"• {filter_type}")
+                    
+                    st.markdown("**Output Validators:**")
+                    for validator in guardrails['outputValidators']:
+                        st.write(f"• {validator}")
+                
+                with col2:
+                    st.markdown("**Rate Controls:**")
+                    for control, value in guardrails['rateControls'].items():
+                        st.write(f"• {control.replace('_', ' ').title()}: {value}")
+                    
+                    st.markdown("**Kill Switch:**")
+                    kill_switch = guardrails['killSwitch']
+                    status = "Active" if kill_switch['enabled'] else "Disabled"
+                    st.write(f"• Status: {status}")
+                    for trigger in kill_switch['triggers']:
+                        st.write(f"  - {trigger}")
+                
+                # Recent guardrail events
+                st.markdown("**Recent Events:**")
+                events = [
+                    {"time": "14:32:15", "type": "Input Filter", "message": "PII detected in input", "severity": "warning"},
+                    {"time": "14:28:42", "type": "Rate Control", "message": "Rate limit approaching", "severity": "info"},
+                    {"time": "14:25:18", "type": "Output Validator", "message": "Confidence below threshold", "severity": "warning"}
+                ]
+                
+                for event in events:
+                    severity_icon = "" if event['severity'] == 'warning' else "" if event['severity'] == 'info' else ""
+                    st.write(f"{severity_icon} **{event['time']}** - {event['type']}: {event['message']}")
+            
+            with tab3:
+                st.markdown("#### Performance Trends")
+                
+                # Generate sample trend data for the last 7 days
+                dates = pd.date_range('2025-01-15', periods=7, freq='D')
+                
+                # API calls trend with caching
+                @st.cache_data(ttl=300)  # Cache for 5 minutes
+                def create_monitoring_charts(agent_id, base_calls):
+                    dates = pd.date_range('2025-01-15', periods=7, freq='D').strftime('%Y-%m-%d')
+                    
+                    # API calls trend
+                    calls_trend = [base_calls + i*10 for i in range(7)]
+                    calls_df = pd.DataFrame({'Date': dates, 'API Calls': calls_trend})
+                    fig_calls = px.line(calls_df, x='Date', y='API Calls', title='API Calls Trend (7 days)')
+                    
+                    # Response time trend
+                    response_times = [245, 238, 252, 241, 248, 235, 242]
+                    response_df = pd.DataFrame({'Date': dates, 'Response Time (ms)': response_times})
+                    fig_response = px.line(response_df, x='Date', y='Response Time (ms)', title='Response Time Trend (7 days)')
+                    
+                    # Error rate trend
+                    error_rates = [0.8, 1.2, 0.6, 0.9, 1.1, 0.7, 0.8]
+                    error_df = pd.DataFrame({'Date': dates, 'Error Rate (%)': error_rates})
+                    fig_error = px.line(error_df, x='Date', y='Error Rate (%)', title='Error Rate Trend (7 days)')
+                    
+                    return fig_calls, fig_response, fig_error
+                
+                base_calls = data['calls']
+                fig_calls, fig_response, fig_error = create_monitoring_charts(agent['id'], base_calls)
+                
+                st.plotly_chart(fig_calls, use_container_width=True, key=f"monitoring_calls_chart_{agent['id']}")
+                st.plotly_chart(fig_response, use_container_width=True, key=f"monitoring_response_chart_{agent['id']}")
+                st.plotly_chart(fig_error, use_container_width=True, key=f"monitoring_error_chart_{agent['id']}")
+            
+            with tab4:
+                st.markdown("#### Runtime Controls")
+                
+                col1, col2 = st.columns(2)
+                with col1:
+                    st.markdown("**Agent Controls:**")
+                    if st.button(f"Pause {agent['name']}", key=f"pause_{agent['id']}"):
+                        st.warning(f"{agent['name']} paused")
+                    
+                    if st.button(f"Restart {agent['name']}", key=f"restart_{agent['id']}"):
+                        st.info(f"{agent['name']} restarted")
+                    
+                    if st.button(f"🔧 Maintenance Mode", key=f"maintenance_{agent['id']}"):
+                        st.warning(f"{agent['name']} in maintenance mode")
+                
+                with col2:
+                    st.markdown("**Emergency Controls:**")
+                    if st.button(f"Kill Switch", key=f"kill_{agent['id']}", type="secondary"):
+                        st.error(f"Kill switch activated for {agent['name']}")
+                    
+                    if st.button(f"Force Guardrails", key=f"guardrails_{agent['id']}"):
+                        st.warning(f"Guardrails enforced for {agent['name']}")
+                
+                # Configuration
+                st.markdown("**Runtime Configuration:**")
+                with st.expander("View Current Configuration"):
+                    st.json({
+                        "max_concurrent_requests": agent['monitoring'].get('maxConcurrent', 100),
+                        "timeout_seconds": agent['monitoring'].get('timeout', 30),
+                        "retry_attempts": agent['monitoring'].get('retryAttempts', 3),
+                        "circuit_breaker_threshold": agent['monitoring'].get('circuitBreaker', 5)
+                    })
+    
+    # System-wide charts
+    st.markdown("---")
+    st.markdown("### 📈 System-Wide Trends")
+    
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        # Escalations over time
+        escalation_data = pd.DataFrame({
+            'Date': pd.date_range('2025-01-15', periods=7, freq='D'),
+            'Escalations': [0, 1, 0, 2, 0, 1, 0]
+        })
+        
+        fig = px.line(escalation_data, x='Date', y='Escalations', title='System Escalations Over Time')
+        st.plotly_chart(fig, use_container_width=True, key="audit_compliance_heatmap")
+    
+    with col2:
+        # Agent health distribution
+        health_data = []
+        for agent in agents:
+            uptime = get_uptime_value(agent)
+            if uptime >= 99.0:
+                health_data.append('Healthy')
+            elif uptime >= 95.0:
+                health_data.append('Warning')
+            else:
+                health_data.append('Critical')
+        
+        health_counts = pd.Series(health_data).value_counts()
+        fig_health = px.pie(values=health_counts.values, names=health_counts.index, title='Agent Health Distribution')
+        st.plotly_chart(fig_health, use_container_width=True, key="audit_health_distribution")
 
 def escalation_console():
     st.markdown('<h1 class="main-header">Escalation Console</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Agentic Operating System"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -4319,7 +4626,7 @@ def escalation_console():
 def audit_reporting():
     st.markdown('<h1 class="main-header">Audit & Reporting</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Agentic Operating System"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -4414,7 +4721,7 @@ def get_payment_instruction_data():
 def payment_instruction_entry():
     st.markdown('<h1 class="main-header">Payment Instruction</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Agentic Operating System"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -4431,9 +4738,9 @@ def payment_instruction_entry():
         st.info("\U0001F9D0 Critic/Reviewer")
     with col3:
         st.markdown("**Active Agents:**")
-        st.markdown("â€¢ **Payment Orchestrator Agent**")
-        st.markdown("â€¢ **Anomaly Detection Agent**")
-        st.markdown("â€¢ **Compliance Review Agent**")
+        st.markdown("• **Payment Orchestrator Agent**")
+        st.markdown("• **Anomaly Detection Agent**")
+        st.markdown("• **Compliance Review Agent**")
     
     st.markdown("---")
     st.markdown("### Sample Instructions")
@@ -4516,7 +4823,7 @@ def payment_instruction_entry():
 def intent_verification():
     st.markdown('<h1 class="main-header">Intent Verification & Anomaly Detection</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Payment Instruction"):
+    if st.button("← Back to Payment Instruction"):
         st.session_state['current_page'] = 'payment_instruction'
         st.rerun()
     
@@ -4592,9 +4899,9 @@ def intent_verification():
         st.rerun()
 
 def scenario_summary():
-    st.markdown('<h1 class="main-header">Payment Review â€“ Scenario Summary</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Payment Review – Scenario Summary</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Verification"):
+    if st.button("← Back to Verification"):
         st.session_state['current_page'] = 'intent_verification'
         st.rerun()
     
@@ -4678,9 +4985,9 @@ def scenario_summary():
             st.error("Please enter a decision journal entry")
 
 def payment_escalation():
-    st.markdown('<h1 class="main-header">Escalation Console â€“ Payment Processor Agent</h1>', unsafe_allow_html=True)
+    st.markdown('<h1 class="main-header">Escalation Console – Payment Processor Agent</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Agentic Operating System"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -4714,7 +5021,7 @@ def payment_escalation():
         if item["Status"] == "Success":
             st.success(f"**Level {item['Level']}:** {item['Action']} - {item['Status']} at {item['Time']}")
         elif item["Status"] == "Pending":
-            st.warning(f"â³ **Level {item['Level']}:** {item['Action']} - {item['Status']} at {item['Time']}")
+            st.warning(f"⏳ **Level {item['Level']}:** {item['Action']} - {item['Status']} at {item['Time']}")
         else:
             st.info(f"**Level {item['Level']}:** {item['Action']} - {item['Status']} at {item['Time']}")
     
@@ -4796,7 +5103,7 @@ def create_payment_audit_charts():
 def payment_audit():
     st.markdown('<h1 class="main-header">Payment Audit & Compliance Dashboard</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Agentic Operating System"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -4890,32 +5197,32 @@ def create_process_flow_chart():
     # Define nodes with professional corporate design and strategic layout
     nodes = [
         # Input Layer - Executive Blue
-        {"id": "user_input", "label": "Payment Request\nNatural Language Input", "x": 0, "y": 10, "color": "#1E3A8A", "size": 120, "category": "input", "shape": "circle", "width": 140, "height": 80},
+        {"id": "user_input", "label": "Payment Request<br/>Natural Language Input", "x": 0, "y": 10, "color": "#1E3A8A", "size": 120, "category": "input", "shape": "rect", "width": 140, "height": 80},
         
         # AI Processing Layer - Professional Green
-        {"id": "intent_agent", "label": "Intent Parsing\nAI Agent", "x": 3, "y": 10, "color": "#059669", "size": 100, "category": "agent", "shape": "circle", "width": 120, "height": 60},
-        {"id": "verification_agent", "label": "Verification\nAI Agent", "x": 5.5, "y": 10, "color": "#059669", "size": 100, "category": "agent", "shape": "circle", "width": 120, "height": 60},
-        {"id": "anomaly_agent", "label": "Risk Analysis\nAI Agent", "x": 8, "y": 10, "color": "#059669", "size": 100, "category": "agent", "shape": "circle", "width": 120, "height": 60},
+        {"id": "intent_agent", "label": "Intent Parsing<br/>AI Agent", "x": 3, "y": 10, "color": "#059669", "size": 100, "category": "agent", "shape": "rect", "width": 120, "height": 60},
+        {"id": "verification_agent", "label": "Verification<br/>AI Agent", "x": 5.5, "y": 10, "color": "#059669", "size": 100, "category": "agent", "shape": "rect", "width": 120, "height": 60},
+        {"id": "anomaly_agent", "label": "Risk Analysis<br/>AI Agent", "x": 8, "y": 10, "color": "#059669", "size": 100, "category": "agent", "shape": "rect", "width": 120, "height": 60},
         
         # Decision Diamond - Executive Orange
-        {"id": "decision_point", "label": "Risk Assessment\n& Routing", "x": 10.5, "y": 10, "color": "#DC2626", "size": 100, "category": "decision", "shape": "diamond", "width": 100, "height": 100},
+        {"id": "decision_point", "label": "Risk Assessment<br/>& Routing", "x": 10.5, "y": 10, "color": "#DC2626", "size": 100, "category": "decision", "shape": "diamond", "width": 100, "height": 100},
         
         # Human Review Points - Executive Red
-        {"id": "human_review", "label": "Treasury Review\nManual Approval", "x": 13, "y": 8, "color": "#B91C1C", "size": 100, "category": "human", "shape": "circle", "width": 120, "height": 60},
-        {"id": "escalation", "label": "Executive Escalation\nHigh-Risk Cases", "x": 13, "y": 12, "color": "#B91C1C", "size": 100, "category": "human", "shape": "circle", "width": 120, "height": 60},
+        {"id": "human_review", "label": "Treasury Review<br/>Manual Approval", "x": 13, "y": 8, "color": "#B91C1C", "size": 100, "category": "human", "shape": "rect", "width": 120, "height": 60},
+        {"id": "escalation", "label": "Executive Escalation<br/>High-Risk Cases", "x": 13, "y": 12, "color": "#B91C1C", "size": 100, "category": "human", "shape": "rect", "width": 120, "height": 60},
         
         # Execution Layer - Executive Blue
-        {"id": "payment_execution", "label": "Payment Execution\nCore Banking", "x": 16, "y": 10, "color": "#1E3A8A", "size": 120, "category": "execution", "shape": "circle", "width": 140, "height": 80},
+        {"id": "payment_execution", "label": "Payment Execution<br/>Core Banking", "x": 16, "y": 10, "color": "#1E3A8A", "size": 120, "category": "execution", "shape": "rect", "width": 140, "height": 80},
         
         # Output Layer - Success Green
-        {"id": "confirmation", "label": "Transaction Complete\nAudit Trail", "x": 19, "y": 10, "color": "#047857", "size": 120, "category": "output", "shape": "circle", "width": 140, "height": 80},
+        {"id": "confirmation", "label": "Transaction Complete<br/>Audit Trail", "x": 19, "y": 10, "color": "#047857", "size": 120, "category": "output", "shape": "rect", "width": 140, "height": 80},
         
         # Monitoring Layer - Executive Gray
-        {"id": "monitoring", "label": "Real-time Monitoring\n& Compliance", "x": 10.5, "y": 6, "color": "#6B7280", "size": 100, "category": "monitoring", "shape": "circle", "width": 120, "height": 60},
+        {"id": "monitoring", "label": "Real-time Monitoring<br/>& Compliance", "x": 10.5, "y": 6, "color": "#6B7280", "size": 100, "category": "monitoring", "shape": "rect", "width": 120, "height": 60},
         
         # Data Sources - Subtle Gray
-        {"id": "compliance_db", "label": "Compliance Database\nKYC/AML Data", "x": 3, "y": 7, "color": "#9CA3AF", "size": 80, "category": "data", "shape": "circle", "width": 100, "height": 50},
-        {"id": "payment_api", "label": "Payment Gateway\nBanking APIs", "x": 16, "y": 7, "color": "#9CA3AF", "size": 80, "category": "data", "shape": "circle", "width": 100, "height": 50},
+        {"id": "compliance_db", "label": "Compliance Database<br/>KYC/AML Data", "x": 3, "y": 7, "color": "#9CA3AF", "size": 80, "category": "data", "shape": "rect", "width": 100, "height": 50},
+        {"id": "payment_api", "label": "Payment Gateway<br/>Banking APIs", "x": 16, "y": 7, "color": "#9CA3AF", "size": 80, "category": "data", "shape": "rect", "width": 100, "height": 50},
     ]
     
     # Define edges (connections) - Executive-style with clean lines and professional styling
@@ -5061,7 +5368,7 @@ def create_process_flow_chart():
                 color=node["color"],
                 line=dict(width=style["border_width"], color=style["border_color"]),
                 opacity=style["opacity"],
-                symbol='circle' if node.get("shape") == "circle" else 'diamond' if node.get("shape") == "diamond" else 'circle'
+                symbol='square' if node.get("shape") == "rect" else 'diamond' if node.get("shape") == "diamond" else 'circle'
             ),
             text=node["label"],
             textposition="middle center",
@@ -5071,8 +5378,8 @@ def create_process_flow_chart():
                 family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
             ),
             showlegend=False,
-            hovertemplate=f"<b>{node['label'].split('\n')[0]}</b><br>" +
-                         f"<br>".join(node['label'].split('\n')[1:]) +
+            hovertemplate=f"<b>{node['label'].split('<br/>')[0]}</b><br>" +
+                         f"<br>".join(node['label'].split('<br/>')[1:]) +
                          f"<br><br><b>Category:</b> {node['category'].title()}" +
                          "<extra></extra>"
         ))
@@ -5320,7 +5627,7 @@ def create_process_flow_chart():
 def process_flow_diagram():
     st.markdown('<h1 class="main-header">End-to-End Process Flow</h1>', unsafe_allow_html=True)
     
-    if st.button("â† Back to Agentic Operating System"):
+    if st.button("← Back to Agentic Operating System"):
         st.session_state['current_page'] = 'landing'
         st.rerun()
     
@@ -5335,13 +5642,296 @@ def process_flow_diagram():
     # Use the cached executive-style chart
     fig = create_process_flow_chart()
     st.plotly_chart(fig, use_container_width=True, key="executive_process_flow")
+
+@st.cache_data(ttl=300)  # Cache for 5 minutes
+def warm_cache():
+    """Pre-warm commonly used caches for better performance"""
+    # Pre-load commonly used data
+    landing_data = get_landing_page_data()
+    payment_data = get_payment_instruction_data()
+    
+    return {
+        'landing_ready': True,
+        'payment_ready': True
+    }
+
+# Remove duplicate main function - keeping the correct one below
+
+@st.cache_data(ttl=300)  # Cache for 5 minutes
+def warm_cache():
+    """Pre-warm commonly used caches for better performance"""
+    # Pre-load commonly used data
+    landing_data = get_landing_page_data()
+    payment_data = get_payment_instruction_data()
+    
+    return {
+        'landing_ready': True,
+        'payment_ready': True
+    }
+
+# Duplicate main function removed - keeping the correct one below
+
+@st.cache_data(ttl=300)  # Cache for 5 minutes
+def warm_cache():
+    """Pre-warm commonly used caches for better performance"""
+    # Pre-load commonly used data
+    landing_data = get_landing_page_data()
+    payment_data = get_payment_instruction_data()
+    
+    return {
+        'landing_ready': True,
+        'payment_ready': True
+    }
+
+def main():
+    # Initialize session state with performance optimizations
+    if 'current_page' not in st.session_state:
+        st.session_state['current_page'] = 'landing'
+        
+        # Monitoring Layer - iOS Gray
+        {"id": "monitoring", "label": "Monitoring<br/>📊 Real-time Tracking<br/>& Compliance Logging", "x": 12, "y": 4, "color": "#8E8E93", "size": 140, "category": "monitoring", "shadow": False},
+        
+        # Data Sources - iOS Gray with subtle styling
+        {"id": "compliance_db", "label": "Compliance DB<br/>🛡️ Sanctions/KYC<br/>Data Sources", "x": 3, "y": 6, "color": "#AEAEB2", "size": 130, "category": "data", "shadow": False},
+        {"id": "payment_api", "label": "Payment API<br/>🔌 Core Banking<br/>Gateway", "x": 18, "y": 6, "color": "#AEAEB2", "size": 130, "category": "data", "shadow": False},
+    ]
+    
+    # Define edges (connections) - iOS-style with smooth curves and modern styling
+    edges = [
+        # Main flow - Primary path with iOS blue
+        {"from": "user_input", "to": "intent_agent", "label": "Natural Language", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "intent_agent", "to": "verification_agent", "label": "Structured Data", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "verification_agent", "to": "anomaly_agent", "label": "Validated Data", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "anomaly_agent", "to": "decision_point", "label": "Risk Score", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "decision_point", "to": "payment_execution", "label": "Low Risk", "type": "main", "width": 4, "curve": 0.1},
+        {"from": "payment_execution", "to": "confirmation", "label": "Success", "type": "main", "width": 4, "curve": 0.1},
+        
+        # Data connections - Supporting systems with subtle styling
+        {"from": "compliance_db", "to": "verification_agent", "label": "Compliance Check", "type": "data", "width": 2, "curve": 0.2},
+        {"from": "payment_api", "to": "payment_execution", "label": "API Call", "type": "data", "width": 2, "curve": 0.2},
+        
+        # Escalation paths - Human intervention with iOS red
+        {"from": "decision_point", "to": "human_review", "label": "Medium Risk", "type": "escalation", "width": 3, "curve": 0.3},
+        {"from": "decision_point", "to": "escalation", "label": "High Risk", "type": "escalation", "width": 3, "curve": 0.3},
+        {"from": "human_review", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 3, "curve": 0.2},
+        {"from": "escalation", "to": "payment_execution", "label": "Approved", "type": "escalation", "width": 3, "curve": 0.2},
+        
+        # Monitoring connections - Oversight with subtle gray
+        {"from": "monitoring", "to": "intent_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "verification_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "anomaly_agent", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+        {"from": "monitoring", "to": "payment_execution", "label": "Monitor", "type": "monitoring", "width": 1.5, "curve": 0.4},
+    ]
+    
+    # Create the iOS-style diagram
+    fig = go.Figure()
+    
+    # Define iOS-style edge colors and styles
+    edge_styles = {
+        "main": {"color": "#007AFF", "dash": "solid", "opacity": 0.9},
+        "escalation": {"color": "#FF3B30", "dash": "solid", "opacity": 0.8},
+        "data": {"color": "#AEAEB2", "dash": "dot", "opacity": 0.6},
+        "monitoring": {"color": "#8E8E93", "dash": "dot", "opacity": 0.5}
+    }
+    
+    # Add edges with iOS-style curved connections
+    for edge in edges:
+        from_node = next(n for n in nodes if n["id"] == edge["from"])
+        to_node = next(n for n in nodes if n["id"] == edge["to"])
+        
+        style = edge_styles.get(edge["type"], {"color": "#8E8E93", "dash": "solid", "opacity": 0.8})
+        
+        # Create curved path for iOS-style connections
+        curve_factor = edge.get("curve", 0.1)
+        mid_x = (from_node["x"] + to_node["x"]) / 2
+        mid_y = (from_node["y"] + to_node["y"]) / 2
+        
+        # Calculate control points for smooth curves
+        if from_node["y"] == to_node["y"]:  # Horizontal connection
+            control_x = mid_x
+            control_y = mid_y + curve_factor
+        else:  # Diagonal connection
+            control_x = mid_x + curve_factor
+            control_y = mid_y
+        
+        # Create smooth curve using quadratic bezier
+        import numpy as np
+        t = np.linspace(0, 1, 50)
+        x_curve = (1-t)**2 * from_node["x"] + 2*(1-t)*t * control_x + t**2 * to_node["x"]
+        y_curve = (1-t)**2 * from_node["y"] + 2*(1-t)*t * control_y + t**2 * to_node["y"]
+        
+        fig.add_trace(go.Scatter(
+            x=x_curve,
+            y=y_curve,
+            mode='lines',
+            line=dict(
+                color=style["color"], 
+                width=edge["width"], 
+                dash=style["dash"],
+                shape='spline'
+            ),
+            showlegend=False,
+            hoverinfo='skip',
+            opacity=style["opacity"]
+        ))
+        
+        # Add iOS-style edge labels with modern typography
+        label_offset_x = 0.4 if edge["type"] == "escalation" else 0.2
+        label_offset_y = 0.3 if edge["type"] == "data" else 0.1
+        
+        fig.add_annotation(
+            x=mid_x + label_offset_x,
+            y=mid_y + label_offset_y,
+            text=f"<b>{edge['label']}</b>",
+            showarrow=False,
+            font=dict(
+                size=12, 
+                color="#1D1D1F", 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            ),
+            bgcolor="rgba(255,255,255,0.95)",
+            bordercolor=style["color"],
+            borderwidth=1.5,
+            borderpad=8,
+            opacity=0.95,
+            align="center"
+        )
+    
+    # Add nodes with iOS-style design and shadows
+    for node in nodes:
+        # iOS-style node styling with shadows and modern effects
+        node_style = {
+            "input": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "agent": {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True},
+            "decision": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "human": {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True},
+            "execution": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "output": {"border_width": 0, "opacity": 0.95, "shadow": True, "gradient": True},
+            "monitoring": {"border_width": 0, "opacity": 0.8, "shadow": False, "gradient": False},
+            "data": {"border_width": 0, "opacity": 0.75, "shadow": False, "gradient": False}
+        }
+        
+        style = node_style.get(node["category"], {"border_width": 0, "opacity": 0.9, "shadow": True, "gradient": True})
+        
+        # Add shadow effect for iOS-style depth
+        if style["shadow"] and node.get("shadow", False):
+            fig.add_trace(go.Scatter(
+                x=[node["x"] + 0.1],
+                y=[node["y"] - 0.1],
+                mode='markers',
+                marker=dict(
+                    size=node["size"],
+                    color='rgba(0,0,0,0.15)',
+                    opacity=0.3
+                ),
+                showlegend=False,
+                hoverinfo='skip'
+            ))
+        
+        # Main node with iOS-style rounded appearance
+        fig.add_trace(go.Scatter(
+            x=[node["x"]],
+            y=[node["y"]],
+            mode='markers+text',
+            marker=dict(
+                size=node["size"],
+                color=node["color"],
+                line=dict(width=0),
+                opacity=style["opacity"],
+                symbol='circle'
+            ),
+            text=node["label"],
+            textposition="middle center",
+            textfont=dict(
+                size=13, 
+                color="white", 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
+            ),
+            showlegend=False,
+            hovertemplate=f"<b>{node['label'].split('<br/>')[0]}</b><br>" +
+                         f"<br>".join(node['label'].split('<br/>')[1:]) +
+                         f"<br><br><b>Category:</b> {node['category'].title()}" +
+                         "<extra></extra>"
+        ))
+    
+    # Update layout with iOS-style design
+    fig.update_layout(
+        title=dict(
+            text="High-Value Payment Processing Workflow",
+            font=dict(
+                size=28, 
+                family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", 
+                color="#1D1D1F"
+            ),
+            x=0.5,
+            y=0.95
+        ),
+        xaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(0,0,0,0.05)',
+            showticklabels=False, 
+            zeroline=False,
+            range=[-2, 23],
+            gridwidth=1
+        ),
+        yaxis=dict(
+            showgrid=True, 
+            gridcolor='rgba(0,0,0,0.05)',
+            showticklabels=False, 
+            zeroline=False,
+            range=[2, 12],
+            gridwidth=1
+        ),
+        plot_bgcolor='rgba(242,242,247,0.8)',
+        paper_bgcolor='rgba(255,255,255,1.0)',
+        width=1600,
+        height=800,
+        margin=dict(l=100, r=100, t=140, b=100),
+        font=dict(
+            family="SF Pro Display, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif", 
+            size=12
+        )
+    )
+    
+    # Use cached chart for better performance
+    fig = create_process_flow_chart()
+    st.plotly_chart(fig, use_container_width=True, key="process_flow_diagram")
+    
+    # Add iOS-style visual legend
+    st.markdown("""
+    <div style="background: linear-gradient(135deg, #f2f2f7 0%, #ffffff 100%); padding: 2rem; border-radius: 16px; margin: 2rem 0; border: 1px solid rgba(0,0,0,0.05); box-shadow: 0 4px 20px rgba(0,0,0,0.08);">
+        <h4 style="color: #1D1D1F; font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; margin: 0 0 1.5rem 0; font-weight: 700; font-size: 1.2rem; letter-spacing: -0.01em;">🔄 Process Flow Legend</h4>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 1.5rem;">
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(0,122,255,0.05); border-radius: 12px; border: 1px solid rgba(0,122,255,0.1);">
+                <div style="width: 24px; height: 24px; background: #007AFF; border-radius: 50%; box-shadow: 0 2px 8px rgba(0,122,255,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">Main Flow</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">Primary processing path</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(255,59,48,0.05); border-radius: 12px; border: 1px solid rgba(255,59,48,0.1);">
+                <div style="width: 24px; height: 24px; background: #FF3B30; border-radius: 50%; box-shadow: 0 2px 8px rgba(255,59,48,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">Escalation</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">Human intervention</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(48,209,88,0.05); border-radius: 12px; border: 1px solid rgba(48,209,88,0.1);">
+                <div style="width: 24px; height: 24px; background: #30D158; border-radius: 50%; box-shadow: 0 2px 8px rgba(48,209,88,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">AI Agents</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">Automated processing</span>
+            </div>
+            <div style="display: flex; align-items: center; gap: 0.75rem; padding: 0.75rem; background: rgba(142,142,147,0.05); border-radius: 12px; border: 1px solid rgba(142,142,147,0.1);">
+                <div style="width: 24px; height: 24px; background: #8E8E93; border-radius: 50%; box-shadow: 0 2px 8px rgba(142,142,147,0.3);"></div>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #1D1D1F; font-weight: 600; font-size: 0.95rem;">Data Sources</span>
+                <span style="font-family: 'SF Pro Display', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; color: #6e6e73; font-size: 0.85rem;">External systems</span>
+            </div>
+        </div>
+    </div>
+    """, unsafe_allow_html=True)
     
     # Process Flow Details
     st.markdown("---")
-    st.markdown("### Process Flow Details")
+    st.markdown("### 🔄 Process Flow Details")
     
-    # Create tabs for different aspects
-    tab1, tab2, tab3, tab4 = st.tabs(["Workflow Steps", "AI Agents", "Human Interactions", "Data Flow"])
+    # Create tabs for different aspects with iOS styling
+    tab1, tab2, tab3, tab4 = st.tabs(["📋 Workflow Steps", "🤖 AI Agents", "👥 Human Interactions", "📊 Data Flow"])
     
     with tab1:
         st.markdown("""
@@ -5374,25 +5964,25 @@ def process_flow_diagram():
     
     with tab2:
         st.markdown("""
-        #### **Intent Agent (Retriever-Augmented)**
+        #### **🔍 Intent Agent (Retriever-Augmented)**
         - **Purpose**: Parse natural language payment instructions
         - **Capabilities**: NLP processing, entity extraction, intent classification
         - **Input**: Free-form text instructions
         - **Output**: Structured payment data (amount, accounts, purpose, urgency)
         
-        #### **Verification Agent (Document Classifier)**
+        #### **✅ Verification Agent (Document Classifier)**
         - **Purpose**: Validate accounts and compliance status
         - **Capabilities**: Account validation, compliance checking, data enrichment
         - **Input**: Account details, payment amount
         - **Output**: Validation status, compliance flags, risk indicators
         
-        #### **Anomaly Agent (AI Supervisor)**
+        #### **🔍 Anomaly Agent (AI Supervisor)**
         - **Purpose**: Detect unusual patterns and assess risk
         - **Capabilities**: Pattern analysis, anomaly detection, risk scoring
         - **Input**: Payment data, historical patterns, user behavior
         - **Output**: Anomaly score, risk level, pattern analysis
         
-        #### **Decision Agent (Workflow Orchestrator)**
+        #### **⚖️ Decision Agent (Workflow Orchestrator)**
         - **Purpose**: Route payments based on risk and business rules
         - **Capabilities**: Rule evaluation, routing logic, escalation triggers
         - **Input**: Risk scores, compliance status, business rules
@@ -5401,21 +5991,21 @@ def process_flow_diagram():
     
     with tab3:
         st.markdown("""
-        #### **Treasury Operations (Human Review)**
+        #### **👥 Treasury Operations (Human Review)**
         - **Trigger**: Medium-risk payments (>$100K, <$1M)
         - **Process**: Manual review of payment details and risk factors
         - **Tools**: Scenario summary dashboard, decision journal
         - **Decision**: Approve, reject, or escalate further
         - **SLA**: 15-minute response time
         
-        #### **Senior Management (Escalation)**
+        #### **⚠️ Senior Management (Escalation)**
         - **Trigger**: High-risk payments (>$1M) or complex scenarios
         - **Process**: Executive review with full context and analysis
         - **Tools**: Comprehensive audit trail, risk analysis reports
         - **Decision**: Final approval authority
         - **SLA**: 30-minute response time
         
-        #### **Compliance Team (Oversight)**
+        #### **🛡️ Compliance Team (Oversight)**
         - **Role**: Monitor overall compliance and audit processes
         - **Access**: Real-time monitoring dashboard, audit reports
         - **Responsibilities**: Policy updates, compliance training, audit reviews
@@ -5423,25 +6013,25 @@ def process_flow_diagram():
     
     with tab4:
         st.markdown("""
-        #### **Input Data Sources**
+        #### **📥 Input Data Sources**
         - **User Instructions**: Natural language payment requests
         - **Account Data**: Customer account information and balances
         - **Compliance Data**: Sanctions lists, KYC status, AML flags
         - **Historical Data**: Previous transactions, user patterns, risk indicators
         
-        #### **Processing Data**
+        #### **⚙️ Processing Data**
         - **Structured Payment Data**: Parsed and validated payment details
         - **Risk Scores**: Anomaly detection and risk assessment results
         - **Compliance Status**: Real-time compliance check results
         - **Decision Context**: All relevant data for human review
         
-        #### **Output Data**
+        #### **📤 Output Data**
         - **Transaction Records**: Complete payment transaction details
         - **Audit Trails**: Comprehensive logging of all decisions and actions
         - **Compliance Reports**: Regulatory reporting and audit documentation
         - **Monitoring Data**: Real-time performance and compliance metrics
         
-        #### **Data Flow Patterns**
+        #### **🔄 Data Flow Patterns**
         - **Real-time Processing**: Immediate data validation and risk assessment
         - **Asynchronous Review**: Human review processes with SLA tracking
         - **Batch Reporting**: Daily compliance and audit reports
@@ -5450,7 +6040,7 @@ def process_flow_diagram():
     
     # Process Metrics
     st.markdown("---")
-    st.markdown("### Process Performance Metrics")
+    st.markdown("### 📊 Process Performance Metrics")
     
     col1, col2, col3, col4 = st.columns(4)
     with col1:
@@ -5639,6 +6229,9 @@ def main():
         if st.button("Governance Workflow", key="nav_governance"):
             st.session_state['current_page'] = 'governance'
             st.rerun()
+        if st.button("Runtime Monitoring", key="nav_monitoring"):
+            st.session_state['current_page'] = 'monitoring'
+            st.rerun()
         if st.button("Escalation Console", key="nav_escalation"):
             st.session_state['current_page'] = 'escalation'
             st.rerun()
@@ -5650,6 +6243,7 @@ def main():
         st.markdown("""
         <div style="margin: 2rem 0 1.5rem 0; padding: 1.2rem; background: linear-gradient(135deg, #e3f2fd 0%, #f0f8ff 100%); border-radius: 16px; border: 1px solid rgba(0, 122, 255, 0.2); box-shadow: 0 2px 12px rgba(0, 122, 255, 0.1);">
             <div style="display: flex; align-items: center; margin-bottom: 1rem;">
+                <span style="font-size: 1.2rem; margin-right: 0.5rem;">💰</span>
                 <h3 style="color: #007AFF; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-weight: 700; margin: 0; font-size: 1rem;">Payment Workflow</h3>
             </div>
             <p style="color: #6e6e73; font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; font-size: 0.8rem; margin: 0; line-height: 1.4;">High-value payment processing with anomaly detection and governance</p>
@@ -5695,9 +6289,9 @@ def main():
         
         # Show cache status
         if st.session_state.get('performance_mode', True):
-            st.info("Performance Mode: Active")
+            st.info("🚀 Performance Mode: Active")
         else:
-            st.warning("âš ï¸ Performance Mode: Disabled")
+            st.warning("⚠️ Performance Mode: Disabled")
     
     # Route to appropriate page
     if st.session_state['current_page'] == 'landing':
@@ -5706,6 +6300,8 @@ def main():
         agent_detail_page()
     elif st.session_state['current_page'] == 'governance':
         governance_workflow()
+    elif st.session_state['current_page'] == 'monitoring':
+        runtime_monitoring()
     elif st.session_state['current_page'] == 'escalation':
         escalation_console()
     elif st.session_state['current_page'] == 'audit':
