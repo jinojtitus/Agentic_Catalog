@@ -2,25 +2,6 @@
 
 A comprehensive Streamlit application for managing and monitoring AI agents in an enterprise environment. This application provides a complete governance, monitoring, and audit system for AI agents.
 
-## Screenshots
-
-### Agent Catalog Overview
-![Agent Catalog](images/agent-catalog-overview.png)
-*Main dashboard showing agent cards with search and filter capabilities*
-
-### Pattern Card Example
-![Pattern Card](images/pattern-card-example.png)
-*Detailed pattern card showing implementation details and enterprise benefits*
-
-### Agent Card Example
-![Agent Card](images/agent-card-example.png)
-*Individual agent card with comprehensive details including governance, runtime monitoring, and audit information*
-
-### Payment Process Workflow
-![Payment Process Flow](images/payment-process-flow.png)
-*End-to-end payment processing workflow with AI agents and human interactions*
-
-> **Note**: Screenshots are placeholder references. Please add actual screenshots to the `images/` directory following the guidelines in `images/README.md`
 
 ## Features
 
