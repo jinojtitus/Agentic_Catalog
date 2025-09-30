@@ -2,6 +2,26 @@
 
 A comprehensive Streamlit application for managing and monitoring AI agents in an enterprise environment. This application provides a complete governance, monitoring, and audit system for AI agents.
 
+## Screenshots
+
+### Agent Catalog Overview
+![Agent Catalog](images/agent-catalog-overview.png)
+*Main dashboard showing agent cards with search and filter capabilities*
+
+### Pattern Card Example
+![Pattern Card](images/pattern-card-example.png)
+*Detailed pattern card showing implementation details and enterprise benefits*
+
+### Agent Card Example
+![Agent Card](images/agent-card-example.png)
+*Individual agent card with comprehensive details including governance, runtime monitoring, and audit information*
+
+### Payment Process Workflow
+![Payment Process Flow](images/payment-process-flow.png)
+*End-to-end payment processing workflow with AI agents and human interactions*
+
+> **Note**: Screenshots are placeholder references. Please add actual screenshots to the `images/` directory following the guidelines in `images/README.md`
+
 ## Features
 
 ### 🏠 Landing Page
@@ -39,6 +59,47 @@ A comprehensive Streamlit application for managing and monitoring AI agents in a
 - Filterable reports by agent, division, and compliance framework
 - Export options for PDF and CSV reports
 - Compliance summary with progress indicators
+
+### 💳 Payment Process Workflow
+The application includes a comprehensive payment processing workflow that demonstrates AI agent orchestration in a real-world enterprise scenario:
+
+#### Workflow Overview
+The payment process workflow showcases how multiple AI agents work together to handle high-value payment processing with built-in anomaly detection and governance controls.
+
+#### Key Components
+1. **Payment Instruction Entry**: Natural language payment instruction parsing with intent extraction
+2. **Intent Verification**: AI-powered anomaly detection and risk assessment
+3. **Scenario Summary**: Comprehensive review of payment details and risk factors
+4. **Payment Escalation**: Automated escalation handling with human oversight
+5. **Payment Audit**: Compliance monitoring and audit trail generation
+
+#### Process Flow Steps
+1. **Input Processing**: Parse natural language payment instructions (e.g., "Send $2M CAD to Vendor X by Friday")
+2. **Intent Extraction**: Extract structured data including amount, beneficiary, date, and urgency
+3. **Risk Assessment**: AI agents analyze payment for anomalies and compliance issues
+4. **Approval Workflow**: Multi-level approval process with automated and human checkpoints
+5. **Execution**: Secure payment processing with real-time monitoring
+6. **Audit Trail**: Complete documentation and compliance reporting
+
+#### AI Agents Involved
+- **Payment Parser Agent**: Extracts structured data from natural language
+- **Risk Assessment Agent**: Analyzes payment for anomalies and compliance
+- **Approval Orchestrator**: Manages multi-level approval workflow
+- **Compliance Monitor**: Ensures regulatory compliance (GDPR, OSFI, FINTRAC)
+- **Audit Logger**: Maintains comprehensive audit trails
+
+#### Human Interactions
+- **Financial Controller**: Reviews high-value payments and complex scenarios
+- **Compliance Officer**: Validates regulatory compliance and risk assessments
+- **Operations Team**: Handles escalations and exception processing
+- **Audit Team**: Reviews and validates payment processing logs
+
+### 🔄 Process Flow Diagram
+- **Executive-style Visualization**: Professional process flow diagram showing end-to-end workflows
+- **Interactive Elements**: Clickable nodes with detailed information
+- **Multi-tab Interface**: Separate tabs for workflow steps, AI agents, human interactions, and data flow
+- **Real-time Updates**: Dynamic diagram generation based on current agent configurations
+- **Export Capabilities**: Download process flow diagrams in various formats
 
 ## Installation
 
