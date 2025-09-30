@@ -1,10 +1,9 @@
 # Agentic AI Catalog
 
-A comprehensive Streamlit application for managing and monitoring AI agents in an enterprise environment. This application provides a complete governance, monitoring, and audit system for AI agents.
-
+A comprehensive Streamlit prototype for managing and monitoring AI agents for 
 ## Application Summary
 
-The Agentic AI Catalog is a sophisticated enterprise-grade platform designed to manage, monitor, and govern AI agents at scale. Built with Streamlit, it provides a complete lifecycle management system for AI agents, from initial registration through production deployment and ongoing monitoring.
+The Agentic AI Catalog is a prototype to showcade sophit0icated enterprise-grade platform designed to manage, monitor, and govern AI agents at scale. Built with Streamlit, it provides a complete lifecycle management system for AI agents, from initial registration through production deployment and ongoing monitoring.
 
 ### Key Capabilities
 
@@ -19,12 +18,6 @@ The Agentic AI Catalog is a sophisticated enterprise-grade platform designed to 
 - Real-time policy validation and enforcement
 - Multi-framework compliance tracking (GDPR, OSFI, FINTRAC)
 - Audit trail generation and compliance reporting
-
-**Runtime Monitoring & Control**
-- Real-time agent performance monitoring
-- Escalation management and incident handling
-- Guardrail enforcement and safety controls
-- Resource usage tracking and optimization
 
 **Payment Processing Workflow**
 - End-to-end payment instruction processing
