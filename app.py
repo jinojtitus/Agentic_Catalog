@@ -3469,7 +3469,7 @@ def landing_page():
         st.markdown("### Agent Cards")
         
         # Display all agent cards without pagination
-            agents_to_show = filtered_agents
+        agents_to_show = filtered_agents
         
         cols = st.columns(2)
         for i, agent in enumerate(agents_to_show):
@@ -4252,14 +4252,14 @@ def get_monitoring_value(agent, key, default):
         return default
     return value
     
-    def get_uptime_value(agent):
+def get_uptime_value(agent):
     """Extract and convert agent uptime percentage"""
     uptime_str = get_monitoring_value(agent, 'uptime', '0%')
     if isinstance(uptime_str, str) and uptime_str.endswith('%'):
         try:
-                return float(uptime_str.replace('%', ''))
+            return float(uptime_str.replace('%', ''))
         except ValueError:
-        return 0.0
+            return 0.0
     return float(uptime_str) if isinstance(uptime_str, (int, float)) else 0.0
 
 # Runtime monitoring function removed
@@ -4460,7 +4460,7 @@ def payment_instruction_entry():
         # Clear the retry instruction after using it
         del st.session_state['retry_instruction']
     else:
-    default_instruction = st.session_state.get('sample_instruction', "Send $2M CAD to Vendor X by Friday")
+        default_instruction = st.session_state.get('sample_instruction', "Send $2M CAD to Vendor X by Friday")
     
     # Instruction input
     instruction_text = st.text_area(
