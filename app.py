@@ -3469,7 +3469,7 @@ def landing_page():
         st.markdown("### Agent Cards")
         
         # Display all agent cards without pagination
-        agents_to_show = filtered_agents
+            agents_to_show = filtered_agents
         
         cols = st.columns(2)
         for i, agent in enumerate(agents_to_show):
@@ -4251,15 +4251,15 @@ def get_monitoring_value(agent, key, default):
     if value == 'N/A' or value == 'NA':
         return default
     return value
-
-def get_uptime_value(agent):
+    
+    def get_uptime_value(agent):
     """Extract and convert agent uptime percentage"""
     uptime_str = get_monitoring_value(agent, 'uptime', '0%')
     if isinstance(uptime_str, str) and uptime_str.endswith('%'):
         try:
-            return float(uptime_str.replace('%', ''))
+                return float(uptime_str.replace('%', ''))
         except ValueError:
-            return 0.0
+        return 0.0
     return float(uptime_str) if isinstance(uptime_str, (int, float)) else 0.0
 
 # Runtime monitoring function removed
@@ -4460,7 +4460,7 @@ def payment_instruction_entry():
         # Clear the retry instruction after using it
         del st.session_state['retry_instruction']
     else:
-        default_instruction = st.session_state.get('sample_instruction', "Send $2M CAD to Vendor X by Friday")
+    default_instruction = st.session_state.get('sample_instruction', "Send $2M CAD to Vendor X by Friday")
     
     # Instruction input
     instruction_text = st.text_area(
@@ -5001,24 +5001,24 @@ def create_process_flow_chart():
         if edge["label"]:  # Only add labels for non-empty strings
             label_offset_x = 0.3 if edge["type"] == "escalation" else 0.2
             label_offset_y = 0.2 if edge["type"] == "data" else 0.1
-            
-            fig.add_annotation(
-                x=mid_x + label_offset_x,
-                y=mid_y + label_offset_y,
-                text=f"<b>{edge['label']}</b>",
-                showarrow=False,
-                font=dict(
+        
+        fig.add_annotation(
+            x=mid_x + label_offset_x,
+            y=mid_y + label_offset_y,
+            text=f"<b>{edge['label']}</b>",
+            showarrow=False,
+            font=dict(
                     size=11, 
                     color="#1F2937", 
                     family="Inter, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif"
-                ),
-                bgcolor="rgba(255,255,255,0.95)",
-                bordercolor=style["color"],
+            ),
+            bgcolor="rgba(255,255,255,0.95)",
+            bordercolor=style["color"],
                 borderwidth=1,
                 borderpad=6,
-                opacity=0.95,
-                align="center"
-            )
+            opacity=0.95,
+            align="center"
+        )
     
     # Add nodes with executive-style design
     for node in nodes:
