@@ -14,7 +14,7 @@ with tab1:
     
     # Check if file exists
     if os.path.exists("cash_services_deposit_processing.mmd"):
-        with open("cash_services_deposit_processing.mmd", "r") as f:
+        with open("cash_services_deposit_processing.mmd", "r", encoding="utf-8") as f:
             deposit_mermaid_code = f.read()
         
         # Display the mermaid diagram
@@ -54,7 +54,7 @@ with tab2:
     
     # Check if file exists
     if os.path.exists("cash_services_currency_processing.mmd"):
-        with open("cash_services_currency_processing.mmd", "r") as f:
+        with open("cash_services_currency_processing.mmd", "r", encoding="utf-8") as f:
             currency_mermaid_code = f.read()
         
         # Display the mermaid diagram

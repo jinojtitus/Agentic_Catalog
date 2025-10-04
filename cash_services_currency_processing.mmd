@@ -1,152 +1,214 @@
-%%{init: {'theme': 'base', 'themeVariables': { 'primaryColor': '#2E86AB', 'primaryTextColor': '#fff', 'primaryBorderColor': '#1E5F8E', 'lineColor': '#5C677D', 'secondaryColor': '#A23B72', 'tertiaryColor': '#F18F01', 'background': '#C73E1D'}}}%%
+%%{init: {'theme':'base', 'themeVariables': { 'primaryColor':'#fff', 'primaryTextColor':'#333', 'lineColor':'#333'}}}%%
 flowchart TB
-    %% Intake - Blue
-    subgraph INTAKE["INTAKE"]
+    %% Cash Services - Currency Processing Workflow
+    
+    %% Intake Subgraph
+    subgraph INTAKE[INTAKE]
         direction TB
-        I1[Currency Order Request]
-        I2[Branch Currency Request]
-        I3[ATM Replenishment Request]
-        I4[Commercial Client Order]
+        I1[Currency Exchange Request]
+        I2[Customer Verification]
+        I3[Currency Type Identification]
+        I4[Amount Specification]
+        I5[Rate Confirmation]
+        I6[Initial Documentation]
+        
         I1 --> I2
         I2 --> I3
         I3 --> I4
+        I4 --> I5
+        I5 --> I6
     end
     
-    %% Triage - Purple
-    subgraph TRIAGE["TRIAGE"]
+    %% Triage Subgraph
+    subgraph TRIAGE[TRIAGE]
         direction TB
-        T1[Validate Request]
-        T2[Check Inventory Levels]
-        T3[Priority Assessment]
-        T4[Route to Processing]
-        T1 --> T2
-        T2 --> T3
-        T3 --> T4
+        T1{Transaction Type}
+        T2[Buy Foreign Currency]
+        T3[Sell Foreign Currency]
+        T4[Currency Exchange]
+        T5[Traveler's Checks]
+        T6[Wire in Foreign Currency]
+        T7{Amount Category}
+        T8[Small Transaction]
+        T9[Medium Transaction]
+        T10[Large Transaction]
+        
+        T1 -->|Buy| T2
+        T1 -->|Sell| T3
+        T1 -->|Exchange| T4
+        T1 -->|Checks| T5
+        T1 -->|Wire| T6
+        
+        T2 --> T7
+        T3 --> T7
+        T4 --> T7
+        T5 --> T7
+        T6 --> T7
+        
+        T7 -->|< $1,000| T8
+        T7 -->|$1,000-$10,000| T9
+        T7 -->|> $10,000| T10
     end
     
-    %% Fulfilment - Green
-    subgraph FULFILMENT["FULFILMENT"]
+    %% Fulfillment Subgraph
+    subgraph FULFILLMENT[FULFILLMENT]
         direction TB
-        F1[Currency Preparation]
-        F2[Quality Check]
-        F3[Package for Delivery]
-        F4[Schedule Transport]
-        F5[Delivery Confirmation]
+        F1[Verify Currency Availability]
+        F2[Calculate Exchange Rate]
+        F3[Apply Fees and Charges]
+        F4[Count and Authenticate Bills]
+        F5[Process Transaction]
+        F6[Update Inventory]
+        F7[Issue Receipt]
+        F8[Provide Currency]
+        F9[Record in System]
+        
         F1 --> F2
         F2 --> F3
         F3 --> F4
         F4 --> F5
+        F5 --> F6
+        F6 --> F7
+        F7 --> F8
+        F8 --> F9
     end
     
-    %% Investigations - Orange
-    subgraph INVESTIGATIONS["INVESTIGATIONS"]
+    %% Investigations Subgraph
+    subgraph INVESTIGATIONS[INVESTIGATIONS]
         direction TB
-        IV1[Counterfeit Detection]
-        IV2[Shortage Investigation]
-        IV3[Damaged Currency Review]
-        IV4[Discrepancy Resolution]
-        IV1 --> IV2
+        IV1{Suspicious Activity?}
+        IV2[Review Transaction History]
+        IV3[Verify Source of Funds]
+        IV4[Check Sanctions Lists]
+        IV5[Analyze Patterns]
+        IV6[Document Review]
+        IV7[Customer Interview]
+        IV8{Clear to Proceed?}
+        
+        IV1 -->|Yes| IV2
         IV2 --> IV3
         IV3 --> IV4
+        IV4 --> IV5
+        IV5 --> IV6
+        IV6 --> IV7
+        IV7 --> IV8
     end
     
-    %% Escalations - Red
-    subgraph ESCALATIONS["ESCALATIONS"]
+    %% Escalations Subgraph
+    subgraph ESCALATIONS[ESCALATIONS]
         direction TB
-        E1[Critical Shortage Alert]
-        E2[Security Incident]
-        E3[Regulatory Reporting]
-        E4[Senior Management Review]
+        E1[Flag Transaction]
+        E2[Notify Compliance Officer]
+        E3[Senior Management Review]
+        E4[Legal Consultation]
+        E5[Regulatory Reporting Decision]
+        E6[Final Disposition]
+        E7[Customer Communication]
+        
         E1 --> E2
         E2 --> E3
         E3 --> E4
+        E4 --> E5
+        E5 --> E6
+        E6 --> E7
     end
     
-    %% Risk Controls - Dark Blue
-    subgraph RISK["RISK CONTROLS"]
+    %% Risk Controls Subgraph
+    subgraph RISK_CONTROLS[RISK CONTROLS]
         direction TB
-        R1[Dual Control Verification]
-        R2[Transport Security Check]
-        R3[Insurance Validation]
-        R4[Compliance Review]
-        R5[Audit Trail]
-        R1 --> R2
-        R2 --> R3
-        R3 --> R4
-        R4 --> R5
+        R1[KYC Verification]
+        R2[AML Screening]
+        R3[OFAC Check]
+        R4[Transaction Limits]
+        R5[Currency Authenticity]
+        R6[Rate Validation]
+        R7{Risk Assessment}
+        R8[Enhanced Due Diligence]
+        R9[CTR Filing]
+        R10[SAR Evaluation]
+        
+        R1 --> R7
+        R2 --> R7
+        R3 --> R7
+        R4 --> R7
+        R5 --> R7
+        R6 --> R7
+        
+        R7 -->|High Risk| R8
+        R7 -->|>$10,000 Cash| R9
+        R8 --> R10
     end
     
-    %% Support Operations - Teal
-    subgraph SUPPORT_OPS["SUPPORT - OPERATIONS MANAGEMENT"]
-        direction TB
-        SO1[Inventory Management]
-        SO2[Vendor Coordination]
-        SO3[Equipment Maintenance]
-        SO4[Staff Scheduling]
+    %% Support Operations Management Subgraph
+    subgraph SUPPORT_OPS[SUPPORT - OPERATIONS MANAGEMENT]
+        direction LR
+        SO1[Currency Inventory Management]
+        SO2[Rate Updates and Distribution]
+        SO3[Teller Training]
+        SO4[Cash Vault Management]
+        SO5[Equipment Maintenance]
+        SO6[Daily Balancing]
+        
         SO1 --> SO2
         SO2 --> SO3
         SO3 --> SO4
+        SO4 --> SO5
+        SO5 --> SO6
     end
     
-    %% Support Process - Gray
-    subgraph SUPPORT_PROC["SUPPORT - PROCESS MANAGEMENT"]
-        direction TB
-        SP1[Process Documentation]
-        SP2[Performance Metrics]
-        SP3[Training Programs]
-        SP4[Continuous Improvement]
+    %% Support Process Management Subgraph
+    subgraph SUPPORT_PROCESS[SUPPORT - PROCESS MANAGEMENT]
+        direction LR
+        SP1[Regulatory Compliance Updates]
+        SP2[Policy and Procedure Maintenance]
+        SP3[System Configuration]
+        SP4[Audit Trail Management]
+        SP5[Reporting Requirements]
+        SP6[Cross-Border Regulations]
+        
         SP1 --> SP2
         SP2 --> SP3
         SP3 --> SP4
+        SP4 --> SP5
+        SP5 --> SP6
     end
     
     %% Main Flow Connections
-    I4 --> T1
-    T4 --> F1
-    F5 --> Complete[Currency Delivered]
+    INTAKE --> TRIAGE
+    TRIAGE --> RISK_CONTROLS
+    RISK_CONTROLS -->|Low/Medium Risk| FULFILLMENT
+    RISK_CONTROLS -->|High Risk| INVESTIGATIONS
+    FULFILLMENT --> END_SUCCESS[Transaction Complete]
+    INVESTIGATIONS -->|Cleared| FULFILLMENT
+    INVESTIGATIONS -->|Issues| ESCALATIONS
+    ESCALATIONS -->|Approved| FULFILLMENT
+    ESCALATIONS -->|Denied| END_DENIED[Transaction Denied]
     
-    %% Investigation Triggers
-    F2 -.->|Quality Issues| IV1
-    F1 -.->|Shortage Detected| IV2
-    
-    %% Escalation Triggers
-    IV4 -.->|Major Discrepancy| E1
-    T2 -.->|Critical Shortage| E1
-    
-    %% Risk Control Integration
-    F1 -.->|Verification| R1
-    F4 -.->|Security| R2
-    
-    %% Support Integration
-    T2 -.->|Inventory Check| SO1
-    F4 -.->|Transport| SO2
-    
-    %% Process Support
-    Complete -.->|Metrics| SP2
-    E4 -.->|Process Review| SP4
-    
-    %% Outcome Paths
-    E4 --> Hold[Hold Order]
-    IV4 --> Resolve[Issue Resolved]
-    R5 --> Approved[Approved for Release]
+    %% Support Connections
+    SUPPORT_OPS -.->|Enables| INTAKE
+    SUPPORT_OPS -.->|Maintains| FULFILLMENT
+    SUPPORT_PROCESS -.->|Governs| RISK_CONTROLS
+    SUPPORT_PROCESS -.->|Guides| ESCALATIONS
     
     %% Styling
-    classDef intakeStyle fill:#2E86AB,stroke:#1E5F8E,stroke-width:2px,color:#fff
-    classDef triageStyle fill:#A23B72,stroke:#7D2E5A,stroke-width:2px,color:#fff
-    classDef fulfilmentStyle fill:#27AE60,stroke:#1E8449,stroke-width:2px,color:#fff
-    classDef investigationStyle fill:#F18F01,stroke:#C73E1D,stroke-width:2px,color:#fff
-    classDef escalationStyle fill:#E74C3C,stroke:#C0392B,stroke-width:2px,color:#fff
-    classDef riskStyle fill:#34495E,stroke:#2C3E50,stroke-width:2px,color:#fff
-    classDef supportOpsStyle fill:#16A085,stroke:#138D75,stroke-width:2px,color:#fff
-    classDef supportProcStyle fill:#7F8C8D,stroke:#566573,stroke-width:2px,color:#fff
-    classDef outcomeStyle fill:#95A5A6,stroke:#7F8C8D,stroke-width:2px,color:#fff
+    classDef intakeStyle fill:#e3f2fd,stroke:#1976d2,stroke-width:2px,color:#000
+    classDef triageStyle fill:#f3e5f5,stroke:#7b1fa2,stroke-width:2px,color:#000
+    classDef fulfillmentStyle fill:#e8f5e9,stroke:#388e3c,stroke-width:2px,color:#000
+    classDef investigationStyle fill:#fff3e0,stroke:#f57c00,stroke-width:2px,color:#000
+    classDef escalationStyle fill:#ffebee,stroke:#d32f2f,stroke-width:2px,color:#000
+    classDef riskStyle fill:#fce4ec,stroke:#c2185b,stroke-width:2px,color:#000
+    classDef supportOpsStyle fill:#e0f2f1,stroke:#00796b,stroke-width:2px,color:#000
+    classDef supportProcStyle fill:#f1f8e9,stroke:#558b2f,stroke-width:2px,color:#000
+    classDef successStyle fill:#c8e6c9,stroke:#2e7d32,stroke-width:3px,color:#000
+    classDef deniedStyle fill:#ffcdd2,stroke:#c62828,stroke-width:3px,color:#000
     
-    class I1,I2,I3,I4 intakeStyle
-    class T1,T2,T3,T4 triageStyle
-    class F1,F2,F3,F4,F5 fulfilmentStyle
-    class IV1,IV2,IV3,IV4 investigationStyle
-    class E1,E2,E3,E4 escalationStyle
-    class R1,R2,R3,R4,R5 riskStyle
-    class SO1,SO2,SO3,SO4 supportOpsStyle
-    class SP1,SP2,SP3,SP4 supportProcStyle
-    class Complete,Hold,Resolve,Approved outcomeStyle
+    class INTAKE intakeStyle
+    class TRIAGE triageStyle
+    class FULFILLMENT fulfillmentStyle
+    class INVESTIGATIONS investigationStyle
+    class ESCALATIONS escalationStyle
+    class RISK_CONTROLS riskStyle
+    class SUPPORT_OPS supportOpsStyle
+    class SUPPORT_PROCESS supportProcStyle
+    class END_SUCCESS successStyle
+    class END_DENIED deniedStyle
